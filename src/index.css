@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #06071a;
+    color: #111827;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer utilities {
+  .gradient-text {
+    background: linear-gradient(135deg, #fff 0%, #818cf8 50%, #6366f1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+  }
+
+  .hero-glow {
+    background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.3) 0%, transparent 70%);
+  }
+
+  .grid-bg {
+    background-image:
+      linear-gradient(rgba(99, 102, 241, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(99, 102, 241, 0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .section-glow {
+    background: radial-gradient(ellipse 60% 40% at 50% 50%, rgba(99, 102, 241, 0.12) 0%, transparent 70%);
+  }
+
+  .btn-primary {
+    @apply bg-brand hover:bg-brand-dark text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 flex items-center gap-2;
+  }
+
+  .btn-secondary {
+    @apply border border-white/20 hover:border-white/40 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 flex items-center gap-2;
+  }
+
+  .tag-badge {
+    @apply inline-flex items-center gap-2 bg-brand/10 border border-brand/30 text-brand-light text-xs font-semibold px-3 py-1.5 rounded-full;
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #05061a; }
+::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 3px; }
+
+/* Animations */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(99,102,241,0.3), transparent);
+  background-size: 200% auto;
+  animation: shimmer 3s linear infinite;
+}
+
+@font-face {
+  font-family: "InterRegular";
+  src: url("./assets/fonts/static/GoogleSansFlex_120pt-Regular.ttf")
+    format("woff2");
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "InterMedium";
+  src: url("./assets/fonts/static/GoogleSansFlex_120pt-Medium.ttf")
+    format("woff2");
+  font-style: normal;
+  font-display: swap;
+}
+
+
+body{
+  font-family: "InterRegular";
+}
