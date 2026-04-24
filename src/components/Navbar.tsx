@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Menu, X, Zap } from 'lucide-react';
 import { navItems } from '../data';
 
@@ -17,12 +18,12 @@ export default function Navbar() {
       scrolled ? 'bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-sm py-3' : 'py-5'
     }`}>
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
-        <a href="#" className="flex items-center gap-2.5 group">
+        <Link to="/" className="flex items-center gap-2.5 group">
           <div className="w-8 h-8 rounded-lg bg-brand flex items-center justify-center group-hover:bg-brand-dark transition-colors">
             <Zap size={16} className="text-white" fill="white" />
           </div>
           <span className={`font-bold text-lg tracking-tight transition-colors ${scrolled ? 'text-gray-900' : 'text-white'}`}>sirdash.ai</span>
-        </a>
+        </Link>
 
         <div className="hidden md:flex items-center gap-8">
           {navItems.map((item) => (
@@ -34,6 +35,14 @@ export default function Navbar() {
         </div>
 
         <div className="hidden md:flex items-center gap-3">
+          <Link
+            to="/login"
+            className={`text-sm font-medium transition-all px-4 py-2 rounded-lg border ${
+              scrolled ? 'text-gray-600 border-gray-200 hover:border-gray-300' : 'text-white/70 border-white/15 hover:border-white/30'
+            }`}
+          >
+            Sign in
+          </Link>
           <a href="#" className={`text-sm font-medium transition-all px-4 py-2 rounded-lg border ${
             scrolled ? 'text-gray-600 border-gray-200 hover:border-gray-300' : 'text-white/70 border-white/15 hover:border-white/30'
           }`}>
@@ -57,6 +66,7 @@ export default function Navbar() {
             </a>
           ))}
           <div className="pt-3 space-y-2 border-t border-gray-100">
+            <Link to="/login" className="block text-center text-gray-600 text-sm border border-gray-200 rounded-xl py-2.5 hover:border-gray-300 transition-colors" onClick={() => setIsOpen(false)}>Sign in</Link>
             <a href="#" className="block text-center text-gray-600 text-sm border border-gray-200 rounded-xl py-2.5 hover:border-gray-300 transition-colors">Try Our Sandbox</a>
             <a href="#demo" className="block text-center bg-brand text-white text-sm font-semibold rounded-xl py-2.5 hover:bg-brand-dark transition-colors">Request Demo ↗</a>
           </div>
