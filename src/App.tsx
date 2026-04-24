@@ -1,9 +1,12 @@
-import { Route, Routes } from 'react-router-dom';
-import Layout from './layout/Layout';
-import HomePage from './pages/HomePage';
-import ForgotPasswordPage from './pages/ForgotPasswordPage';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
+import { Route, Routes } from "react-router-dom";
+import GuestOnlyRoute from "./components/GuestOnlyRoute";
+import Layout from "./layout/Layout";
+import HomePage from "./pages/HomePage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import VerifyEmailPage from "./pages/VerifyEmailPage";
+import AuthCallbackPage from "./pages/AuthCallbackPage";
 
 function App() {
   return (
@@ -16,9 +19,32 @@ function App() {
           </Layout>
         }
       />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-      <Route path="/register" element={<RegisterPage />} />
+      <Route
+        path="/login"
+        element={
+          <GuestOnlyRoute>
+            <LoginPage />
+          </GuestOnlyRoute>
+        }
+      />
+      <Route
+        path="/forgot-password"
+        element={
+          <GuestOnlyRoute>
+            <ForgotPasswordPage />
+          </GuestOnlyRoute>
+        }
+      />
+      <Route
+        path="/register"
+        element={
+          <GuestOnlyRoute>
+            <RegisterPage />
+          </GuestOnlyRoute>
+        }
+      />
+      <Route path="/verify-email" element={<VerifyEmailPage />} />
+      <Route path="/auth/callback" element={<AuthCallbackPage />} />
     </Routes>
   );
 }

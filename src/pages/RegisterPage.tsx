@@ -12,7 +12,11 @@ import {
   User,
   Zap,
 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
+import RegisterVerificationSent from "../components/RegisterVerificationSent";
+import { supabase } from "../lib/supabase";
+import { signInWithGoogle } from "../lib/authUtils";
 
 const registerSchema = z
   .object({
@@ -40,7 +44,8 @@ export default function RegisterPage() {
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const navigate = useNavigate();
+  const [verificationSent, setVerificationSent] = useState(false);
+  const [submittedEmail, setSubmittedEmail] = useState("");
 
   const {
     register,
@@ -57,19 +62,50 @@ export default function RegisterPage() {
     },
   });
 
-  const onSubmit = async (_data: RegisterFormValues) => {
-    await new Promise((r) => setTimeout(r, 400));
-    navigate("/login");
+  const onSubmit = async (data: RegisterFormValues) => {
+    const { error } = await supabase.auth.signUp({
+      email: data.email,
+      password: data.password,
+      options: {
+        data: { full_name: data.fullName },
+        emailRedirectTo: `${globalThis.location.origin}/verify-email`,
+      },
+    });
+
+    if (error) {
+      toast.error(error.message || "Registration failed");
+      return;
+    }
+
+    setSubmittedEmail(data.email);
+    setVerificationSent(true);
+    toast.success("Verification email sent");
   };
 
   const handleGoogleSignUp = async () => {
     setIsGoogleLoading(true);
     try {
-      await new Promise((r) => setTimeout(r, 500));
-    } finally {
+      const { error } = await signInWithGoogle();
+      if (error) {
+        toast.error(error.message || "Could not sign up with Google");
+        setIsGoogleLoading(false);
+      }
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Could not sign up with Google";
+      toast.error(message);
       setIsGoogleLoading(false);
     }
   };
+
+  if (verificationSent) {
+    return (
+      <RegisterVerificationSent
+        email={submittedEmail}
+        onBackToRegistration={() => setVerificationSent(false)}
+      />
+    );
+  }
 
   return (
     <div className="relative min-h-screen bg-[#F9FAFB] text-gray-900">
@@ -248,7 +284,9 @@ export default function RegisterPage() {
                     type="button"
                     className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-brand/20"
                     onClick={() => setShowPassword((v) => !v)}
-                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
                   >
                     {showPassword ? (
                       <EyeOff className="h-5 w-5" aria-hidden />

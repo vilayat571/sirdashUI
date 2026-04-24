@@ -12,6 +12,9 @@ import {
   Zap,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { supabase } from "../lib/supabase";
+import { signInWithGoogle } from "../lib/authUtils";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
@@ -41,16 +44,33 @@ export default function LoginPage() {
     },
   });
 
-  const onSubmit = async (_data: LoginFormValues) => {
-    await new Promise((r) => setTimeout(r, 400));
+  const onSubmit = async (data: LoginFormValues) => {
+    const { error } = await supabase.auth.signInWithPassword({
+      email: data.email,
+      password: data.password,
+    });
+
+    if (error) {
+      toast.error(error.message || "Invalid email or password");
+      return;
+    }
+
+    toast.success("Welcome back!");
     navigate("/");
   };
 
   const handleGoogleLogin = async () => {
     setIsGoogleLoading(true);
     try {
-      await new Promise((r) => setTimeout(r, 500));
-    } finally {
+      const { error } = await signInWithGoogle();
+      if (error) {
+        toast.error(error.message || "Could not sign in with Google");
+        setIsGoogleLoading(false);
+      }
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Could not sign in with Google";
+      toast.error(message);
       setIsGoogleLoading(false);
     }
   };
@@ -156,7 +176,7 @@ export default function LoginPage() {
                     type="email"
                     autoComplete="email"
                     className="w-full rounded-lg border border-gray-200 bg-white py-2.5 pl-10 pr-3 text-sm text-gray-900 placeholder-gray-400 outline-none transition-shadow focus:border-brand focus:ring-2 focus:ring-brand/15"
-                    placeholder="you@company.com"
+                    placeholder="Enter your mail"
                     aria-invalid={Boolean(errors.email)}
                     aria-describedby={
                       errors.email ? "login-email-error" : undefined
@@ -198,7 +218,9 @@ export default function LoginPage() {
                     type="button"
                     className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-brand/20"
                     onClick={() => setShowPassword((v) => !v)}
-                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
                   >
                     {showPassword ? (
                       <EyeOff className="h-5 w-5" aria-hidden />
