@@ -1,16 +1,17 @@
-import { Zap, Mail, Twitter, Linkedin } from 'lucide-react';
+import { Zap, Mail, Twitter, Linkedin } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const footerLinks = {
   PRODUCT: [
-    { label: 'Features', href: '#technology' },
-    { label: 'Security', href: '#security' },
-    { label: 'Case Studies', href: '#use-cases' },
+    { label: "Features", href: "#technology" },
+    { label: "Security", href: "#security" },
+    { label: "Case Studies", href: "#use-cases" },
   ],
   COMPANY: [
-    { label: 'About Us', href: '#about' },
-    { label: 'Careers', href: '#' },
-    { label: 'Contact Us', href: '#demo' },
-    { label: 'Request Demo', href: '#demo' },
+    { label: "About Us", href: "#about" },
+    { label: "Careers", href: "#" },
+    { label: "Contact Us", href: "#demo" },
+    { label: "Request Demo", href: "/login" },
   ],
 };
 
@@ -28,13 +29,20 @@ export default function Footer() {
               <span className="text-brand-light font-light text-lg">.ai</span>
             </div>
             <p className="text-white/40 text-sm leading-relaxed max-w-xs">
-              Transforming how enterprises access and analyze data through AI-powered natural language interfaces.
+              Transforming how enterprises access and analyze data through
+              AI-powered natural language interfaces.
             </p>
             <div className="flex gap-3">
-              <a href="#" className="w-9 h-9 rounded-lg bg-white/5 border border-white/8 hover:border-white/20 flex items-center justify-center text-white/50 hover:text-white transition-all">
+              <a
+                href="#"
+                className="w-9 h-9 rounded-lg bg-white/5 border border-white/8 hover:border-white/20 flex items-center justify-center text-white/50 hover:text-white transition-all"
+              >
                 <Twitter size={15} />
               </a>
-              <a href="#" className="w-9 h-9 rounded-lg bg-white/5 border border-white/8 hover:border-white/20 flex items-center justify-center text-white/50 hover:text-white transition-all">
+              <a
+                href="#"
+                className="w-9 h-9 rounded-lg bg-white/5 border border-white/8 hover:border-white/20 flex items-center justify-center text-white/50 hover:text-white transition-all"
+              >
                 <Linkedin size={15} />
               </a>
             </div>
@@ -43,20 +51,45 @@ export default function Footer() {
                 <Mail size={14} className="text-brand-light" />
               </div>
               <div>
-                <div className="text-white/70 text-sm font-medium mb-0.5">Email Us</div>
-                <div className="text-white/35 text-xs mb-1">For support & general inquiries:</div>
-                <a href="mailto:support@sirdash.ai" className="text-brand-light text-sm hover:text-brand transition-colors">support@sirdash.ai</a>
+                <div className="text-white/70 text-sm font-medium mb-0.5">
+                  Email Us
+                </div>
+                <div className="text-white/35 text-xs mb-1">
+                  For support & general inquiries:
+                </div>
+                <a
+                  href="mailto:support@sirdash.ai"
+                  className="text-brand-light text-sm hover:text-brand transition-colors"
+                >
+                  support@sirdash.ai
+                </a>
               </div>
             </div>
           </div>
 
           {Object.entries(footerLinks).map(([category, links]) => (
             <div key={category}>
-              <h4 className="text-white/60 text-xs font-semibold uppercase tracking-widest mb-5">{category}</h4>
+              <h4 className="text-white/60 text-xs font-semibold uppercase tracking-widest mb-5">
+                {category}
+              </h4>
               <ul className="space-y-3">
                 {links.map((link) => (
                   <li key={link.label}>
-                    <a href={link.href} className="text-white/35 hover:text-white text-sm transition-colors">{link.label}</a>
+                    {link.href.startsWith("/") ? (
+                      <Link
+                        to={link.href}
+                        className="text-white/35 hover:text-white text-sm transition-colors"
+                      >
+                        {link.label}
+                      </Link>
+                    ) : (
+                      <a
+                        href={link.href}
+                        className="text-white/35 hover:text-white text-sm transition-colors"
+                      >
+                        {link.label}
+                      </a>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -65,11 +98,21 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-white/5 mt-14 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-white/20 text-sm">© {new Date().getFullYear()} SirDash.ai — All rights reserved.</p>
+          <p className="text-white/20 text-sm">
+            © {new Date().getFullYear()} SirDash.ai — All rights reserved.
+          </p>
           <div className="flex gap-6">
-            {['Privacy Policy','Terms of Service','Cookie Policy'].map((item) => (
-              <a key={item} href="#" className="text-white/20 hover:text-white/45 text-sm transition-colors">{item}</a>
-            ))}
+            {["Privacy Policy", "Terms of Service", "Cookie Policy"].map(
+              (item) => (
+                <a
+                  key={item}
+                  href="#"
+                  className="text-white/20 hover:text-white/45 text-sm transition-colors"
+                >
+                  {item}
+                </a>
+              ),
+            )}
           </div>
         </div>
       </div>
