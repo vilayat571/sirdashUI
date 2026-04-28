@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { LoaderCircle, Zap } from "lucide-react";
 import { supabase } from "../lib/supabase";
+import { isAdmin } from "../lib/authUtils";
 
 export default function AuthCallbackPage() {
   const navigate = useNavigate();
@@ -23,7 +24,9 @@ export default function AuthCallbackPage() {
 
       if (session) {
         toast.success("Welcome back!");
-        navigate("/", { replace: true });
+        navigate(isAdmin(session.user) ? "/admin/dashboard" : "/", {
+          replace: true,
+        });
         return;
       }
 

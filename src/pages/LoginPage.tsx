@@ -14,7 +14,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { supabase } from "../lib/supabase";
-import { signInWithGoogle } from "../lib/authUtils";
+import { isAdmin, signInWithGoogle } from "../lib/authUtils";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
@@ -45,7 +45,7 @@ export default function LoginPage() {
   });
 
   const onSubmit = async (data: LoginFormValues) => {
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data: authData, error } = await supabase.auth.signInWithPassword({
       email: data.email,
       password: data.password,
     });
@@ -56,7 +56,7 @@ export default function LoginPage() {
     }
 
     toast.success("Welcome back!");
-    navigate("/");
+    navigate(isAdmin(authData.user) ? "/admin/dashboard" : "/");
   };
 
   const handleGoogleLogin = async () => {

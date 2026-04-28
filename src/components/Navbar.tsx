@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import type { User } from "@supabase/supabase-js";
-import { Menu, X, Zap } from "lucide-react";
+import { ArrowUpRight, LayoutDashboard, Menu, X, Zap } from "lucide-react";
 import toast from "react-hot-toast";
 import { navItems } from "../data";
 import NavbarMobileUserCard from "./NavbarMobileUserCard";
 import NavbarProfileDropdown from "./NavbarProfileDropdown";
 import {
   getSupabaseSessionUser,
+  isAdmin,
   signOutSupabase,
   subscribeSupabaseAuth,
 } from "../lib/authUtils";
@@ -40,6 +41,18 @@ export default function Navbar() {
     }
     toast.success("You've been signed out.");
   }
+
+  const ctaGoesToDashboard = Boolean(user && isAdmin(user));
+  const ctaLabel = ctaGoesToDashboard ? "Go to dashboard" : "Try our sandbox";
+  const ctaIcon = ctaGoesToDashboard ? (
+    <LayoutDashboard size={18} className="shrink-0" aria-hidden />
+  ) : (
+    <ArrowUpRight size={18} className="shrink-0" aria-hidden />
+  );
+  const desktopCtaClass =
+    "bg-brand hover:bg-brand-dark text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-all shadow-md shadow-brand/20 flex items-center gap-1.5";
+  const mobileCtaClass =
+    "flex w-full items-center justify-center gap-1.5 bg-brand text-white text-sm font-semibold rounded-xl py-2.5 hover:bg-brand-dark transition-colors";
 
   return (
     <nav
@@ -88,12 +101,20 @@ export default function Navbar() {
               Sign in
             </Link>
           )}
-          <a
-            href="#"
-            className="bg-brand hover:bg-brand-dark text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-all shadow-md shadow-brand/20 flex items-center gap-1.5"
-          >
-            Try our sandbox <span className="text-lg leading-none">↗</span>
-          </a>
+          {ctaGoesToDashboard ? (
+            <Link
+              to="/admin/dashboard"
+              className={desktopCtaClass}
+            >
+              {ctaLabel}
+              {ctaIcon}
+            </Link>
+          ) : (
+            <a href="#" className={desktopCtaClass}>
+              {ctaLabel}
+              {ctaIcon}
+            </a>
+          )}
         </div>
 
         <button
@@ -128,12 +149,21 @@ export default function Navbar() {
                 Sign in
               </Link>
             )}
-            <a
-              href="#"
-              className="block text-center bg-brand text-white text-sm font-semibold rounded-xl py-2.5 hover:bg-brand-dark transition-colors"
-            >
-              Try our sandbox ↗
-            </a>
+            {ctaGoesToDashboard ? (
+              <Link
+                to="/admin/dashboard"
+                className={mobileCtaClass}
+                onClick={() => setIsOpen(false)}
+              >
+                {ctaLabel}
+                {ctaIcon}
+              </Link>
+            ) : (
+              <a href="#" className={mobileCtaClass}>
+                {ctaLabel}
+                {ctaIcon}
+              </a>
+            )}
           </div>
         </div>
       )}
