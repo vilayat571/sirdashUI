@@ -13,6 +13,8 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
 import AuthCallbackPage from "./pages/AuthCallbackPage";
+import CareersPage from "./pages/CareersPage";
+import ImpressumPage from "./pages/ImpressumPage";
 
 function App() {
   return (
@@ -22,6 +24,22 @@ function App() {
         element={
           <Layout>
             <HomePage />
+          </Layout>
+        }
+      />
+          <Route
+        path="/career"
+        element={
+          <Layout>
+            <CareersPage />
+          </Layout>
+        }
+      />
+          <Route
+        path="/impressum"
+        element={
+          <Layout>
+            <ImpressumPage />
           </Layout>
         }
       />

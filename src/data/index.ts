@@ -2,10 +2,12 @@ import { NavItem, PricingPlan, UseCase, SecurityFeature } from '../types';
 
 export const navItems: NavItem[] = [
   { label: 'About', href: '#about' },
-  { label: 'Technology', href: '#technology' },
-  { label: 'Use Cases', href: '#use-cases' },
-  { label: 'Book Demo', href: '#demo' },
-  { label: 'Pricing', href: '#pricing' },
+  { label: 'Technology', href: '/#technology' },
+  { label: 'Use Cases', href: '/#use-cases' },
+  { label: 'Book Demo', href: '/#demo' },
+  { label: 'Impressum', href: '/impressum' },
+  { label: 'Pricing', href: '/#pricing' },
+  { label: 'Career', href: '/career' },
 ];
 
 export const statsData = [

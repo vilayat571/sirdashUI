@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import type { User } from "@supabase/supabase-js";
-import { ArrowUpRight, LayoutDashboard, Menu, X, Zap } from "lucide-react";
+import { Menu, X, Zap } from "lucide-react";
 import toast from "react-hot-toast";
 import { navItems } from "../data";
 import NavbarMobileUserCard from "./NavbarMobileUserCard";
@@ -64,8 +64,8 @@ export default function Navbar() {
     >
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2.5 group">
-          <div className="w-8 h-8 rounded-lg bg-brand flex items-center justify-center group-hover:bg-brand-dark transition-colors">
-            <Zap size={16} className="text-white" fill="white" />
+          <div className="w-8 h-8 flex items-center justify-center ">
+           <img src={logo} alt="" />
           </div>
           <span
             className={`font-bold text-lg tracking-tight transition-colors ${scrolled ? "text-gray-900" : "text-white"}`}
@@ -92,7 +92,7 @@ export default function Navbar() {
           ) : (
             <Link
               to="/login"
-              className={`text-sm font-medium transition-all px-4 py-2 rounded-lg border ${
+              className={`text-sm bg-white text-black font-medium transition-all px-4 py-2 rounded-lg border ${
                 scrolled
                   ? "text-gray-600 border-gray-200 hover:border-gray-300"
                   : "text-white/70 border-white/15 hover:border-white/30"
@@ -101,20 +101,12 @@ export default function Navbar() {
               Sign in
             </Link>
           )}
-          {ctaGoesToDashboard ? (
-            <Link
-              to="/admin/dashboard"
-              className={desktopCtaClass}
-            >
-              {ctaLabel}
-              {ctaIcon}
-            </Link>
-          ) : (
-            <a href="#" className={desktopCtaClass}>
-              {ctaLabel}
-              {ctaIcon}
-            </a>
-          )}
+          <a
+            href="#"
+            className="bg-brand hover:bg-brand-dark text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-all shadow-md shadow-brand/20 flex items-center gap-1.5"
+          >
+            Try our sandbox <span className="text-lg leading-none">↗</span>
+          </a>
         </div>
 
         <button
@@ -149,21 +141,12 @@ export default function Navbar() {
                 Sign in
               </Link>
             )}
-            {ctaGoesToDashboard ? (
-              <Link
-                to="/admin/dashboard"
-                className={mobileCtaClass}
-                onClick={() => setIsOpen(false)}
-              >
-                {ctaLabel}
-                {ctaIcon}
-              </Link>
-            ) : (
-              <a href="#" className={mobileCtaClass}>
-                {ctaLabel}
-                {ctaIcon}
-              </a>
-            )}
+            <a
+              href="#"
+              className="block text-center bg-brand text-white text-sm font-semibold rounded-xl py-2.5 hover:bg-brand-dark transition-colors"
+            >
+              Try our sandbox ↗
+            </a>
           </div>
         </div>
       )}
