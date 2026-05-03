@@ -57,7 +57,6 @@ export default function BookDemo() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&display=swap');
         @keyframes bd-success { 0%{transform:scale(0.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
         @keyframes bd-spin { to{transform:rotate(360deg)} }
         @keyframes bd-check { from{stroke-dashoffset:50} to{stroke-dashoffset:0} }
@@ -78,12 +77,12 @@ export default function BookDemo() {
               display: 'inline-flex', alignItems: 'center', gap: 8,
               background: 'rgba(99,102,241,0.08)', border: '1px solid rgba(99,102,241,0.2)',
               borderRadius: 999, padding: '6px 16px', marginBottom: 16,
-              fontFamily: "'Syne',sans-serif", fontSize: 12, fontWeight: 700, color: '#6366f1', letterSpacing: '0.08em',
+              fontSize: 12, fontWeight: 700, color: '#6366f1', letterSpacing: '0.08em',
             }}>
               <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#6366f1', display: 'inline-block', boxShadow: '0 0 6px rgba(99,102,241,0.5)' }} />
               BOOK A DEMO
             </div>
-            <h2 style={{ fontSize: 'clamp(2.2rem,5vw,3.2rem)', fontWeight: 800, color: '#111827', marginBottom: 12, fontFamily: "'Syne',sans-serif", letterSpacing: '-0.025em' }}>
+            <h2 style={{ fontSize: 'clamp(2.2rem,5vw,3.2rem)', fontWeight: 800, color: '#111827', marginBottom: 12, letterSpacing: '-0.025em' }}>
               Book a Demo
             </h2>
             <p style={{ color: '#6b7280', fontSize: 17, maxWidth: 500, margin: '0 auto' }}>
@@ -121,7 +120,7 @@ export default function BookDemo() {
                     {f.icon}
                   </div>
                   <div>
-                    <h3 style={{ color: '#111827', fontWeight: 700, fontSize: 16, marginBottom: 6, fontFamily: "'Syne',sans-serif" }}>{f.title}</h3>
+                    <h3 style={{ color: '#111827', fontWeight: 700, fontSize: 16, marginBottom: 6,  }}>{f.title}</h3>
                     <p style={{ color: '#6b7280', fontSize: 14, lineHeight: 1.75, margin: 0 }}>{f.description}</p>
                   </div>
                 </div>
@@ -157,7 +156,7 @@ export default function BookDemo() {
                         style={{ strokeDasharray: 50, strokeDashoffset: 0, animation: 'bd-check 0.5s ease 0.2s both' }} />
                     </svg>
                   </div>
-                  <h3 style={{ color: '#111827', fontWeight: 800, fontSize: 22, marginBottom: 10, fontFamily: "'Syne',sans-serif" }}>
+                  <h3 style={{ color: '#111827', fontWeight: 800, fontSize: 22, marginBottom: 10, }}>
                     Demo Request Sent!
                   </h3>
                   <p style={{ color: '#6b7280', fontSize: 14, lineHeight: 1.75 }}>
@@ -235,7 +234,6 @@ export default function BookDemo() {
                       display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
                       boxShadow: '0 6px 24px rgba(99,102,241,0.35)',
                       transition: 'all 0.25s',
-                      fontFamily: "'Syne',sans-serif",
                     }}
                     onMouseEnter={e => { if (!submitting) { const el = e.currentTarget; el.style.transform = 'translateY(-2px)'; el.style.boxShadow = '0 10px 32px rgba(99,102,241,0.5)'; } }}
                     onMouseLeave={e => { const el = e.currentTarget; el.style.transform = 'translateY(0)'; el.style.boxShadow = '0 6px 24px rgba(99,102,241,0.35)'; }}

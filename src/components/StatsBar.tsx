@@ -100,7 +100,7 @@ function StatCard({ stat, active }: { stat: StatConfig; active: boolean }) {
       <div style={{
         fontSize: 32,
         fontWeight: 800,
-        fontFamily: "'Syne', sans-serif",
+       
         background: "linear-gradient(135deg,#6366f1,#8b5cf6)",
         WebkitBackgroundClip: "text",
         WebkitTextFillColor: "transparent",
@@ -173,7 +173,7 @@ function LogoMarquee() {
               userSelect: "none",
               transition: "color 0.2s",
               cursor: "default",
-              fontFamily: "'Syne', sans-serif",
+             
             }}
             onMouseEnter={(e) => ((e.currentTarget as HTMLDivElement).style.color = "#6366f1")}
             onMouseLeave={(e) => ((e.currentTarget as HTMLDivElement).style.color = "#d1d5db")}
@@ -201,7 +201,6 @@ export default function StatsBar() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&display=swap');
 
         @keyframes marquee {
           0%   { transform: translateX(0); }
@@ -255,7 +254,7 @@ export default function StatsBar() {
                 fontSize: 11,
                 fontWeight: 700,
                 letterSpacing: "0.1em",
-                fontFamily: "'Syne', sans-serif",
+               
               }}>
                 TRUSTED BY INDUSTRY LEADERS
               </span>
@@ -264,7 +263,7 @@ export default function StatsBar() {
             <p style={{ color: "#9ca3af", fontSize: 14, fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase" }}>
               Helping to grow the next generation of{" "}
               <strong style={{
-                fontFamily: "'Syne', sans-serif",
+               
                 background: "linear-gradient(135deg,#6366f1,#8b5cf6)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",

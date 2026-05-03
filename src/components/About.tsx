@@ -139,7 +139,6 @@ function FeatureCard({ badge, badgeColor, glowColor, title, desc, icon, delay, a
           fontSize: 11,
           fontWeight: 700,
           marginBottom: 14,
-          fontFamily: "'Syne', sans-serif",
           letterSpacing: "0.04em",
         }}
       >
@@ -151,7 +150,6 @@ function FeatureCard({ badge, badgeColor, glowColor, title, desc, icon, delay, a
         fontWeight: 800,
         fontSize: 18,
         marginBottom: 10,
-        fontFamily: "'Syne', sans-serif",
         letterSpacing: "-0.01em",
         lineHeight: 1.3,
       }}>
@@ -172,7 +170,6 @@ function FeatureCard({ badge, badgeColor, glowColor, title, desc, icon, delay, a
         border: "none",
         padding: 0,
         cursor: "pointer",
-        fontFamily: "'Syne', sans-serif",
         transition: "gap 0.2s",
       }}
         onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.gap = "10px")}
@@ -255,7 +252,7 @@ function ConnectBanner({ active }: { active: boolean }) {
       </div>
 
       <div style={{ flex: 1, minWidth: 200 }}>
-        <h3 style={{ color: "#111827", fontWeight: 800, fontSize: 20, marginBottom: 6, fontFamily: "'Syne', sans-serif" }}>
+        <h3 style={{ color: "#111827", fontWeight: 800, fontSize: 20, marginBottom: 6, }}>
           Connect SirDash To Your Stack
         </h3>
         <p style={{ color: "#6b7280", fontSize: 14, lineHeight: 1.75, margin: 0 }}>
@@ -278,7 +275,6 @@ function ConnectBanner({ active }: { active: boolean }) {
           textDecoration: "none",
           whiteSpace: "nowrap",
           transition: "all 0.3s",
-          fontFamily: "'Syne', sans-serif",
           boxShadow: hovered ? "0 6px 24px rgba(99,102,241,0.4)" : "0 4px 16px rgba(99,102,241,0.25)",
           transform: hovered ? "translateY(-2px)" : "translateY(0)",
           display: "inline-block",
@@ -326,7 +322,6 @@ export default function About() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&display=swap');
 
         @keyframes about-float {
           0%, 100% { transform: translateY(0px) rotate(-2deg); }
@@ -368,7 +363,7 @@ export default function About() {
               lineHeight: 1.12,
               letterSpacing: "-0.025em",
               marginBottom: 16,
-              fontFamily: "'Syne', sans-serif",
+             
               opacity: headingVisible ? 1 : 0,
               transform: headingVisible ? "translateY(0)" : "translateY(20px)",
               transition: "opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s",
@@ -410,7 +405,6 @@ export default function About() {
                   textDecoration: "none",
                   boxShadow: "0 8px 28px rgba(99,102,241,0.3)",
                   transition: "all 0.25s",
-                  fontFamily: "'Syne', sans-serif",
                 }}
                 onMouseEnter={(e) => {
                   const el = e.currentTarget as HTMLAnchorElement;

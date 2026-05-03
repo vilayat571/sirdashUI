@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import type { User } from "@supabase/supabase-js";
-import { Menu, X, Zap } from "lucide-react";
+import { ArrowUpRight, LayoutDashboard, Menu, X, } from "lucide-react";
 import toast from "react-hot-toast";
 import { navItems } from "../data";
 import NavbarMobileUserCard from "./NavbarMobileUserCard";
@@ -12,6 +12,7 @@ import {
   signOutSupabase,
   subscribeSupabaseAuth,
 } from "../lib/authUtils";
+import logo from '../assets/sirdash-logo.png'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -92,7 +93,7 @@ export default function Navbar() {
           ) : (
             <Link
               to="/login"
-              className={`text-sm bg-white text-black font-medium transition-all px-4 py-2 rounded-lg border ${
+              className={`text-sm  text-white font-medium transition-all px-4 py-2 rounded-lg border ${
                 scrolled
                   ? "text-gray-600 border-gray-200 hover:border-gray-300"
                   : "text-white/70 border-white/15 hover:border-white/30"

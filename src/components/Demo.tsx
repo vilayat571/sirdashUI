@@ -9,7 +9,6 @@ import { useInView } from './useInView';
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&display=swap');
         @keyframes demo-ripple { 0%{transform:scale(1);opacity:0.6} 100%{transform:scale(3);opacity:0} }
         @keyframes demo-scan { 0%{top:0%} 100%{top:100%} }
         @keyframes demo-blink { 0%,100%{opacity:1} 50%{opacity:0} }
@@ -24,7 +23,7 @@ import { useInView } from './useInView';
             opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(20px)',
             transition: 'opacity 0.6s ease, transform 0.6s ease',
           }}>
-            <h2 style={{ fontSize: 'clamp(2.2rem,5vw,3.2rem)', fontWeight: 800, color: '#111827', marginBottom: 12, fontFamily: "'Syne',sans-serif", letterSpacing: '-0.025em' }}>
+            <h2 style={{ fontSize: 'clamp(2.2rem,5vw,3.2rem)', fontWeight: 800, color: '#111827', marginBottom: 12, letterSpacing: '-0.025em' }}>
               See SirDash in Action
             </h2>
             <p style={{ color: '#6b7280', fontSize: 17, maxWidth: 480, margin: '0 auto' }}>
@@ -158,7 +157,7 @@ import { useInView } from './useInView';
                 background: 'linear-gradient(135deg,#6366f1,#818cf8)',
                 color: 'white', fontWeight: 700,
                 padding: '16px 36px', borderRadius: 16, fontSize: 15,
-                textDecoration: 'none', fontFamily: "'Syne',sans-serif",
+                textDecoration: 'none', 
                 boxShadow: '0 8px 28px rgba(99,102,241,0.35)',
                 transition: 'all 0.25s',
                 display: 'flex', alignItems: 'center', gap: 8,
@@ -199,7 +198,7 @@ export function Pricing() {
             opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(20px)',
             transition: 'opacity 0.6s ease, transform 0.6s ease',
           }}>
-            <h2 style={{ fontSize: 'clamp(2.2rem,5vw,3.2rem)', fontWeight: 800, color: '#111827', marginBottom: 12, fontFamily: "'Syne',sans-serif", letterSpacing: '-0.025em' }}>
+            <h2 style={{ fontSize: 'clamp(2.2rem,5vw,3.2rem)', fontWeight: 800, color: '#111827', marginBottom: 12,  letterSpacing: '-0.025em' }}>
               Simple, Transparent Pricing
             </h2>
             <p style={{ color: '#6b7280', fontSize: 17 }}>Choose the plan that best fits your needs</p>
@@ -240,7 +239,7 @@ export function Pricing() {
                       background: '#6366f1', color: 'white', fontSize: 12, fontWeight: 700,
                       padding: '6px 18px', borderRadius: 999,
                       boxShadow: '0 4px 16px rgba(99,102,241,0.4)',
-                      whiteSpace: 'nowrap', fontFamily: "'Syne',sans-serif",
+                      whiteSpace: 'nowrap', 
                     }}>
                       ⭐ Most Popular
                     </div>
@@ -256,14 +255,14 @@ export function Pricing() {
                   )}
 
                   <div style={{ marginBottom: 24 }}>
-                    <h3 style={{ fontWeight: 800, fontSize: 20, marginBottom: 4, color: isPopular ? 'white' : '#111827', fontFamily: "'Syne',sans-serif" }}>
+                    <h3 style={{ fontWeight: 800, fontSize: 20, marginBottom: 4, color: isPopular ? 'white' : '#111827', }}>
                       {plan.name}
                     </h3>
                     <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginTop: 12, marginBottom: 8 }}>
                       <span style={{
                         fontWeight: 800, fontSize: 40, lineHeight: 1,
                         color: isPopular ? 'white' : '#111827',
-                        fontFamily: "'Syne',sans-serif",
+                        
                         animation: inView ? `price-pop 0.5s ease ${0.3 + i * 0.15}s both` : 'none',
                       }}>
                         {plan.price}
@@ -296,7 +295,7 @@ export function Pricing() {
                     padding: '13px', borderRadius: 14,
                     fontWeight: 700, fontSize: 14,
                     textDecoration: 'none',
-                    fontFamily: "'Syne',sans-serif",
+                    
                     background: isPopular ? 'white' : 'linear-gradient(135deg,#6366f1,#818cf8)',
                     color: isPopular ? '#6366f1' : 'white',
                     boxShadow: isPopular ? 'none' : '0 4px 16px rgba(99,102,241,0.3)',
@@ -328,7 +327,7 @@ export function Pricing() {
             opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(20px)',
             transition: 'opacity 0.7s ease 0.4s, transform 0.7s ease 0.4s',
           }}>
-            <h3 style={{ color: '#111827', fontWeight: 800, fontSize: 20, marginBottom: 8, fontFamily: "'Syne',sans-serif" }}>
+            <h3 style={{ color: '#111827', fontWeight: 800, fontSize: 20, marginBottom: 8, }}>
               Need a custom solution?
             </h3>
             <p style={{ color: '#6b7280', fontSize: 14, marginBottom: 20 }}>
@@ -338,7 +337,7 @@ export function Pricing() {
               display: 'inline-block',
               border: '1px solid #e5e7eb', color: '#374151',
               fontWeight: 700, padding: '12px 32px', borderRadius: 14,
-              textDecoration: 'none', fontSize: 14, fontFamily: "'Syne',sans-serif",
+              textDecoration: 'none', fontSize: 14, 
               transition: 'all 0.25s',
             }}
               onMouseEnter={e => { const el = e.currentTarget; el.style.borderColor = 'rgba(99,102,241,0.4)'; el.style.color = '#6366f1'; el.style.transform = 'translateY(-2px)'; }}

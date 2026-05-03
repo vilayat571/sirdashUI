@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { companyFields, contactFields } from "../data/constants";
 
 const useInView = (threshold = 0.15) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -39,35 +40,11 @@ const FadeIn = ({
   );
 };
 
-const companyFields = [
-  { label: "Company Name",        value: "Sirdas OÜ (trading as SirDash.ai)" },
-  { label: "Registration Number", value: "17473197" },
-  { label: "Legal Form",          value: "Private Limited Company (OÜ)" },
-  { label: "Registered Address",  value: "Ahtri tn 12, Tallinn, Harju County, 15551, Estonia" },
-  { label: "Managing Director",   value: "Anvar Atash" },
-  { label: "Share Capital",       value: "€1" },
-  { label: "Date of Incorporation", value: "1 April 2026" },
-  { label: "Financial Year",      value: "1 January – 31 December" },
-  { label: "Contact Email",       value: "anvar@sirdash.ai" },
-  { label: "Register Authority",  value: "Tartu County Court, Registry Department" },
-  { label: "Register Source",     value: "Estonian Business Register (e-äriregister)" },
-];
-
-const contactFields = [
-  { label: "General & Support",    value: "support@sirdash.ai" },
-  { label: "Partnership Enquiries", value: "partner@sirdash.ai" },
-  { label: "Careers",              value: "careers@sirdash.ai" },
-  { label: "Website",              value: "www.sirdash.ai", href: "https://www.sirdash.ai" },
-];
 
 export default function ImpressumPage() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
-
-        .imp-syne { font-family: 'Syne', sans-serif; }
-        .imp-dm   { font-family: 'DM Sans', sans-serif; }
 
         @keyframes imp-shimmer {
           0%   { background-position: -200% 0; }
@@ -103,7 +80,7 @@ export default function ImpressumPage() {
         <section className="relative z-10 pt-32 pb-20 px-6 text-center">
           <FadeIn>
             <div
-              className="imp-syne inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-8 imp-badge-glow"
+              className=" inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-8 imp-badge-glow"
               style={{ background: "rgba(99,102,241,0.15)", border: "1px solid rgba(99,102,241,0.4)" }}
             >
               <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#818cf8", display: "inline-block" }} />
@@ -113,7 +90,7 @@ export default function ImpressumPage() {
 
           <FadeIn delay={0.1}>
             <h1
-              className="imp-syne imp-shimmer"
+              className=" imp-shimmer"
               style={{ fontSize: "clamp(3rem,7vw,5rem)", fontWeight: 800, lineHeight: 1.05, letterSpacing: "-0.02em", marginBottom: "1.25rem" }}
             >
               Impressum
@@ -137,7 +114,7 @@ export default function ImpressumPage() {
               style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(99,102,241,0.2)" }}
             >
               <div
-                className="imp-syne px-6 py-4"
+                className=" px-6 py-4"
                 style={{ borderBottom: "1px solid rgba(99,102,241,0.15)", background: "rgba(99,102,241,0.08)", color: "#e2e8f0", fontSize: 13, letterSpacing: "0.06em", fontWeight: 600 }}
               >
                 COMPANY REGISTRATION DETAILS
@@ -150,7 +127,7 @@ export default function ImpressumPage() {
                     className="imp-row flex items-start gap-4 px-6 py-4"
                     style={{ borderBottom: i < companyFields.length - 1 ? "1px solid rgba(99,102,241,0.08)" : "none", transition: "background 0.2s" }}
                   >
-                    <span className="imp-syne shrink-0" style={{ color: "#64748b", fontSize: 13, letterSpacing: "0.03em", width: 200, paddingTop: 2 }}>
+                    <span className=" shrink-0" style={{ color: "#64748b", fontSize: 13, letterSpacing: "0.03em", width: 200, paddingTop: 2 }}>
                       {label}
                     </span>
                     <span style={{ color: "#cbd5e1", fontSize: 15, lineHeight: 1.6 }}>{value}</span>
@@ -167,7 +144,7 @@ export default function ImpressumPage() {
               style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(99,102,241,0.2)" }}
             >
               <div
-                className="imp-syne px-6 py-4"
+                className=" px-6 py-4"
                 style={{ borderBottom: "1px solid rgba(99,102,241,0.15)", background: "rgba(99,102,241,0.08)", color: "#e2e8f0", fontSize: 13, letterSpacing: "0.06em", fontWeight: 600 }}
               >
                 CONTACT INFORMATION
@@ -180,7 +157,7 @@ export default function ImpressumPage() {
                     className="imp-row flex items-center gap-4 px-6 py-4"
                     style={{ borderBottom: i < contactFields.length - 1 ? "1px solid rgba(99,102,241,0.08)" : "none", transition: "background 0.2s" }}
                   >
-                    <span className="imp-syne shrink-0" style={{ color: "#64748b", fontSize: 13, letterSpacing: "0.03em", width: 200 }}>
+                    <span className=" shrink-0" style={{ color: "#64748b", fontSize: 13, letterSpacing: "0.03em", width: 200 }}>
                       {label}
                     </span>
                     <a
@@ -205,7 +182,7 @@ export default function ImpressumPage() {
               className="rounded-2xl p-6"
               style={{ background: "rgba(99,102,241,0.06)", border: "1px solid rgba(99,102,241,0.15)" }}
             >
-              <h3 className="imp-syne" style={{ color: "#a5b4fc", fontSize: 13, letterSpacing: "0.07em", fontWeight: 600, marginBottom: 12 }}>
+              <h3 className="" style={{ color: "#a5b4fc", fontSize: 13, letterSpacing: "0.07em", fontWeight: 600, marginBottom: 12 }}>
                 DISCLAIMER
               </h3>
               <p style={{ color: "#64748b", fontSize: 14, lineHeight: 1.85 }}>

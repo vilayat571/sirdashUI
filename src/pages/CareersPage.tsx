@@ -112,17 +112,17 @@ function RoleCard() {
           <div>
             {/* Badges */}
             <div className="flex flex-wrap items-center gap-2 mb-2">
-              <span className="car-syne font-bold" style={{ color: "#e2e8f0", fontSize: 20 }}>
+              <span className=" font-bold" style={{ color: "#e2e8f0", fontSize: 20 }}>
                 Founding Engineer
               </span>
               <span
-                className="car-syne px-3 py-1 rounded-full"
+                className=" px-3 py-1 rounded-full"
                 style={{ background: "rgba(99,102,241,0.2)", color: "#a5b4fc", fontSize: 11, letterSpacing: "0.04em" }}
               >
                 Platform & DevOps
               </span>
               <span
-                className="car-syne px-3 py-1 rounded-full"
+                className=" px-3 py-1 rounded-full"
                 style={{ background: "rgba(52,211,153,0.12)", color: "#6ee7b7", fontSize: 11, letterSpacing: "0.04em" }}
               >
                 10% Equity
@@ -197,7 +197,7 @@ function RoleCard() {
 
           {/* Compensation */}
           <div className="rounded-xl p-5" style={{ background: "rgba(99,102,241,0.08)", border: "1px solid rgba(99,102,241,0.2)" }}>
-            <h3 className="car-syne" style={{ color: "#a5b4fc", fontSize: 12, letterSpacing: "0.08em", fontWeight: 600, marginBottom: 8 }}>
+            <h3 className="" style={{ color: "#a5b4fc", fontSize: 12, letterSpacing: "0.08em", fontWeight: 600, marginBottom: 8 }}>
               COMPENSATION
             </h3>
             <p style={{ color: "#cbd5e1", fontSize: 14 }}>
@@ -209,7 +209,7 @@ function RoleCard() {
           <div className="flex flex-wrap gap-4">
             <a
               href="mailto:careers@sirdash.ai?subject=Founding Engineer Application"
-              className="car-apply-btn car-syne"
+              className="car-apply-btn "
               style={{
                 display: "inline-block",
                 padding: "13px 28px",
@@ -241,7 +241,7 @@ function RoleCard() {
               href="https://www.sirdash.ai"
               target="_blank"
               rel="noreferrer"
-              className="car-syne"
+              className=""
               style={{
                 display: "inline-block",
                 padding: "13px 28px",
@@ -268,7 +268,7 @@ function Section({ heading, children }: { heading: string; children: React.React
   return (
     <div>
       <h3
-        className="car-syne"
+        className=""
         style={{ color: "#a5b4fc", fontSize: 12, letterSpacing: "0.08em", fontWeight: 600, marginBottom: 12 }}
       >
         {heading}
@@ -303,9 +303,6 @@ export default function CareersPage() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
-
-        .car-syne { font-family: 'Syne', sans-serif; }
         .car-dm   { font-family: 'DM Sans', sans-serif; }
 
         @keyframes car-shimmer {
@@ -343,7 +340,7 @@ export default function CareersPage() {
         <section className="relative z-10 pt-32 pb-20 px-6 text-center">
           <FadeIn>
             <div
-              className="car-syne inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-8 car-badge-glow"
+              className=" inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-8 car-badge-glow"
               style={{ background: "rgba(99,102,241,0.15)", border: "1px solid rgba(99,102,241,0.4)" }}
             >
               <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#34d399", display: "inline-block", boxShadow: "0 0 6px #34d399" }} />
@@ -353,7 +350,7 @@ export default function CareersPage() {
 
           <FadeIn delay={0.1}>
             <h1
-              className="car-syne car-shimmer"
+              className=" car-shimmer"
               style={{ fontSize: "clamp(2.8rem,6.5vw,4.75rem)", fontWeight: 800, lineHeight: 1.07, letterSpacing: "-0.02em", marginBottom: "1.2rem" }}
             >
               Shape the Future<br />of Data Intelligence
@@ -370,7 +367,7 @@ export default function CareersPage() {
           <FadeIn delay={0.3}>
             <a
               href="#open-roles"
-              className="car-syne inline-block px-8 py-4 rounded-full font-semibold"
+              className=" inline-block px-8 py-4 rounded-full font-semibold"
               style={{
                 background: "rgba(99,102,241,0.85)",
                 color: "white",
@@ -407,8 +404,8 @@ export default function CareersPage() {
                   className="car-stat rounded-2xl p-6 text-center"
                   style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(99,102,241,0.18)", transition: "all 0.3s" }}
                 >
-                  <div className="car-syne car-shimmer" style={{ fontSize: 28, fontWeight: 800, lineHeight: 1 }}>{num}</div>
-                  <div className="car-syne" style={{ color: "#64748b", fontSize: 12, marginTop: 7, letterSpacing: "0.05em" }}>{label}</div>
+                  <div className=" car-shimmer" style={{ fontSize: 28, fontWeight: 800, lineHeight: 1 }}>{num}</div>
+                  <div className="" style={{ color: "#64748b", fontSize: 12, marginTop: 7, letterSpacing: "0.05em" }}>{label}</div>
                 </div>
               </FadeIn>
             ))}
@@ -418,7 +415,7 @@ export default function CareersPage() {
         {/* ── Open Roles ── */}
         <section id="open-roles" className="relative z-10 max-w-3xl mx-auto px-6 pb-24">
           <FadeIn>
-            <h2 className="car-syne text-center font-bold mb-10" style={{ color: "#e2e8f0", fontSize: 32 }}>
+            <h2 className=" text-center font-bold mb-10" style={{ color: "#e2e8f0", fontSize: 32 }}>
               Open Positions
             </h2>
           </FadeIn>
@@ -431,7 +428,7 @@ export default function CareersPage() {
         {/* ── Perks ── */}
         <section className="relative z-10 max-w-4xl mx-auto px-6 pb-24">
           <FadeIn>
-            <h2 className="car-syne text-center font-bold mb-10" style={{ color: "#e2e8f0", fontSize: 32 }}>
+            <h2 className=" text-center font-bold mb-10" style={{ color: "#e2e8f0", fontSize: 32 }}>
               Why SirDash.ai
             </h2>
           </FadeIn>
@@ -444,7 +441,7 @@ export default function CareersPage() {
                   style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(99,102,241,0.18)", transition: "all 0.3s" }}
                 >
                   <div style={{ color: "#818cf8", fontSize: 22, marginBottom: 12 }}>{symbol}</div>
-                  <div className="car-syne font-semibold" style={{ color: "#e2e8f0", fontSize: 15, marginBottom: 8 }}>{title}</div>
+                  <div className=" font-semibold" style={{ color: "#e2e8f0", fontSize: 15, marginBottom: 8 }}>{title}</div>
                   <p style={{ color: "#64748b", fontSize: 13, lineHeight: 1.75 }}>{desc}</p>
                 </div>
               </FadeIn>
@@ -459,7 +456,7 @@ export default function CareersPage() {
               className="rounded-2xl p-10 text-center"
               style={{ background: "rgba(99,102,241,0.07)", border: "1px solid rgba(99,102,241,0.22)" }}
             >
-              <h3 className="car-syne font-bold mb-3" style={{ color: "#e2e8f0", fontSize: 26 }}>
+              <h3 className=" font-bold mb-3" style={{ color: "#e2e8f0", fontSize: 26 }}>
                 Don't see the right role?
               </h3>
               <p style={{ color: "#94a3b8", fontSize: 15, marginBottom: 24 }}>
@@ -467,7 +464,7 @@ export default function CareersPage() {
               </p>
               <a
                 href="mailto:careers@sirdash.ai"
-                className="car-syne inline-block px-7 py-3.5 rounded-full font-semibold"
+                className=" inline-block px-7 py-3.5 rounded-full font-semibold"
                 style={{
                   background: "rgba(99,102,241,0.85)",
                   color: "white",

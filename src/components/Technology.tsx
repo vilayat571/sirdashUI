@@ -23,7 +23,6 @@ export default function Technology() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&display=swap');
         @keyframes tech-pulse { 0%,100%{opacity:1} 50%{opacity:0} }
         @keyframes tech-bar { from{height:0} to{height:var(--h)} }
         @keyframes tech-slide-right { from{transform:translateX(-12px);opacity:0} to{transform:translateX(0);opacity:1} }
@@ -42,13 +41,13 @@ export default function Technology() {
                 display: 'inline-flex', alignItems: 'center', gap: 8,
                 background: 'rgba(99,102,241,0.08)', border: '1px solid rgba(99,102,241,0.2)',
                 borderRadius: 999, padding: '6px 16px', marginBottom: 16,
-                fontFamily: "'Syne',sans-serif", fontSize: 12, fontWeight: 700,
+                 fontSize: 12, fontWeight: 700,
                 color: '#6366f1', letterSpacing: '0.08em',
               }}>
                 <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#6366f1', display: 'inline-block', boxShadow: '0 0 6px rgba(99,102,241,0.5)' }} />
                 OUR TECHNOLOGY
               </div>
-              <h2 style={{ fontSize: 'clamp(2.2rem,5vw,3.2rem)', fontWeight: 800, color: '#111827', marginBottom: 12, fontFamily: "'Syne',sans-serif", letterSpacing: '-0.025em' }}>
+              <h2 style={{ fontSize: 'clamp(2.2rem,5vw,3.2rem)', fontWeight: 800, color: '#111827', marginBottom: 12,  letterSpacing: '-0.025em' }}>
                 Our Technology
               </h2>
               <p style={{ color: '#6b7280', fontSize: 18, maxWidth: 480, margin: '0 auto' }}>
@@ -116,7 +115,7 @@ export default function Technology() {
                         <h3 style={{
                           color: isActive ? '#111827' : '#374151',
                           fontWeight: 700, fontSize: 15,
-                          fontFamily: "'Syne',sans-serif",
+                          
                           transition: 'color 0.3s',
                         }}>
                           {f.title}
@@ -136,7 +135,7 @@ export default function Technology() {
                 textDecoration: 'none',
                 boxShadow: '0 8px 28px rgba(99,102,241,0.3)',
                 transition: 'all 0.25s',
-                fontFamily: "'Syne',sans-serif",
+                
                 opacity: inView ? 1 : 0,
                 transform: inView ? 'translateY(0)' : 'translateY(12px)',
                 transitionDelay: '0.45s',

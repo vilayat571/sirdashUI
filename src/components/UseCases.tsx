@@ -28,7 +28,6 @@ export default function UseCases() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&display=swap');
         @keyframes uc-fade-in { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
         @keyframes uc-bar { from{height:0;opacity:0} to{opacity:1} }
         @keyframes uc-dot { 0%,100%{transform:scale(1)} 50%{transform:scale(1.5)} }
@@ -43,7 +42,7 @@ export default function UseCases() {
             opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(20px)',
             transition: 'opacity 0.6s ease, transform 0.6s ease',
           }}>
-            <h2 style={{ fontSize: 'clamp(2.2rem,5vw,3.2rem)', fontWeight: 800, color: '#111827', marginBottom: 12, fontFamily: "'Syne',sans-serif", letterSpacing: '-0.025em' }}>
+            <h2 style={{ fontSize: 'clamp(2.2rem,5vw,3.2rem)', fontWeight: 800, color: '#111827', marginBottom: 12,  letterSpacing: '-0.025em' }}>
               Use Cases
             </h2>
             <p style={{ color: '#6b7280', fontSize: 17, maxWidth: 480, margin: '0 auto' }}>
@@ -69,7 +68,7 @@ export default function UseCases() {
                   fontWeight: 700, fontSize: 13,
                   border: 'none', cursor: 'pointer',
                   transition: 'all 0.3s',
-                  fontFamily: "'Syne',sans-serif",
+                  
                   boxShadow: active === i ? '0 4px 16px rgba(99,102,241,0.3)' : 'none',
                   position: 'relative', overflow: 'hidden',
                 }}
@@ -106,7 +105,7 @@ export default function UseCases() {
               {/* Left */}
               <div>
                 <div style={{ fontSize: 44, marginBottom: 12 }}>{current.icon}</div>
-                <h3 style={{ color: '#111827', fontWeight: 800, fontSize: 26, marginBottom: 12, fontFamily: "'Syne',sans-serif" }}>
+                <h3 style={{ color: '#111827', fontWeight: 800, fontSize: 26, marginBottom: 12,  }}>
                   {current.role}
                 </h3>
                 <p style={{ color: '#6b7280', lineHeight: 1.8, marginBottom: 24, fontSize: 15 }}>{current.description}</p>
@@ -133,7 +132,7 @@ export default function UseCases() {
 
               {/* Right */}
               <div>
-                <h4 style={{ color: '#9ca3af', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16, fontFamily: "'Syne',sans-serif" }}>
+                <h4 style={{ color: '#9ca3af', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16,  }}>
                   Key Benefits
                 </h4>
 
@@ -154,7 +153,7 @@ export default function UseCases() {
 
                 {/* Live preview */}
                 <div style={{ background: '#f9fafb', border: '1px solid #f3f4f6', borderRadius: 18, padding: 16 }}>
-                  <div style={{ color: '#9ca3af', fontSize: 11, marginBottom: 10, fontFamily: "'Syne',sans-serif", letterSpacing: '0.04em', fontWeight: 600 }}>
+                  <div style={{ color: '#9ca3af', fontSize: 11, marginBottom: 10,  letterSpacing: '0.04em', fontWeight: 600 }}>
                     LIVE QUERY PREVIEW
                   </div>
                   <div style={{
