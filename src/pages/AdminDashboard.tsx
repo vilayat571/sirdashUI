@@ -3,28 +3,11 @@ import {
   ArrowRight,
   CalendarDays,
   LayoutDashboard,
-  List,
   LoaderCircle,
   PlusCircle,
 } from "lucide-react";
+import { dashboardActions } from "../data/admin";
 import { useAdminUpdates } from "../hooks/useAdminUpdates";
-
-const dashboardActions = [
-  {
-    title: "Create New Update",
-    description: "Publish a product update to the public changelog.",
-    href: "/admin/dashboard/updates/create",
-    Icon: PlusCircle,
-    cta: "Create update",
-  },
-  {
-    title: "Manage Updates",
-    description: "Review, edit, or delete existing changelog entries.",
-    href: "/admin/dashboard/updates",
-    Icon: List,
-    cta: "View updates",
-  },
-];
 
 export default function AdminDashboard() {
   const { data: updates, isPending, isError } = useAdminUpdates();

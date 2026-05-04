@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import {
   ArrowLeft,
   Eye,
@@ -15,30 +14,10 @@ import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import BrandLogoLink from "../components/BrandLogoLink";
 import RegisterVerificationSent from "../components/RegisterVerificationSent";
+import type { RegisterFormValues } from "../lib/authSchemas";
+import { registerSchema } from "../lib/authSchemas";
 import { supabase } from "../lib/supabase";
 import { signInWithGoogle } from "../lib/authUtils";
-
-const registerSchema = z
-  .object({
-    fullName: z
-      .string()
-      .min(2, { message: "Please enter your name (at least 2 characters)" })
-      .max(100, { message: "Name is too long" }),
-    email: z.string().email({ message: "Please enter a valid email address" }),
-    password: z
-      .string()
-      .min(8, { message: "Password must be at least 8 characters" }),
-    confirmPassword: z.string(),
-    acceptTerms: z.coerce.boolean().refine((v) => v, {
-      message: "You must accept the Terms and Privacy Policy",
-    }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
-
-type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);

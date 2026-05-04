@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import {
   ArrowLeft,
   Eye,
@@ -13,18 +12,10 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import BrandLogoLink from "../components/BrandLogoLink";
+import type { LoginFormValues } from "../lib/authSchemas";
+import { loginSchema } from "../lib/authSchemas";
 import { supabase } from "../lib/supabase";
 import { isAdmin, signInWithGoogle } from "../lib/authUtils";
-
-const loginSchema = z.object({
-  email: z.string().email({ message: "Please enter a valid email address" }),
-  password: z
-    .string()
-    .min(8, { message: "Password must be at least 8 characters" }),
-  rememberMe: z.coerce.boolean().default(false),
-});
-
-type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
