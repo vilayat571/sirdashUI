@@ -97,10 +97,10 @@ export default function Navbar() {
           ) : (
             <Link
               to="/login"
-              className={`text-sm  text-white font-medium transition-all px-4 py-2 rounded-lg border ${
+              className={`text-sm font-medium transition-all px-4 py-2 rounded-lg border ${
                 scrolled
-                  ? "text-gray-600 border-gray-200 hover:border-gray-300"
-                  : "text-white/70 border-white/15 hover:border-white/30"
+                  ? "text-gray-800 border-gray-200 bg-gray-50 hover:bg-gray-100 hover:border-gray-300 hover:text-gray-900"
+                  : "text-white/70 border-white/15 hover:border-white/30 hover:text-white"
               }`}
             >
               Sign in
