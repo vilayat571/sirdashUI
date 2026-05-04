@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { LoaderCircle, Zap } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
+import BrandLogoLink from "../components/BrandLogoLink";
 import { supabase } from "../lib/supabase";
 import { isAdmin } from "../lib/authUtils";
 
@@ -50,14 +51,7 @@ export default function AuthCallbackPage() {
       <div className="relative z-10 mx-auto flex min-h-screen max-w-lg flex-col justify-center px-5 py-14 sm:px-6">
         <div className="rounded-2xl border border-gray-200/80 bg-white p-8 shadow-[0_4px_24px_rgba(0,0,0,0.04),0_1px_2px_rgba(0,0,0,0.04)] sm:p-10">
           <div className="text-center">
-            <span className="inline-flex items-center justify-center gap-2.5">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand shadow-sm shadow-brand/20">
-                <Zap className="h-5 w-5 text-white" fill="white" aria-hidden />
-              </span>
-              <span className="text-lg font-bold tracking-tight text-gray-900">
-                sirdash.ai
-              </span>
-            </span>
+            <BrandLogoLink className="inline-flex items-center justify-center gap-2.5 group" />
           </div>
 
           <div className="mt-8 flex flex-col items-center text-center">

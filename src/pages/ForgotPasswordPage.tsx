@@ -2,8 +2,9 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { ArrowLeft, LoaderCircle, Mail, Zap } from "lucide-react";
+import { ArrowLeft, LoaderCircle, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
+import BrandLogoLink from "../components/BrandLogoLink";
 
 const forgotSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
@@ -50,17 +51,7 @@ export default function ForgotPasswordPage() {
       <div className="relative z-10 mx-auto flex min-h-screen max-w-lg flex-col justify-center px-5 py-14 sm:px-6">
         <div className="rounded-2xl border border-gray-200/80 bg-white p-8 shadow-[0_4px_24px_rgba(0,0,0,0.04),0_1px_2px_rgba(0,0,0,0.04)] sm:p-10">
           <div className="text-center">
-            <Link
-              to="/"
-              className="inline-flex items-center justify-center gap-2.5 transition-opacity hover:opacity-80"
-            >
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand shadow-sm shadow-brand/20">
-                <Zap className="h-5 w-5 text-white" fill="white" aria-hidden />
-              </span>
-              <span className="text-lg font-bold tracking-tight text-gray-900">
-                sirdash.ai
-              </span>
-            </Link>
+            <BrandLogoLink className="inline-flex items-center justify-center gap-2.5 transition-opacity hover:opacity-80 group" />
 
             <h1 className="mt-6 text-2xl font-bold tracking-tight text-gray-900 sm:text-[1.75rem]">
               {isSuccess ? "Check your email" : "Forgot your password?"}

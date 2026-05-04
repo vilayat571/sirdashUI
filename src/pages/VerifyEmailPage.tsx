@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import type { EmailOtpType } from "@supabase/supabase-js";
-import { CheckCircle, LoaderCircle, XCircle, Zap } from "lucide-react";
+import { CheckCircle, LoaderCircle, XCircle } from "lucide-react";
+import BrandLogoLink from "../components/BrandLogoLink";
 import { handleEmailVerification } from "../lib/authUtils";
 
 type VerificationStatus = "loading" | "success" | "error";
@@ -23,13 +24,13 @@ export default function VerifyEmailPage() {
       if (result.success) {
         setStatus("success");
         setMessage(
-          "Your email has been successfully verified. You can now sign in to your account."
+          "Your email has been successfully verified. You can now sign in to your account.",
         );
       } else {
         setStatus("error");
         setMessage(
           result.errorMessage ??
-            "There was a problem verifying your email. The link may have expired or is invalid."
+            "There was a problem verifying your email. The link may have expired or is invalid.",
         );
       }
     }
@@ -50,17 +51,7 @@ export default function VerifyEmailPage() {
       <div className="relative z-10 mx-auto flex min-h-screen max-w-lg flex-col justify-center px-5 py-14 sm:px-6">
         <div className="rounded-2xl border border-gray-200/80 bg-white p-8 shadow-[0_4px_24px_rgba(0,0,0,0.04),0_1px_2px_rgba(0,0,0,0.04)] sm:p-10">
           <div className="text-center">
-            <Link
-              to="/"
-              className="inline-flex items-center justify-center gap-2.5 transition-opacity hover:opacity-80"
-            >
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand shadow-sm shadow-brand/20">
-                <Zap className="h-5 w-5 text-white" fill="white" aria-hidden />
-              </span>
-              <span className="text-lg font-bold tracking-tight text-gray-900">
-                sirdash.ai
-              </span>
-            </Link>
+            <BrandLogoLink className="inline-flex items-center justify-center gap-2.5 transition-opacity hover:opacity-80 group" />
 
             <h1 className="mt-6 text-2xl font-bold tracking-tight text-gray-900 sm:text-[1.75rem]">
               Email verification
@@ -80,10 +71,7 @@ export default function VerifyEmailPage() {
 
             {status === "success" && (
               <div className="flex flex-col items-center">
-                <CheckCircle
-                  className="h-14 w-14 text-green-500"
-                  aria-hidden
-                />
+                <CheckCircle className="h-14 w-14 text-green-500" aria-hidden />
                 <p className="mt-4 text-sm text-gray-600">{message}</p>
                 <button
                   type="button"

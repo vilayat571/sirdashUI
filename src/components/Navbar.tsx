@@ -6,13 +6,13 @@ import toast from "react-hot-toast";
 import { navItems } from "../data";
 import NavbarMobileUserCard from "./NavbarMobileUserCard";
 import NavbarProfileDropdown from "./NavbarProfileDropdown";
+import BrandLogoLink from "./BrandLogoLink";
 import {
   getSupabaseSessionUser,
   isAdmin,
   signOutSupabase,
   subscribeSupabaseAuth,
 } from "../lib/authUtils";
-import logo from "../assets/sirdash-logo.png";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -64,16 +64,9 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2.5 group">
-          <div className="w-8 h-8 flex items-center justify-center ">
-            <img src={logo} alt="" />
-          </div>
-          <span
-            className={`font-bold text-lg tracking-tight transition-colors ${scrolled ? "text-gray-900" : "text-white"}`}
-          >
-            sirdash.ai
-          </span>
-        </Link>
+        <BrandLogoLink
+          labelClassName={`font-bold text-lg tracking-tight transition-colors ${scrolled ? "text-gray-900" : "text-white"}`}
+        />
 
         <div className="hidden md:flex items-center gap-8">
           {navItems.map((item) => (
