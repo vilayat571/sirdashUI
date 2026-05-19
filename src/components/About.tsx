@@ -1,454 +1,188 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
+import { useInView } from "./useInView";
+import { Play } from "lucide-react";
 
-function useInView(threshold = 0.15) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) setVisible(true); },
-      { threshold }
-    );
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, []);
-  return [ref, visible] as const;
-}
-
-// ── Animated typing cursor for the badge ──────────────────────────────────
-function TypingBadge({ text }: { text: string }) {
-  const [displayed, setDisplayed] = useState("");
-  const [ref, inView] = useInView(0.4);
-  useEffect(() => {
-    if (!inView) return;
-    let i = 0;
-    const id = setInterval(() => {
-      setDisplayed(text.slice(0, ++i));
-      if (i >= text.length) clearInterval(id);
-    }, 38);
-    return () => clearInterval(id);
-  }, [inView, text]);
-
-  return (
-    <div ref={ref} style={{
-      display: "inline-flex",
-      alignItems: "center",
-      gap: 8,
-      background: "white",
-      border: "1px solid #e5e7eb",
-      borderRadius: 999,
-      padding: "6px 16px",
-      fontSize: 13,
-      fontWeight: 700,
-      color: "#6366f1",
-      boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
-      marginBottom: 24,
-      letterSpacing: "0.04em",
-    }}>
-      <span style={{
-        width: 7, height: 7, borderRadius: "50%",
-        background: "#6366f1",
-        display: "inline-block",
-        boxShadow: "0 0 6px rgba(99,102,241,0.5)",
-        flexShrink: 0,
-      }} />
-      {displayed}
-      <span style={{
-        display: "inline-block",
-        width: 2, height: 14,
-        background: "#6366f1",
-        borderRadius: 1,
-        marginLeft: 1,
-        opacity: displayed.length < text.length ? 1 : 0,
-        transition: "opacity 0.2s",
-      }} />
-    </div>
-  );
-}
-
-// ── Feature card ───────────────────────────────────────────────────────────
-interface CardProps {
-  badge: string;
-  badgeColor: string;
-  glowColor: string;
-  title: string;
-  desc: string;
-  icon: string;
-  delay: number;
-  active: boolean;
-}
-
-function FeatureCard({ badge, badgeColor, glowColor, title, desc, icon, delay, active }: CardProps) {
-  const [hovered, setHovered] = useState(false);
-
-  return (
-    <div
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        position: "relative",
-        background: "white",
-        borderRadius: 20,
-        border: `1px solid ${hovered ? glowColor + "55" : "#f3f4f6"}`,
-        padding: "28px 24px",
-        boxShadow: hovered
-          ? `0 16px 48px ${glowColor}22, 0 4px 16px rgba(0,0,0,0.06)`
-          : "0 2px 8px rgba(0,0,0,0.04)",
-        transform: active
-          ? hovered ? "translateY(-6px)" : "translateY(0)"
-          : "translateY(24px)",
-        opacity: active ? 1 : 0,
-        transition: `opacity 0.6s ease ${delay}s, transform 0.6s cubic-bezier(0.34,1.4,0.64,1) ${delay}s, box-shadow 0.3s ease, border-color 0.3s ease`,
-        overflow: "hidden",
-        cursor: "default",
-      }}
-    >
-      {/* Top glow blob */}
-      <div style={{
-        position: "absolute", top: 0, left: 0, right: 0, height: 120,
-        background: `radial-gradient(ellipse at 50% 0%, ${glowColor}18, transparent 70%)`,
-        opacity: hovered ? 1 : 0,
-        transition: "opacity 0.4s",
-        pointerEvents: "none",
-      }} />
-
-      {/* Animated icon */}
-      <div style={{
-        width: 44, height: 44,
-        borderRadius: 14,
-        background: glowColor + "15",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        fontSize: 22,
-        marginBottom: 16,
-        transform: hovered ? "scale(1.12) rotate(-4deg)" : "scale(1) rotate(0deg)",
-        transition: "transform 0.4s cubic-bezier(0.34,1.56,0.64,1)",
-        boxShadow: hovered ? `0 4px 16px ${glowColor}30` : "none",
-      }}>
-        {icon}
-      </div>
-
-      <div
-        className={badgeColor}
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 4,
-          borderWidth: 1,
-          borderStyle: "solid",
-          borderRadius: 999,
-          padding: "3px 10px",
-          fontSize: 11,
-          fontWeight: 700,
-          marginBottom: 14,
-          letterSpacing: "0.04em",
-        }}
-      >
-        {badge}
-      </div>
-
-      <h3 style={{
-        color: "#111827",
-        fontWeight: 800,
-        fontSize: 18,
-        marginBottom: 10,
-        letterSpacing: "-0.01em",
-        lineHeight: 1.3,
-      }}>
-        {title}
-      </h3>
-
-      <p style={{ color: "#6b7280", fontSize: 14, lineHeight: 1.75, marginBottom: 20 }}>{desc}</p>
-
-      {/* Animated "Learn more" */}
-      <button style={{
-        display: "flex",
-        alignItems: "center",
-        gap: 6,
-        color: "#6366f1",
-        fontSize: 13,
-        fontWeight: 700,
-        background: "none",
-        border: "none",
-        padding: 0,
-        cursor: "pointer",
-        transition: "gap 0.2s",
-      }}
-        onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.gap = "10px")}
-        onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.gap = "6px")}
-      >
-        Learn More
-        <span style={{
-          display: "inline-flex",
-          alignItems: "center",
-          justifyContent: "center",
-          width: 22, height: 22,
-          borderRadius: "50%",
-          background: "rgba(99,102,241,0.1)",
-          fontSize: 13,
-          transition: "background 0.2s",
-        }}>→</span>
-      </button>
-
-      {/* Bottom shimmer bar */}
-      <div style={{
-        position: "absolute", bottom: 0, left: "15%", right: "15%", height: 2,
-        borderRadius: 2,
-        background: `linear-gradient(90deg, transparent, ${glowColor}, transparent)`,
-        opacity: hovered ? 1 : 0,
-        transition: "opacity 0.4s",
-      }} />
-    </div>
-  );
-}
-
-// ── Connect banner ─────────────────────────────────────────────────────────
-function ConnectBanner({ active }: { active: boolean }) {
-  const [hovered, setHovered] = useState(false);
-
-  return (
-    <div
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        position: "relative",
-        background: "white",
-        borderRadius: 20,
-        border: `1px solid ${hovered ? "rgba(99,102,241,0.35)" : "#f3f4f6"}`,
-        padding: "32px",
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        gap: 24,
-        boxShadow: hovered
-          ? "0 12px 40px rgba(99,102,241,0.12), 0 2px 8px rgba(0,0,0,0.04)"
-          : "0 2px 8px rgba(0,0,0,0.04)",
-        opacity: active ? 1 : 0,
-        transform: active ? "translateY(0)" : "translateY(20px)",
-        transition: "opacity 0.65s ease 0.45s, transform 0.65s ease 0.45s, box-shadow 0.3s, border-color 0.3s",
-        overflow: "hidden",
-        flexWrap: "wrap",
-      }}
-    >
-      {/* Background shimmer on hover */}
-      <div style={{
-        position: "absolute", inset: 0, pointerEvents: "none",
-        background: "radial-gradient(ellipse at 0% 50%, rgba(99,102,241,0.05), transparent 60%)",
-        opacity: hovered ? 1 : 0,
-        transition: "opacity 0.4s",
-      }} />
-
-      {/* Icon */}
-      <div style={{
-        flexShrink: 0,
-        width: 52, height: 52,
-        borderRadius: 16,
-        background: "rgba(99,102,241,0.08)",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        fontSize: 26,
-        transform: hovered ? "rotate(-8deg) scale(1.08)" : "rotate(0) scale(1)",
-        transition: "transform 0.4s cubic-bezier(0.34,1.56,0.64,1)",
-        boxShadow: hovered ? "0 4px 16px rgba(99,102,241,0.2)" : "none",
-      }}>
-        🔗
-      </div>
-
-      <div style={{ flex: 1, minWidth: 200 }}>
-        <h3 style={{ color: "#111827", fontWeight: 800, fontSize: 20, marginBottom: 6, }}>
-          Connect SirDash To Your Stack
-        </h3>
-        <p style={{ color: "#6b7280", fontSize: 14, lineHeight: 1.75, margin: 0 }}>
-          Connect in minutes with PostgreSQL, Microsoft SQL Server, or Oracle Database. We'll jump on a call to onboard you and configure your semantic data layer from day one.
-        </p>
-      </div>
-
-      <a
-        href="#demo"
-        style={{
-          flexShrink: 0,
-          background: hovered
-            ? "linear-gradient(135deg,#6366f1,#7c3aed)"
-            : "linear-gradient(135deg,#6366f1,#818cf8)",
-          color: "white",
-          fontWeight: 700,
-          padding: "13px 24px",
-          borderRadius: 14,
-          fontSize: 14,
-          textDecoration: "none",
-          whiteSpace: "nowrap",
-          transition: "all 0.3s",
-          boxShadow: hovered ? "0 6px 24px rgba(99,102,241,0.4)" : "0 4px 16px rgba(99,102,241,0.25)",
-          transform: hovered ? "translateY(-2px)" : "translateY(0)",
-          display: "inline-block",
-        }}
-      >
-        Book A Demo ↗
-      </a>
-    </div>
-  );
-}
-
-// ── Main ───────────────────────────────────────────────────────────────────
-
-const CARDS = [
-  {
-    badge: "+ REAL-TIME ANALYTICS",
-    badgeColor: "text-red-500 bg-red-50 border-red-200",
-    glowColor: "#ef4444",
-    icon: "📊",
-    title: "Dashboards In Seconds",
-    desc: "Plan, collaborate, and query your data in seconds. No SQL knowledge needed—our AI translates your questions into powerful database queries automatically.",
-  },
-  {
-    badge: "+ BETTER INSIGHTS",
-    badgeColor: "text-green-600 bg-green-50 border-green-200",
-    glowColor: "#22c55e",
-    icon: "🧠",
-    title: "AI-Driven Insights",
-    desc: "Our Agentic RAG Intelligence actively shapes responses based on your specific domain knowledge. Get insights tailored to your business context every time.",
-  },
-  {
-    badge: "+ NO MORE SQL",
-    badgeColor: "text-indigo-600 bg-indigo-50 border-indigo-200",
-    glowColor: "#6366f1",
-    icon: "✍️",
-    title: "Write Queries In English",
-    desc: "Natural language queries are transformed into precise SQL statements. Ask anything in plain English and get perfectly structured results instantly.",
-  },
-];
-
-export default function About() {
+export function Demo() {
   const [sectionRef, inView] = useInView(0.1);
-  const [headingRef, headingVisible] = useInView(0.3);
+  const [playing, setPlaying] = useState(false);
 
   return (
     <>
       <style>{`
-
-        @keyframes about-float {
-          0%, 100% { transform: translateY(0px) rotate(-2deg); }
-          50%       { transform: translateY(-8px) rotate(-2deg); }
+        @keyframes demo-pulse {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.5; transform: scale(0.8); }
         }
-        @keyframes about-spin-slow {
-          from { transform: rotate(0deg); }
-          to   { transform: rotate(360deg); }
+        @keyframes demo-ring {
+          0% { transform: scale(1); opacity: 0.6; }
+          100% { transform: scale(2.2); opacity: 0; }
+        }
+        .demo-section::before {
+          content: '';
+          position: absolute;
+          top: -200px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 900px;
+          height: 600px;
+          background: radial-gradient(ellipse, rgba(99,102,241,0.12) 0%, transparent 70%);
+          pointer-events: none;
+        }
+        .demo-grid-lines {
+          position: absolute;
+          inset: 0;
+          background-image:
+            linear-gradient(rgba(99,102,241,0.04) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(99,102,241,0.04) 1px, transparent 1px);
+          background-size: 60px 60px;
+          pointer-events: none;
         }
       `}</style>
 
-      <section id="about" style={{ background: "#f9fafb", padding: "112px 0 96px", position: "relative", overflow: "hidden" }}>
+      <section className="demo-section bg-[#05060f] py-[140px] relative overflow-hidden">
+        <div className="demo-grid-lines" />
 
-        {/* Decorative background shapes */}
-        <div style={{
-          position: "absolute", top: -80, right: -80, width: 320, height: 320,
-          borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(99,102,241,0.07), transparent 70%)",
-          pointerEvents: "none",
-        }} />
-        <div style={{
-          position: "absolute", bottom: 40, left: -60, width: 240, height: 240,
-          borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(139,92,246,0.05), transparent 70%)",
-          pointerEvents: "none",
-        }} />
+        <div ref={sectionRef} className="max-w-[1100px] mx-auto px-6">
 
-        <div ref={sectionRef} style={{ maxWidth: 1152, margin: "0 auto", padding: "0 24px" }}>
+          {/* Header */}
+          <div
+            className="text-center mb-16"
+            style={{
+              opacity: inView ? 1 : 0,
+              transform: inView ? "translateY(0)" : "translateY(24px)",
+              transition: "opacity 0.7s ease, transform 0.7s ease",
+            }}
+          >
+            <div className="inline-flex items-center gap-2 bg-[rgba(99,102,241,0.1)] border border-[rgba(99,102,241,0.25)] text-[#818cf8] text-[11px] font-medium tracking-[0.15em] uppercase px-4 py-1.5 rounded-full mb-6">
+              <span
+                className="w-1.5 h-1.5 bg-[#6366f1] rounded-full shrink-0"
+                style={{
+                  boxShadow: "0 0 8px #6366f1",
+                  animation: "demo-pulse 2s ease-in-out infinite",
+                }}
+              />
+              Live Demo
+            </div>
 
-          {/* ── Heading block ── */}
-          <div ref={headingRef} style={{ textAlign: "center", marginBottom: 64 }}>
-
-            <TypingBadge text="+ NATURAL LANGUAGE DATA ACCESS" />
-
-            <h2 style={{
-              fontSize: "clamp(2.2rem,5vw,3.2rem)",
-              fontWeight: 800,
-              color: "#111827",
-              lineHeight: 1.12,
-              letterSpacing: "-0.025em",
-              marginBottom: 16,
-             
-              opacity: headingVisible ? 1 : 0,
-              transform: headingVisible ? "translateY(0)" : "translateY(20px)",
-              transition: "opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s",
-            }}>
-              Connect Instantly With<br />All Your Data Sources
+            <h2 className="text-[clamp(2.4rem,5vw,3.8rem)] font-extrabold text-white leading-[1.05] tracking-[-0.03em] mb-4">
+              See SirDash{" "}
+              <span className="bg-gradient-to-br from-[#818cf8] to-[#c4b5fd] bg-clip-text text-transparent">
+                in Action
+              </span>
             </h2>
 
-            <p style={{
-              color: "#6b7280",
-              fontSize: 18,
-              maxWidth: 480,
-              margin: "0 auto 32px",
-              lineHeight: 1.75,
-              opacity: headingVisible ? 1 : 0,
-              transform: headingVisible ? "translateY(0)" : "translateY(16px)",
-              transition: "opacity 0.6s ease 0.32s, transform 0.6s ease 0.32s",
-            }}>
-              No SQL, no complicated setup—just ask your data questions in plain English and get instant answers.
+            <p className="text-white/40 text-base font-light max-w-[440px] mx-auto leading-[1.7]">
+              Watch how natural language transforms into powerful data insights—in seconds, not hours.
             </p>
+          </div>
 
-            {/* CTA */}
-            <div style={{
-              opacity: headingVisible ? 1 : 0,
-              transform: headingVisible ? "translateY(0)" : "translateY(12px)",
-              transition: "opacity 0.6s ease 0.42s, transform 0.6s ease 0.42s",
-            }}>
-              <a
-                href="#demo"
+          {/* Video */}
+          <div
+            style={{
+              opacity: inView ? 1 : 0,
+              transform: inView ? "translateY(0) scale(1)" : "translateY(32px) scale(0.97)",
+              transition: "opacity 0.8s ease 0.15s, transform 0.8s cubic-bezier(0.34,1.2,0.64,1) 0.15s",
+            }}
+          >
+            <div
+              className="relative rounded-[24px] overflow-hidden aspect-video max-w-[900px] mx-auto cursor-pointer"
+              style={{
+                boxShadow:
+                  "0 0 0 1px rgba(99,102,241,0.2), 0 40px 100px rgba(0,0,0,0.6), 0 0 80px rgba(99,102,241,0.08)",
+              }}
+              onClick={() => setPlaying(true)}
+            >
+              {/* Thumbnail bg */}
+              <div className="absolute inset-0 bg-[#0a0b1e] flex items-center justify-center">
+                <div className="w-[85%] h-[75%] bg-white/[0.03] border border-white/[0.06] rounded-2xl overflow-hidden flex flex-col">
+                  <div className="h-9 bg-white/[0.04] border-b border-white/[0.05] flex items-center px-4 gap-2">
+                    {(["#ef4444", "#f59e0b", "#22c55e"] as const).map((color, i) => (
+                      <div key={i} className="w-2 h-2 rounded-full" style={{ background: color }} />
+                    ))}
+                  </div>
+                  <div className="flex-1 p-5 grid grid-cols-2 gap-3">
+                    {[...Array(4)].map((_, i) => (
+                      <div
+                        key={i}
+                        className="bg-[rgba(99,102,241,0.06)] border border-[rgba(99,102,241,0.12)] rounded-[10px] p-3.5 flex flex-col gap-2"
+                      >
+                        <div className="h-1.5 rounded-[3px] bg-[rgba(99,102,241,0.3)] w-[60%]" />
+                        <div className="h-1.5 rounded-[3px] bg-white/[0.08]" />
+                        <div className="h-1.5 rounded-[3px] bg-white/[0.08] w-[60%]" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Play overlay */}
+              <div
+                className={`absolute inset-0 flex flex-col items-center justify-center gap-5 backdrop-blur-[4px] transition-opacity duration-[400ms] ${
+                  playing ? "opacity-0 pointer-events-none" : "opacity-100"
+                }`}
                 style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 8,
-                  background: "linear-gradient(135deg,#6366f1,#818cf8)",
-                  color: "white",
-                  fontWeight: 700,
-                  padding: "14px 28px",
-                  borderRadius: 14,
-                  fontSize: 15,
-                  textDecoration: "none",
-                  boxShadow: "0 8px 28px rgba(99,102,241,0.3)",
-                  transition: "all 0.25s",
-                }}
-                onMouseEnter={(e) => {
-                  const el = e.currentTarget as HTMLAnchorElement;
-                  el.style.transform = "translateY(-3px)";
-                  el.style.boxShadow = "0 12px 36px rgba(99,102,241,0.45)";
-                }}
-                onMouseLeave={(e) => {
-                  const el = e.currentTarget as HTMLAnchorElement;
-                  el.style.transform = "translateY(0)";
-                  el.style.boxShadow = "0 8px 28px rgba(99,102,241,0.3)";
+                  background: "linear-gradient(135deg, rgba(6,7,26,0.85) 0%, rgba(6,7,26,0.6) 100%)",
                 }}
               >
-                Book A Demo
-                <span style={{
-                  display: "inline-flex", alignItems: "center", justifyContent: "center",
-                  width: 24, height: 24, borderRadius: "50%",
-                  background: "rgba(255,255,255,0.2)",
-                  fontSize: 15,
-                }}>↗</span>
-              </a>
+                <div className="relative flex items-center justify-center">
+                  <div
+                    className="absolute w-20 h-20 rounded-full border-2 border-white/30"
+                    style={{ animation: "demo-ring 2s ease-in-out infinite" }}
+                  />
+                  <div
+                    className="absolute w-20 h-20 rounded-full border-2 border-white/30"
+                    style={{ animation: "demo-ring 2s ease-in-out infinite", animationDelay: "0.7s" }}
+                  />
+                  <button
+                    className="w-20 h-20 rounded-full bg-white flex items-center justify-center cursor-pointer border-none transition-all duration-300 hover:scale-110"
+                    style={{
+                      boxShadow: "0 8px 40px rgba(99,102,241,0.4)",
+                    }}
+                  >
+                    <Play size={28} color="#6366f1" style={{ marginLeft: 3 }} />
+                  </button>
+                </div>
+                <span className="text-white/70 text-[13px] font-light tracking-[0.05em]">
+                  Watch 2-min demo
+                </span>
+              </div>
+
+              {playing && (
+                <iframe
+                  src="https://www.youtube.com/embed/MLAG4v7Aa7g?si=5W5b8pB_uBJIOB_i&autoplay=1"
+                  title="SirDash Demo"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="absolute inset-0 w-full h-full border-none"
+                />
+              )}
             </div>
           </div>
 
-          {/* ── Feature cards ── */}
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3,1fr)",
-            gap: 20,
-            marginBottom: 20,
-          }}>
-            {CARDS.map((card, i) => (
-              <FeatureCard
-                key={card.title}
-                {...card}
-                delay={0.1 + i * 0.12}
-                active={inView}
-              />
+          {/* Bottom stats */}
+          <div
+            className="flex items-center justify-center gap-10 mt-10 flex-wrap"
+            style={{
+              opacity: inView ? 1 : 0,
+              transition: "opacity 0.7s ease 0.5s",
+            }}
+          >
+            {[
+              "No SQL knowledge needed",
+              "Works with any database",
+              "Results in under 2 seconds",
+              "Enterprise-grade security",
+            ].map((s) => (
+              <div key={s} className="flex items-center gap-2.5 text-white/35 text-[13px] font-light">
+                <div className="w-1 h-1 rounded-full bg-[#6366f1]" />
+                {s}
+              </div>
             ))}
           </div>
-
-          {/* ── Connect banner ── */}
-          <ConnectBanner active={inView} />
         </div>
       </section>
     </>
   );
 }
+
+export default Demo;

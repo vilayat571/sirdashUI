@@ -5,7 +5,7 @@ import {
   getUserAvatarUrl,
   getUserDisplayName,
   profileInitials,
-} from "../lib/authUtils";
+} from "../../lib/authUtils";
 
 type NavbarProfileDropdownProps = Readonly<{
   user: User;

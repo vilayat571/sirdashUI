@@ -4,15 +4,15 @@ import type { User } from "@supabase/supabase-js";
 import { ArrowUpRight, LayoutDashboard, Menu, X, } from "lucide-react";
 import toast from "react-hot-toast";
 import { navItems } from "../../data";
-import NavbarMobileUserCard from "./NavbarMobileUserCard";
-import NavbarProfileDropdown from "./NavbarProfileDropdown";
+import NavbarMobileUserCard from "../Navbar/NavbarMobileUserCard";
+import NavbarProfileDropdown from "../Navbar/NavbarProfileDropdown";
 import {
   getSupabaseSessionUser,
   isAdmin,
   signOutSupabase,
   subscribeSupabaseAuth,
 } from "../../lib/authUtils";
-import logo from '../assets/sirdash-logo.png'
+import logo from '../../assets/sirdash-logo.png'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);

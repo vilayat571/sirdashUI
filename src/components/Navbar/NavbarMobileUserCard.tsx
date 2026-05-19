@@ -4,7 +4,7 @@ import {
   getUserAvatarUrl,
   getUserDisplayName,
   profileInitials,
-} from "../lib/authUtils";
+} from "../../lib/authUtils";
 
 type NavbarMobileUserCardProps = Readonly<{
   user: User;
