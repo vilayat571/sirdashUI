@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import type { User } from "@supabase/supabase-js";
-import { ArrowUpRight, LayoutDashboard, Menu, X, } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import toast from "react-hot-toast";
 import { navItems } from "../../data";
 import NavbarMobileUserCard from "../Navbar/NavbarMobileUserCard";
@@ -12,7 +12,7 @@ import {
   signOutSupabase,
   subscribeSupabaseAuth,
 } from "../../lib/authUtils";
-import logo from '../../assets/sirdash-logo.png'
+import logo from '../../assets/sirdash-logo.png';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,17 +43,8 @@ export default function Navbar() {
     toast.success("You've been signed out.");
   }
 
+  // ✅ Removed: ctaLabel, ctaIcon, desktopCtaClass, mobileCtaClass (declared but never used)
   const ctaGoesToDashboard = Boolean(user && isAdmin(user));
-  const ctaLabel = ctaGoesToDashboard ? "Go to dashboard" : "Try our sandbox";
-  const ctaIcon = ctaGoesToDashboard ? (
-    <LayoutDashboard size={18} className="shrink-0" aria-hidden />
-  ) : (
-    <ArrowUpRight size={18} className="shrink-0" aria-hidden />
-  );
-  const desktopCtaClass =
-    "bg-brand hover:bg-brand-dark text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-all shadow-md shadow-brand/20 flex items-center gap-1.5";
-  const mobileCtaClass =
-    "flex w-full items-center justify-center gap-1.5 bg-brand text-white text-sm font-semibold rounded-xl py-2.5 hover:bg-brand-dark transition-colors";
 
   return (
     <nav
@@ -65,8 +56,8 @@ export default function Navbar() {
     >
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2.5 group">
-          <div className="w-8 h-8 flex items-center justify-center ">
-           <img src={logo} alt="" />
+          <div className="w-8 h-8 flex items-center justify-center">
+            <img src={logo} alt="" />
           </div>
           <span
             className={`font-bold text-lg tracking-tight transition-colors ${scrolled ? "text-gray-900" : "text-white"}`}
@@ -93,7 +84,7 @@ export default function Navbar() {
           ) : (
             <Link
               to="/login"
-              className={`text-sm  text-white font-medium transition-all px-4 py-2 rounded-lg border ${
+              className={`text-sm font-medium transition-all px-4 py-2 rounded-lg border ${
                 scrolled
                   ? "text-gray-600 border-gray-200 hover:border-gray-300"
                   : "text-white/70 border-white/15 hover:border-white/30"
@@ -102,7 +93,13 @@ export default function Navbar() {
               Sign in
             </Link>
           )}
-
+          {/* ✅ CTA button using ctaGoesToDashboard inline */}
+          <a
+            href={ctaGoesToDashboard ? "/dashboard" : "#sandbox"}
+            className="bg-brand hover:bg-brand-dark text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-all shadow-md shadow-brand/20 flex items-center gap-1.5"
+          >
+            {ctaGoesToDashboard ? "Go to dashboard" : "Try our sandbox"}
+          </a>
         </div>
 
         <button
@@ -138,10 +135,10 @@ export default function Navbar() {
               </Link>
             )}
             <a
-              href="#"
+              href={ctaGoesToDashboard ? "/dashboard" : "#sandbox"}
               className="block text-center bg-brand text-white text-sm font-semibold rounded-xl py-2.5 hover:bg-brand-dark transition-colors"
             >
-              Try our sandbox ↗
+              {ctaGoesToDashboard ? "Go to dashboard ↗" : "Try our sandbox ↗"}
             </a>
           </div>
         </div>
