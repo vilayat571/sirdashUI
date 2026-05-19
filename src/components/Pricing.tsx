@@ -1,183 +1,415 @@
 import { useState } from "react";
+import { Check, X, Zap, Star, Building2 } from "lucide-react";
 import { useInView } from "./useInView";
-import { Play } from "lucide-react";
+import { pricingPlans } from "../data";
 
-export function Demo() {
+const planIcons = [Zap, Star, Building2];
+
+export function Pricing() {
   const [sectionRef, inView] = useInView(0.1);
-  const [playing, setPlaying] = useState(false);
+  const [hoveredPlan, setHoveredPlan] = useState<string | null>(null);
 
   return (
     <>
       <style>{`
-        @keyframes demo-pulse {
-          0%, 100% { opacity: 1; transform: scale(1); }
-          50% { opacity: 0.5; transform: scale(0.8); }
+
+        .pricing-section {
+          background: #05060f;
+          padding: 140px 0;
+          position: relative;
+          overflow: hidden;
         }
-        @keyframes demo-ring {
-          0% { transform: scale(1); opacity: 0.6; }
-          100% { transform: scale(2.2); opacity: 0; }
-        }
-        .demo-section::before {
+
+        .pricing-section::before {
           content: '';
           position: absolute;
-          top: -200px;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 900px;
-          height: 600px;
-          background: radial-gradient(ellipse, rgba(99,102,241,0.12) 0%, transparent 70%);
+          bottom: -100px;
+          right: -200px;
+          width: 700px;
+          height: 700px;
+          background: radial-gradient(circle, rgba(99,102,241,0.07) 0%, transparent 65%);
           pointer-events: none;
         }
-        .demo-grid-lines {
+
+        .pricing-section::after {
+          content: '';
           position: absolute;
-          inset: 0;
-          background-image:
-            linear-gradient(rgba(99,102,241,0.04) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(99,102,241,0.04) 1px, transparent 1px);
-          background-size: 60px 60px;
-          pointer-events: none;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 1px;
+          background: linear-gradient(90deg, transparent, rgba(99,102,241,0.3), transparent);
+        }
+
+        .pricing-label {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          background: rgba(99,102,241,0.1);
+          border: 1px solid rgba(99,102,241,0.25);
+          color: #818cf8;
+          font-size: 11px;
+          font-weight: 500;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          padding: 6px 16px;
+          border-radius: 999px;
+          margin-bottom: 24px;
+        }
+
+        .pricing-title {
+          font-size: clamp(2.4rem, 5vw, 3.8rem);
+          font-weight: 800;
+          color: #ffffff;
+          line-height: 1.05;
+          letter-spacing: -0.03em;
+          margin-bottom: 16px;
+        }
+
+        .pricing-title span {
+          background: linear-gradient(135deg, #818cf8, #c4b5fd);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+
+        .pricing-subtitle {
+          color: rgba(255,255,255,0.4);
+          font-size: 16px;
+          font-weight: 300;
+          line-height: 1.7;
+        }
+
+        .pricing-card {
+          position: relative;
+          border-radius: 24px;
+          padding: 32px;
+          display: flex;
+          flex-direction: column;
+          background: rgba(255,255,255,0.03);
+          border: 1px solid rgba(255,255,255,0.06);
+          transition: all 0.4s cubic-bezier(0.34,1.2,0.64,1);
+          cursor: default;
+        }
+
+        .pricing-card:hover {
+          background: rgba(255,255,255,0.05);
+          border-color: rgba(99,102,241,0.3);
+        }
+
+        .pricing-card.popular {
+          background: linear-gradient(160deg, rgba(99,102,241,0.15) 0%, rgba(99,102,241,0.05) 100%);
+          border: 1px solid rgba(99,102,241,0.4);
+          box-shadow: 0 0 0 1px rgba(99,102,241,0.1), inset 0 1px 0 rgba(255,255,255,0.06);
+        }
+
+        .pricing-card.popular:hover {
+          box-shadow: 0 20px 60px rgba(99,102,241,0.2), 0 0 0 1px rgba(99,102,241,0.3), inset 0 1px 0 rgba(255,255,255,0.06);
+        }
+
+        .pricing-popular-badge {
+          position: absolute;
+          top: -14px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: linear-gradient(135deg, #6366f1, #818cf8);
+          color: white;
+          font-size: 11px;
+          font-weight: 600;
+          padding: 5px 18px;
+          border-radius: 999px;
+          white-space: nowrap;
+          letter-spacing: 0.05em;
+          box-shadow: 0 4px 20px rgba(99,102,241,0.5);
+        }
+
+        .pricing-plan-icon {
+          width: 44px;
+          height: 44px;
+          border-radius: 12px;
+          background: rgba(99,102,241,0.12);
+          border: 1px solid rgba(99,102,241,0.2);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 20px;
+        }
+
+        .pricing-plan-name {
+          font-weight: 700;
+          font-size: 18px;
+          color: rgba(255,255,255,0.9);
+          margin-bottom: 4px;
+        }
+
+        .pricing-plan-desc {
+          font-size: 13px;
+          color: rgba(255,255,255,0.35);
+          font-weight: 300;
+          line-height: 1.5;
+          margin-bottom: 24px;
+        }
+
+        .pricing-price-row {
+          display: flex;
+          align-items: baseline;
+          gap: 4px;
+          margin-bottom: 6px;
+        }
+
+        .pricing-price-currency {
+          font-size: 22px;
+          font-weight: 700;
+          color: rgba(255,255,255,0.5);
+        }
+
+        .pricing-price-amount {
+          font-size: 48px;
+          font-weight: 800;
+          color: white;
+          line-height: 1;
+        }
+
+        .pricing-price-period {
+          font-size: 13px;
+          color: rgba(255,255,255,0.3);
+        }
+
+        .pricing-divider {
+          height: 1px;
+          background: rgba(255,255,255,0.06);
+          margin: 24px 0;
+        }
+
+        .pricing-feature-list {
+          list-style: none;
+          padding: 0;
+          margin: 0 0 28px;
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .pricing-feature-item {
+          display: flex;
+          align-items: flex-start;
+          gap: 10px;
+          font-size: 13.5px;
+          font-weight: 400;
+          color: rgba(255,255,255,0.6);
+          line-height: 1.5;
+        }
+
+        .pricing-feature-item.disabled {
+          color: rgba(255,255,255,0.2);
+          text-decoration: line-through;
+        }
+
+        .pricing-cta {
+          display: block;
+          text-align: center;
+          padding: 14px;
+          border-radius: 14px;
+          font-weight: 600;
+          font-size: 14px;
+          text-decoration: none;
+          letter-spacing: 0.02em;
+          transition: all 0.3s;
+          background: rgba(255,255,255,0.06);
+          border: 1px solid rgba(255,255,255,0.1);
+          color: rgba(255,255,255,0.7);
+        }
+
+        .pricing-cta:hover {
+          background: rgba(99,102,241,0.15);
+          border-color: rgba(99,102,241,0.4);
+          color: white;
+          transform: translateY(-2px);
+        }
+
+        .pricing-cta.popular-cta {
+          background: linear-gradient(135deg, #6366f1, #818cf8);
+          border: none;
+          color: white;
+          box-shadow: 0 4px 24px rgba(99,102,241,0.4);
+        }
+
+        .pricing-cta.popular-cta:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 36px rgba(99,102,241,0.55);
+        }
+
+        .pricing-custom-card {
+          background: rgba(255,255,255,0.02);
+          border: 1px solid rgba(255,255,255,0.06);
+          border-radius: 20px;
+          padding: 44px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 32px;
+          flex-wrap: wrap;
+          margin-top: 20px;
+        }
+
+        .pricing-custom-card h3 {
+          font-size: 22px;
+          font-weight: 800;
+          color: white;
+          margin-bottom: 8px;
+        }
+
+        .pricing-custom-card p {
+          font-size: 14px;
+          color: rgba(255,255,255,0.35);
+          font-weight: 300;
+          max-width: 480px;
+        }
+
+        .pricing-custom-cta {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          border: 1px solid rgba(99,102,241,0.4);
+          color: #818cf8;
+          font-weight: 600;
+          padding: 14px 32px;
+          border-radius: 14px;
+          text-decoration: none;
+          font-size: 14px;
+          white-space: nowrap;
+          transition: all 0.3s;
+          font-family: 'DM Sans', sans-serif;
+        }
+
+        .pricing-custom-cta:hover {
+          background: rgba(99,102,241,0.1);
+          border-color: rgba(99,102,241,0.6);
+          color: white;
+          transform: translateY(-2px);
         }
       `}</style>
 
-      <section className="demo-section bg-[#05060f] py-[140px] relative overflow-hidden">
-        <div className="demo-grid-lines" />
-
-        <div ref={sectionRef} className="max-w-[1100px] mx-auto px-6">
-
+      <section className="pricing-section" id="pricing">
+        <div
+          ref={sectionRef}
+          style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px" }}
+        >
           {/* Header */}
           <div
-            className="text-center mb-16"
             style={{
+              textAlign: "center",
+              marginBottom: 72,
               opacity: inView ? 1 : 0,
               transform: inView ? "translateY(0)" : "translateY(24px)",
               transition: "opacity 0.7s ease, transform 0.7s ease",
             }}
           >
-            <div className="inline-flex items-center gap-2 bg-[rgba(99,102,241,0.1)] border border-[rgba(99,102,241,0.25)] text-[#818cf8] text-[11px] font-medium tracking-[0.15em] uppercase px-4 py-1.5 rounded-full mb-6">
-              <span
-                className="w-1.5 h-1.5 bg-[#6366f1] rounded-full shrink-0"
-                style={{
-                  boxShadow: "0 0 8px #6366f1",
-                  animation: "demo-pulse 2s ease-in-out infinite",
-                }}
-              />
-              Live Demo
-            </div>
-
-            <h2 className="text-[clamp(2.4rem,5vw,3.8rem)] font-extrabold text-white leading-[1.05] tracking-[-0.03em] mb-4">
-              See SirDash{" "}
-              <span className="bg-gradient-to-br from-[#818cf8] to-[#c4b5fd] bg-clip-text text-transparent">
-                in Action
-              </span>
+            <div className="pricing-label">Pricing</div>
+            <h2 className="pricing-title">
+              Simple, <span>Transparent</span> Pricing
             </h2>
-
-            <p className="text-white/40 text-base font-light max-w-[440px] mx-auto leading-[1.7]">
-              Watch how natural language transforms into powerful data insights—in seconds, not hours.
+            <p className="pricing-subtitle">
+              No hidden fees. No surprises. Scale when you're ready.
             </p>
           </div>
 
-          {/* Video */}
+          {/* Cards */}
           <div
             style={{
-              opacity: inView ? 1 : 0,
-              transform: inView ? "translateY(0) scale(1)" : "translateY(32px) scale(0.97)",
-              transition: "opacity 0.8s ease 0.15s, transform 0.8s cubic-bezier(0.34,1.2,0.64,1) 0.15s",
+              display: "grid",
+              gridTemplateColumns: "repeat(3,1fr)",
+              gap: 20,
             }}
           >
-            <div
-              className="relative rounded-[24px] overflow-hidden aspect-video max-w-[900px] mx-auto cursor-pointer"
-              style={{
-                boxShadow:
-                  "0 0 0 1px rgba(99,102,241,0.2), 0 40px 100px rgba(0,0,0,0.6), 0 0 80px rgba(99,102,241,0.08)",
-              }}
-              onClick={() => setPlaying(true)}
-            >
-              {/* Thumbnail bg */}
-              <div className="absolute inset-0 bg-[#0a0b1e] flex items-center justify-center">
-                <div className="w-[85%] h-[75%] bg-white/[0.03] border border-white/[0.06] rounded-2xl overflow-hidden flex flex-col">
-                  <div className="h-9 bg-white/[0.04] border-b border-white/[0.05] flex items-center px-4 gap-2">
-                    {(["#ef4444", "#f59e0b", "#22c55e"] as const).map((color, i) => (
-                      <div key={i} className="w-2 h-2 rounded-full" style={{ background: color }} />
-                    ))}
-                  </div>
-                  <div className="flex-1 p-5 grid grid-cols-2 gap-3">
-                    {[...Array(4)].map((_, i) => (
-                      <div
-                        key={i}
-                        className="bg-[rgba(99,102,241,0.06)] border border-[rgba(99,102,241,0.12)] rounded-[10px] p-3.5 flex flex-col gap-2"
-                      >
-                        <div className="h-1.5 rounded-[3px] bg-[rgba(99,102,241,0.3)] w-[60%]" />
-                        <div className="h-1.5 rounded-[3px] bg-white/[0.08]" />
-                        <div className="h-1.5 rounded-[3px] bg-white/[0.08] w-[60%]" />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
+            {pricingPlans.map((plan, i) => {
+              const Icon = planIcons[i] || Zap;
+              const isPopular = plan.isPopular;
 
-              {/* Play overlay */}
-              <div
-                className={`absolute inset-0 flex flex-col items-center justify-center gap-5 backdrop-blur-[4px] transition-opacity duration-[400ms] ${
-                  playing ? "opacity-0 pointer-events-none" : "opacity-100"
-                }`}
-                style={{
-                  background: "linear-gradient(135deg, rgba(6,7,26,0.85) 0%, rgba(6,7,26,0.6) 100%)",
-                }}
-              >
-                <div className="relative flex items-center justify-center">
-                  <div
-                    className="absolute w-20 h-20 rounded-full border-2 border-white/30"
-                    style={{ animation: "demo-ring 2s ease-in-out infinite" }}
-                  />
-                  <div
-                    className="absolute w-20 h-20 rounded-full border-2 border-white/30"
-                    style={{ animation: "demo-ring 2s ease-in-out infinite", animationDelay: "0.7s" }}
-                  />
-                  <button
-                    className="w-20 h-20 rounded-full bg-white flex items-center justify-center cursor-pointer border-none transition-all duration-300 hover:scale-110"
-                    style={{
-                      boxShadow: "0 8px 40px rgba(99,102,241,0.4)",
-                    }}
+              return (
+                <div
+                  key={plan.name}
+                  className={`pricing-card${isPopular ? " popular" : ""}`}
+                  onMouseEnter={() => setHoveredPlan(plan.name)}
+                  onMouseLeave={() => setHoveredPlan(null)}
+                  style={{
+                    opacity: inView ? 1 : 0,
+                    transform: inView
+                      ? hoveredPlan === plan.name ? "translateY(-6px)" : "translateY(0)"
+                      : "translateY(28px)",
+                    transition: `opacity 0.6s ease ${i * 0.1}s, transform 0.5s cubic-bezier(0.34,1.3,0.64,1), box-shadow 0.3s, border-color 0.3s`,
+                  }}
+                >
+                  {isPopular && (
+                    <div className="pricing-popular-badge">⭐ Most Popular</div>
+                  )}
+
+                  <div className="pricing-plan-icon">
+                    <Icon size={20} color="#818cf8" />
+                  </div>
+
+                  <div className="pricing-plan-name">{plan.name}</div>
+                  <div className="pricing-plan-desc">{plan.description}</div>
+
+                  <div className="pricing-price-row">
+                    {plan.price !== "Custom" && (
+                      <span className="pricing-price-currency">€</span>
+                    )}
+                    <span className="pricing-price-amount">
+                      {plan.price === "Custom" ? "Custom" : plan.price.replace("€", "")}
+                    </span>
+                    {plan.price !== "Custom" && (
+                      <span className="pricing-price-period">{plan.period}</span>
+                    )}
+                  </div>
+
+                  <div className="pricing-divider" />
+
+                  <ul className="pricing-feature-list">
+                    {plan.features.map((f) => (
+                      <li key={f} className="pricing-feature-item">
+                        <Check size={14} color="#4ade80" style={{ marginTop: 2, flexShrink: 0 }} />
+                        {f}
+                      </li>
+                    ))}
+                    {plan.notIncluded?.map((f) => (
+                      <li key={f} className="pricing-feature-item disabled">
+                        <X size={14} color="rgba(255,255,255,0.15)" style={{ marginTop: 2, flexShrink: 0 }} />
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <a
+                    href="#demo"
+                    className={`pricing-cta${isPopular ? " popular-cta" : ""}`}
                   >
-                    <Play size={28} color="#6366f1" style={{ marginLeft: 3 }} />
-                  </button>
+                    {plan.cta}
+                  </a>
                 </div>
-                <span className="text-white/70 text-[13px] font-light tracking-[0.05em]">
-                  Watch 2-min demo
-                </span>
-              </div>
-
-              {playing && (
-                <iframe
-                  src="https://www.youtube.com/embed/MLAG4v7Aa7g?si=5W5b8pB_uBJIOB_i&autoplay=1"
-                  title="SirDash Demo"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="absolute inset-0 w-full h-full border-none"
-                />
-              )}
-            </div>
+              );
+            })}
           </div>
 
-          {/* Bottom stats */}
+          {/* Custom plan banner */}
           <div
-            className="flex items-center justify-center gap-10 mt-10 flex-wrap"
+            className="pricing-custom-card"
             style={{
               opacity: inView ? 1 : 0,
-              transition: "opacity 0.7s ease 0.5s",
+              transform: inView ? "translateY(0)" : "translateY(24px)",
+              transition: "opacity 0.7s ease 0.45s, transform 0.7s ease 0.45s",
             }}
           >
-            {[
-              "No SQL knowledge needed",
-              "Works with any database",
-              "Results in under 2 seconds",
-              "Enterprise-grade security",
-            ].map((s) => (
-              <div key={s} className="flex items-center gap-2.5 text-white/35 text-[13px] font-light">
-                <div className="w-1 h-1 rounded-full bg-[#6366f1]" />
-                {s}
-              </div>
-            ))}
+            <div>
+              <h3>Need a custom solution?</h3>
+              <p>
+                Talk to our sales team for volume discounts, custom SLAs, on-prem deployment, and a plan tailored to your exact requirements.
+              </p>
+            </div>
+            <a href="#demo" className="pricing-custom-cta">
+              Get in Touch →
+            </a>
           </div>
         </div>
       </section>
@@ -185,4 +417,4 @@ export function Demo() {
   );
 }
 
-export default Demo;
+export default Pricing;

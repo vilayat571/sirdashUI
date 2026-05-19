@@ -39,6 +39,8 @@ const FadeIn = ({
   );
 };
 
+// ── Data ───────────────────────────────────────────────────────────────────
+
 const stats = [
   { num: "10%",    label: "Founding Equity" },
   { num: "€1B+",  label: "Market Opportunity" },
@@ -83,38 +85,7 @@ const niceToHave = [
   "Startup or scale-up environment exposure",
 ];
 
-function Section({ heading, children }: { heading: string; children: React.ReactNode }) {
-  return (
-    <div>
-      <h3 className="text-[#a5b4fc] text-[12px] tracking-[0.08em] font-semibold mb-3 uppercase">
-        {heading}
-      </h3>
-      <ul className="space-y-2">{children}</ul>
-    </div>
-  );
-}
-
-function ListItem({
-  children,
-  bullet,
-  color,
-  muted = false,
-}: {
-  children: React.ReactNode;
-  bullet: string;
-  color: string;
-  muted?: boolean;
-}) {
-  return (
-    <li
-      className="flex items-start gap-3 text-[14px] leading-[1.75]"
-      style={{ color: muted ? "#94a3b8" : "#cbd5e1" }}
-    >
-      <span style={{ color, marginTop: 3, flexShrink: 0 }}>{bullet}</span>
-      {children}
-    </li>
-  );
-}
+// ── Sub-components ─────────────────────────────────────────────────────────
 
 function RoleCard() {
   const [open, setOpen] = useState(false);
@@ -124,42 +95,60 @@ function RoleCard() {
       className="rounded-2xl overflow-hidden"
       style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(99,102,241,0.25)" }}
     >
-      {/* Header */}
+      {/* Header — always visible */}
       <button
         onClick={() => setOpen((o) => !o)}
-        className="w-full text-left px-6 py-6 bg-transparent cursor-pointer transition-colors duration-200 hover:bg-[rgba(99,102,241,0.05)]"
-        style={{ borderBottom: open ? "1px solid rgba(99,102,241,0.2)" : "none" }}
+        className="w-full text-left px-6 py-6"
+        style={{
+          background: "transparent",
+          cursor: "pointer",
+          borderBottom: open ? "1px solid rgba(99,102,241,0.2)" : "none",
+          transition: "background 0.2s",
+        }}
+        onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.background = "rgba(99,102,241,0.05)")}
+        onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.background = "transparent")}
       >
         <div className="flex items-center justify-between gap-4">
           <div>
+            {/* Badges */}
             <div className="flex flex-wrap items-center gap-2 mb-2">
-              <span className="text-[#e2e8f0] font-bold text-[20px]">Founding Engineer</span>
+              <span className=" font-bold" style={{ color: "#e2e8f0", fontSize: 20 }}>
+                Founding Engineer
+              </span>
               <span
-                className="px-3 py-1 rounded-full text-[11px] tracking-[0.04em]"
-                style={{ background: "rgba(99,102,241,0.2)", color: "#a5b4fc" }}
+                className=" px-3 py-1 rounded-full"
+                style={{ background: "rgba(99,102,241,0.2)", color: "#a5b4fc", fontSize: 11, letterSpacing: "0.04em" }}
               >
                 Platform & DevOps
               </span>
               <span
-                className="px-3 py-1 rounded-full text-[11px] tracking-[0.04em]"
-                style={{ background: "rgba(52,211,153,0.12)", color: "#6ee7b7" }}
+                className=" px-3 py-1 rounded-full"
+                style={{ background: "rgba(52,211,153,0.12)", color: "#6ee7b7", fontSize: 11, letterSpacing: "0.04em" }}
               >
                 10% Equity
               </span>
             </div>
+
+            {/* Meta */}
             <div className="flex flex-wrap gap-5">
-              <span className="text-[#64748b] text-[14px]">📍 Berlin, Germany (Remote-friendly)</span>
-              <span className="text-[#64748b] text-[14px]">⏱ Full-time · Founding role</span>
+              <span style={{ color: "#64748b", fontSize: 14 }}>📍 Berlin, Germany (Remote-friendly)</span>
+              <span style={{ color: "#64748b", fontSize: 14 }}>⏱ Full-time · Founding role</span>
             </div>
           </div>
 
           {/* Arrow */}
           <div
-            className="shrink-0 flex items-center justify-center w-9 h-9 rounded-full text-[#818cf8] text-[18px] transition-transform duration-300"
+            className="shrink-0 flex items-center justify-center"
             style={{
+              width: 36,
+              height: 36,
+              borderRadius: "50%",
               background: "rgba(99,102,241,0.15)",
               border: "1px solid rgba(99,102,241,0.3)",
+              color: "#818cf8",
+              fontSize: 18,
               transform: open ? "rotate(90deg)" : "rotate(0deg)",
+              transition: "transform 0.3s ease",
             }}
           >
             →
@@ -177,24 +166,29 @@ function RoleCard() {
         }}
       >
         <div className="px-6 pb-8 pt-6 space-y-8">
-          <p className="text-[#94a3b8] text-[15px] leading-[1.85]">
+
+          {/* About */}
+          <p style={{ color: "#94a3b8", fontSize: 15, lineHeight: 1.85 }}>
             You'll own the platform architecture, infrastructure, and backend systems that power our multi-database
             querying engine, semantic layer, and enterprise security controls. This is a true founding engineer
             role — your decisions will shape SirDash.ai for years.
           </p>
 
+          {/* Responsibilities */}
           <Section heading="WHAT YOU'LL BUILD">
             {responsibilities.map((r, i) => (
               <ListItem key={i} bullet="▸" color="#6366f1">{r}</ListItem>
             ))}
           </Section>
 
+          {/* Required */}
           <Section heading="REQUIRED EXPERIENCE">
             {required.map((r, i) => (
               <ListItem key={i} bullet="✓" color="#34d399">{r}</ListItem>
             ))}
           </Section>
 
+          {/* Nice to have */}
           <Section heading="NICE TO HAVE">
             {niceToHave.map((r, i) => (
               <ListItem key={i} bullet="◦" color="#6366f1" muted>{r}</ListItem>
@@ -202,14 +196,11 @@ function RoleCard() {
           </Section>
 
           {/* Compensation */}
-          <div
-            className="rounded-xl p-5"
-            style={{ background: "rgba(99,102,241,0.08)", border: "1px solid rgba(99,102,241,0.2)" }}
-          >
-            <h3 className="text-[#a5b4fc] text-[12px] tracking-[0.08em] font-semibold mb-2 uppercase">
+          <div className="rounded-xl p-5" style={{ background: "rgba(99,102,241,0.08)", border: "1px solid rgba(99,102,241,0.2)" }}>
+            <h3 className="" style={{ color: "#a5b4fc", fontSize: 12, letterSpacing: "0.08em", fontWeight: 600, marginBottom: 8 }}>
               COMPENSATION
             </h3>
-            <p className="text-[#cbd5e1] text-[14px]">
+            <p style={{ color: "#cbd5e1", fontSize: 14 }}>
               Competitive salary · 10% equity · Health insurance · Continuous learning budget
             </p>
           </div>
@@ -218,8 +209,18 @@ function RoleCard() {
           <div className="flex flex-wrap gap-4">
             <a
               href="mailto:careers@sirdash.ai?subject=Founding Engineer Application"
-              className="inline-block px-7 py-3.5 rounded-full text-white text-[14px] font-semibold no-underline transition-all duration-[250ms]"
-              style={{ background: "rgba(99,102,241,0.85)" }}
+              className="car-apply-btn "
+              style={{
+                display: "inline-block",
+                padding: "13px 28px",
+                borderRadius: 999,
+                background: "rgba(99,102,241,0.85)",
+                color: "white",
+                fontSize: 14,
+                fontWeight: 600,
+                textDecoration: "none",
+                transition: "all 0.25s",
+              }}
               onMouseEnter={(e) => {
                 const el = e.currentTarget as HTMLAnchorElement;
                 el.style.background = "rgba(99,102,241,1)";
@@ -240,8 +241,19 @@ function RoleCard() {
               href="https://www.sirdash.ai"
               target="_blank"
               rel="noreferrer"
-              className="inline-block px-7 py-3.5 rounded-full text-[#a5b4fc] text-[14px] no-underline transition-colors duration-200 hover:bg-[rgba(99,102,241,0.1)]"
-              style={{ border: "1px solid rgba(99,102,241,0.4)" }}
+              className=""
+              style={{
+                display: "inline-block",
+                padding: "13px 28px",
+                borderRadius: 999,
+                border: "1px solid rgba(99,102,241,0.4)",
+                color: "#a5b4fc",
+                fontSize: 14,
+                textDecoration: "none",
+                transition: "background 0.2s",
+              }}
+              onMouseEnter={(e) => ((e.currentTarget as HTMLAnchorElement).style.background = "rgba(99,102,241,0.1)")}
+              onMouseLeave={(e) => ((e.currentTarget as HTMLAnchorElement).style.background = "transparent")}
             >
               View Website ↗
             </a>
@@ -252,10 +264,47 @@ function RoleCard() {
   );
 }
 
+function Section({ heading, children }: { heading: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <h3
+        className=""
+        style={{ color: "#a5b4fc", fontSize: 12, letterSpacing: "0.08em", fontWeight: 600, marginBottom: 12 }}
+      >
+        {heading}
+      </h3>
+      <ul className="space-y-2">{children}</ul>
+    </div>
+  );
+}
+
+function ListItem({
+  children,
+  bullet,
+  color,
+  muted = false,
+}: {
+  children: React.ReactNode;
+  bullet: string;
+  color: string;
+  muted?: boolean;
+}) {
+  return (
+    <li className="flex items-start gap-3" style={{ color: muted ? "#94a3b8" : "#cbd5e1", fontSize: 14, lineHeight: 1.75 }}>
+      <span style={{ color, marginTop: 3, flexShrink: 0 }}>{bullet}</span>
+      {children}
+    </li>
+  );
+}
+
+// ── Page ───────────────────────────────────────────────────────────────────
+
 export default function CareersPage() {
   return (
     <>
       <style>{`
+        .car-dm   { font-family: 'DM Sans', sans-serif; }
+
         @keyframes car-shimmer {
           0%   { background-position: -200% 0; }
           100% { background-position:  200% 0; }
@@ -268,59 +317,48 @@ export default function CareersPage() {
           background-clip: text;
           animation: car-shimmer 4s linear infinite;
         }
+
+        .car-stat:hover  { transform: translateY(-4px); border-color: rgba(99,102,241,0.5) !important; }
+        .car-perk:hover  { transform: translateY(-3px); background: rgba(99,102,241,0.1) !important; }
+        .car-badge-glow  { box-shadow: 0 0 12px rgba(99,102,241,0.4); }
+
+        .car-orb {
+          position: absolute;
+          border-radius: 50%;
+          filter: blur(90px);
+          pointer-events: none;
+        }
       `}</style>
 
-      <div className="relative overflow-hidden" style={{ background: "transparent" }}>
+      <div className="car-dm relative overflow-hidden" style={{ background: "transparent" }}>
 
         {/* Orbs */}
-        <div
-          className="absolute rounded-full pointer-events-none"
-          style={{
-            width: 600, height: 600,
-            background: "rgba(99,102,241,0.09)",
-            top: -200, left: -120,
-            filter: "blur(90px)",
-          }}
-        />
-        <div
-          className="absolute rounded-full pointer-events-none"
-          style={{
-            width: 400, height: 400,
-            background: "rgba(139,92,246,0.07)",
-            bottom: 80, right: -80,
-            filter: "blur(90px)",
-          }}
-        />
+        <div className="car-orb" style={{ width: 600, height: 600, background: "rgba(99,102,241,0.09)", top: -200, left: -120 }} />
+        <div className="car-orb" style={{ width: 400, height: 400, background: "rgba(139,92,246,0.07)", bottom: 80, right: -80 }} />
 
-        {/* Hero */}
+        {/* ── Hero ── */}
         <section className="relative z-10 pt-32 pb-20 px-6 text-center">
           <FadeIn>
             <div
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-8"
-              style={{
-                background: "rgba(99,102,241,0.15)",
-                border: "1px solid rgba(99,102,241,0.4)",
-                boxShadow: "0 0 12px rgba(99,102,241,0.4)",
-              }}
+              className=" inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-8 car-badge-glow"
+              style={{ background: "rgba(99,102,241,0.15)", border: "1px solid rgba(99,102,241,0.4)" }}
             >
-              <span
-                className="w-[7px] h-[7px] rounded-full bg-green-400 inline-block"
-                style={{ boxShadow: "0 0 6px #34d399" }}
-              />
-              <span className="text-[#a5b4fc] text-[12px] tracking-[0.09em]">WE'RE HIRING · BERLIN</span>
+              <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#34d399", display: "inline-block", boxShadow: "0 0 6px #34d399" }} />
+              <span style={{ color: "#a5b4fc", fontSize: 12, letterSpacing: "0.09em" }}>WE'RE HIRING · BERLIN</span>
             </div>
           </FadeIn>
 
           <FadeIn delay={0.1}>
             <h1
-              className="car-shimmer text-[clamp(2.8rem,6.5vw,4.75rem)] font-extrabold leading-[1.07] tracking-[-0.02em] mb-5"
+              className=" car-shimmer"
+              style={{ fontSize: "clamp(2.8rem,6.5vw,4.75rem)", fontWeight: 800, lineHeight: 1.07, letterSpacing: "-0.02em", marginBottom: "1.2rem" }}
             >
               Shape the Future<br />of Data Intelligence
             </h1>
           </FadeIn>
 
           <FadeIn delay={0.2}>
-            <p className="text-[#94a3b8] text-[18px] max-w-[540px] mx-auto mb-10 leading-[1.75]">
+            <p style={{ color: "#94a3b8", fontSize: 18, maxWidth: 540, margin: "0 auto 2.5rem", lineHeight: 1.75 }}>
               Join a well-funded team building the category-defining AI data layer for enterprises.
               Founding-level equity, serious technical challenges, real impact.
             </p>
@@ -329,8 +367,16 @@ export default function CareersPage() {
           <FadeIn delay={0.3}>
             <a
               href="#open-roles"
-              className="inline-block px-8 py-4 rounded-full text-white text-[15px] font-semibold no-underline tracking-[0.04em] transition-all duration-[250ms]"
-              style={{ background: "rgba(99,102,241,0.85)" }}
+              className=" inline-block px-8 py-4 rounded-full font-semibold"
+              style={{
+                background: "rgba(99,102,241,0.85)",
+                color: "white",
+                fontSize: 15,
+                fontWeight: 600,
+                textDecoration: "none",
+                transition: "all 0.25s",
+                letterSpacing: "0.04em",
+              }}
               onMouseEnter={(e) => {
                 const el = e.currentTarget as HTMLAnchorElement;
                 el.style.background = "rgba(99,102,241,1)";
@@ -349,32 +395,27 @@ export default function CareersPage() {
           </FadeIn>
         </section>
 
-        {/* Stats */}
+        {/* ── Stats ── */}
         <section className="relative z-10 max-w-4xl mx-auto px-6 pb-24">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {stats.map(({ num, label }, i) => (
               <FadeIn key={i} delay={i * 0.07}>
                 <div
-                  className="rounded-2xl p-6 text-center transition-all duration-300 hover:-translate-y-1"
-                  style={{
-                    background: "rgba(255,255,255,0.03)",
-                    border: "1px solid rgba(99,102,241,0.18)",
-                  }}
-                  onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(99,102,241,0.5)")}
-                  onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(99,102,241,0.18)")}
+                  className="car-stat rounded-2xl p-6 text-center"
+                  style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(99,102,241,0.18)", transition: "all 0.3s" }}
                 >
-                  <div className="car-shimmer text-[28px] font-extrabold leading-none">{num}</div>
-                  <div className="text-[#64748b] text-[12px] mt-[7px] tracking-[0.05em]">{label}</div>
+                  <div className=" car-shimmer" style={{ fontSize: 28, fontWeight: 800, lineHeight: 1 }}>{num}</div>
+                  <div className="" style={{ color: "#64748b", fontSize: 12, marginTop: 7, letterSpacing: "0.05em" }}>{label}</div>
                 </div>
               </FadeIn>
             ))}
           </div>
         </section>
 
-        {/* Open Roles */}
+        {/* ── Open Roles ── */}
         <section id="open-roles" className="relative z-10 max-w-3xl mx-auto px-6 pb-24">
           <FadeIn>
-            <h2 className="text-center font-bold mb-10 text-[#e2e8f0] text-[32px]">
+            <h2 className=" text-center font-bold mb-10" style={{ color: "#e2e8f0", fontSize: 32 }}>
               Open Positions
             </h2>
           </FadeIn>
@@ -384,10 +425,10 @@ export default function CareersPage() {
           </FadeIn>
         </section>
 
-        {/* Perks */}
+        {/* ── Perks ── */}
         <section className="relative z-10 max-w-4xl mx-auto px-6 pb-24">
           <FadeIn>
-            <h2 className="text-center font-bold mb-10 text-[#e2e8f0] text-[32px]">
+            <h2 className=" text-center font-bold mb-10" style={{ color: "#e2e8f0", fontSize: 32 }}>
               Why SirDash.ai
             </h2>
           </FadeIn>
@@ -396,43 +437,42 @@ export default function CareersPage() {
             {perks.map(({ symbol, title, desc }, i) => (
               <FadeIn key={i} delay={i * 0.07}>
                 <div
-                  className="rounded-2xl p-6 h-full transition-all duration-300 hover:-translate-y-[3px]"
-                  style={{
-                    background: "rgba(255,255,255,0.03)",
-                    border: "1px solid rgba(99,102,241,0.18)",
-                  }}
-                  onMouseEnter={e => (e.currentTarget.style.background = "rgba(99,102,241,0.1)")}
-                  onMouseLeave={e => (e.currentTarget.style.background = "rgba(255,255,255,0.03)")}
+                  className="car-perk rounded-2xl p-6 h-full"
+                  style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(99,102,241,0.18)", transition: "all 0.3s" }}
                 >
-                  <div className="text-[#818cf8] text-[22px] mb-3">{symbol}</div>
-                  <div className="text-[#e2e8f0] font-semibold text-[15px] mb-2">{title}</div>
-                  <p className="text-[#64748b] text-[13px] leading-[1.75]">{desc}</p>
+                  <div style={{ color: "#818cf8", fontSize: 22, marginBottom: 12 }}>{symbol}</div>
+                  <div className=" font-semibold" style={{ color: "#e2e8f0", fontSize: 15, marginBottom: 8 }}>{title}</div>
+                  <p style={{ color: "#64748b", fontSize: 13, lineHeight: 1.75 }}>{desc}</p>
                 </div>
               </FadeIn>
             ))}
           </div>
         </section>
 
-        {/* Bottom CTA */}
+        {/* ── Bottom CTA ── */}
         <section className="relative z-10 max-w-3xl mx-auto px-6 pb-32">
           <FadeIn>
             <div
               className="rounded-2xl p-10 text-center"
-              style={{
-                background: "rgba(99,102,241,0.07)",
-                border: "1px solid rgba(99,102,241,0.22)",
-              }}
+              style={{ background: "rgba(99,102,241,0.07)", border: "1px solid rgba(99,102,241,0.22)" }}
             >
-              <h3 className="font-bold mb-3 text-[#e2e8f0] text-[26px]">
+              <h3 className=" font-bold mb-3" style={{ color: "#e2e8f0", fontSize: 26 }}>
                 Don't see the right role?
               </h3>
-              <p className="text-[#94a3b8] text-[15px] mb-6">
+              <p style={{ color: "#94a3b8", fontSize: 15, marginBottom: 24 }}>
                 We're always looking for exceptional people. Reach out and tell us how you'd contribute.
               </p>
               <a
                 href="mailto:careers@sirdash.ai"
-                className="inline-block px-7 py-3.5 rounded-full text-white text-[14px] font-semibold no-underline transition-all duration-[250ms]"
-                style={{ background: "rgba(99,102,241,0.85)" }}
+                className=" inline-block px-7 py-3.5 rounded-full font-semibold"
+                style={{
+                  background: "rgba(99,102,241,0.85)",
+                  color: "white",
+                  fontSize: 14,
+                  fontWeight: 600,
+                  textDecoration: "none",
+                  transition: "all 0.25s",
+                }}
                 onMouseEnter={(e) => {
                   const el = e.currentTarget as HTMLAnchorElement;
                   el.style.background = "rgba(99,102,241,1)";

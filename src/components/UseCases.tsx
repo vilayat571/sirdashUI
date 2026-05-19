@@ -16,6 +16,7 @@ export default function UseCases() {
     setTimeout(() => { setActive(i); setAnimating(false); }, 220);
   };
 
+  // Auto-rotate tabs
   useEffect(() => {
     if (!inView) return;
     const id = setInterval(() => {
@@ -28,56 +29,58 @@ export default function UseCases() {
     <>
       <style>{`
         @keyframes uc-fade-in { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes uc-bar     { from{height:0;opacity:0} to{opacity:1} }
-        @keyframes uc-dot     { 0%,100%{transform:scale(1)} 50%{transform:scale(1.5)} }
-        @keyframes uc-progress { from{width:0} to{width:100%} }
+        @keyframes uc-bar { from{height:0;opacity:0} to{opacity:1} }
+        @keyframes uc-dot { 0%,100%{transform:scale(1)} 50%{transform:scale(1.5)} }
       `}</style>
 
-      <section id="use-cases" className="bg-gray-50 py-[112px]">
-        <div ref={sectionRef} className="max-w-[1152px] mx-auto px-6">
+      <section id="use-cases" style={{ background: '#f9fafb', padding: '112px 0' }}>
+        <div ref={sectionRef} style={{ maxWidth: 1152, margin: '0 auto', padding: '0 24px' }}>
 
           {/* Heading */}
-          <div
-            className="text-center mb-16"
-            style={{
-              opacity: inView ? 1 : 0,
-              transform: inView ? 'translateY(0)' : 'translateY(20px)',
-              transition: 'opacity 0.6s ease, transform 0.6s ease',
-            }}
-          >
-            <h2 className="text-[clamp(2.2rem,5vw,3.2rem)] font-extrabold text-gray-900 mb-3 tracking-[-0.025em]">
+          <div style={{
+            textAlign: 'center', marginBottom: 64,
+            opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(20px)',
+            transition: 'opacity 0.6s ease, transform 0.6s ease',
+          }}>
+            <h2 style={{ fontSize: 'clamp(2.2rem,5vw,3.2rem)', fontWeight: 800, color: '#111827', marginBottom: 12,  letterSpacing: '-0.025em' }}>
               Use Cases
             </h2>
-            <p className="text-gray-500 text-[17px] max-w-[480px] mx-auto">
+            <p style={{ color: '#6b7280', fontSize: 17, maxWidth: 480, margin: '0 auto' }}>
               Empowering every data professional with AI-powered insights tailored to their needs.
             </p>
           </div>
 
-          {/* Tab switcher */}
-          <div
-            className="flex gap-2 bg-white border border-gray-200 p-1.5 rounded-[18px] w-fit mx-auto mb-8"
-            style={{
-              boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-              opacity: inView ? 1 : 0,
-              transition: 'opacity 0.6s ease 0.15s',
-            }}
-          >
+          {/* Tab switcher with progress bars */}
+          <div style={{
+            display: 'flex', gap: 8, background: 'white', border: '1px solid #e5e7eb',
+            padding: 6, borderRadius: 18, width: 'fit-content', margin: '0 auto 32px',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+            opacity: inView ? 1 : 0, transition: 'opacity 0.6s ease 0.15s',
+          }}>
             {useCases.map((uc, i) => (
               <button
                 key={uc.role}
                 onClick={() => switchTab(i)}
-                className="px-5 py-2.5 rounded-[13px] font-bold text-[13px] border-none cursor-pointer relative overflow-hidden transition-all duration-300"
                 style={{
+                  padding: '10px 20px', borderRadius: 13,
                   background: active === i ? '#6366f1' : 'transparent',
                   color: active === i ? 'white' : '#6b7280',
+                  fontWeight: 700, fontSize: 13,
+                  border: 'none', cursor: 'pointer',
+                  transition: 'all 0.3s',
+                  
                   boxShadow: active === i ? '0 4px 16px rgba(99,102,241,0.3)' : 'none',
+                  position: 'relative', overflow: 'hidden',
                 }}
               >
+                {/* Auto-progress bar */}
                 {active === i && inView && (
-                  <div
-                    className="absolute bottom-0 left-0 h-0.5 bg-white/50 rounded-[1px]"
-                    style={{ animation: 'uc-progress 5s linear' }}
-                  />
+                  <div style={{
+                    position: 'absolute', bottom: 0, left: 0, height: 2,
+                    background: 'rgba(255,255,255,0.5)',
+                    animation: 'uc-progress 5s linear',
+                    borderRadius: 1,
+                  }} />
                 )}
                 {uc.icon} {uc.role}
               </button>
@@ -85,17 +88,15 @@ export default function UseCases() {
           </div>
 
           {/* Content panel */}
-          <div
-            className="bg-white rounded-[22px] border border-gray-100 px-12 py-10"
-            style={{
-              boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
-              opacity: inView ? 1 : 0,
-              transition: 'opacity 0.6s ease 0.2s',
-            }}
-          >
+          <div style={{
+            background: 'white', borderRadius: 22, border: '1px solid #f3f4f6',
+            boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
+            padding: '40px 48px',
+            opacity: inView ? 1 : 0, transition: 'opacity 0.6s ease 0.2s',
+          }}>
             <div
-              className="grid grid-cols-2 gap-12"
               style={{
+                display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48,
                 animation: animating ? 'none' : 'uc-fade-in 0.35s ease',
                 opacity: animating ? 0 : 1,
                 transition: 'opacity 0.22s ease',
@@ -103,29 +104,27 @@ export default function UseCases() {
             >
               {/* Left */}
               <div>
-                <div className="text-[44px] mb-3">{current.icon}</div>
-                <h3 className="text-gray-900 font-extrabold text-[26px] mb-3">{current.role}</h3>
-                <p className="text-gray-500 leading-[1.8] mb-6 text-[15px]">{current.description}</p>
+                <div style={{ fontSize: 44, marginBottom: 12 }}>{current.icon}</div>
+                <h3 style={{ color: '#111827', fontWeight: 800, fontSize: 26, marginBottom: 12,  }}>
+                  {current.role}
+                </h3>
+                <p style={{ color: '#6b7280', lineHeight: 1.8, marginBottom: 24, fontSize: 15 }}>{current.description}</p>
 
-                <div className="flex flex-col gap-2.5">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                   {current.queries.map((q, i) => (
-                    <div
-                      key={q}
-                      className="flex gap-2.5 bg-gray-50 border border-gray-100 rounded-[14px] px-4 py-3 cursor-default transition-all duration-200"
-                      style={{ animation: `uc-fade-in 0.4s ease ${i * 0.08}s both` }}
-                      onMouseEnter={e => {
-                        const el = e.currentTarget;
-                        el.style.borderColor = 'rgba(99,102,241,0.3)';
-                        el.style.background = 'rgba(99,102,241,0.03)';
-                      }}
-                      onMouseLeave={e => {
-                        const el = e.currentTarget;
-                        el.style.borderColor = '#f3f4f6';
-                        el.style.background = '#f9fafb';
-                      }}
+                    <div key={q} style={{
+                      display: 'flex', gap: 10,
+                      background: '#f9fafb', border: '1px solid #f3f4f6',
+                      borderRadius: 14, padding: '12px 16px',
+                      animation: `uc-fade-in 0.4s ease ${i * 0.08}s both`,
+                      transition: 'border-color 0.2s, background 0.2s',
+                      cursor: 'default',
+                    }}
+                      onMouseEnter={e => { const el = e.currentTarget; el.style.borderColor = 'rgba(99,102,241,0.3)'; el.style.background = 'rgba(99,102,241,0.03)'; }}
+                      onMouseLeave={e => { const el = e.currentTarget; el.style.borderColor = '#f3f4f6'; el.style.background = '#f9fafb'; }}
                     >
-                      <span className="text-[#6366f1] shrink-0 mt-[1px]">💬</span>
-                      <p className="text-gray-600 text-[14px] italic leading-[1.65] m-0">{q}</p>
+                      <span style={{ color: '#6366f1', flexShrink: 0, marginTop: 1 }}>💬</span>
+                      <p style={{ color: '#4b5563', fontSize: 14, fontStyle: 'italic', lineHeight: 1.65, margin: 0 }}>{q}</p>
                     </div>
                   ))}
                 </div>
@@ -133,64 +132,49 @@ export default function UseCases() {
 
               {/* Right */}
               <div>
-                <h4 className="text-gray-400 text-[11px] font-bold tracking-[0.1em] uppercase mb-4">
+                <h4 style={{ color: '#9ca3af', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16,  }}>
                   Key Benefits
                 </h4>
 
-                <div className="flex flex-col gap-3 mb-7">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 28 }}>
                   {current.benefits.map((b, i) => (
-                    <div
-                      key={b}
-                      className="flex items-center gap-3"
-                      style={{ animation: `uc-fade-in 0.4s ease ${i * 0.07}s both` }}
-                    >
-                      <div
-                        className="w-[22px] h-[22px] rounded-full bg-[rgba(99,102,241,0.1)] border border-[rgba(99,102,241,0.2)] flex items-center justify-center shrink-0"
-                      >
-                        <span className="text-[#6366f1] text-[11px]">✓</span>
+                    <div key={b} style={{ display: 'flex', alignItems: 'center', gap: 12, animation: `uc-fade-in 0.4s ease ${i * 0.07}s both` }}>
+                      <div style={{
+                        width: 22, height: 22, borderRadius: '50%',
+                        background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.2)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                      }}>
+                        <span style={{ color: '#6366f1', fontSize: 11 }}>✓</span>
                       </div>
-                      <span className="text-gray-700 text-[14px] font-medium">{b}</span>
+                      <span style={{ color: '#374151', fontSize: 14, fontWeight: 500 }}>{b}</span>
                     </div>
                   ))}
                 </div>
 
                 {/* Live preview */}
-                <div className="bg-gray-50 border border-gray-100 rounded-[18px] p-4">
-                  <div className="text-gray-400 text-[11px] mb-2.5 tracking-[0.04em] font-semibold uppercase">
+                <div style={{ background: '#f9fafb', border: '1px solid #f3f4f6', borderRadius: 18, padding: 16 }}>
+                  <div style={{ color: '#9ca3af', fontSize: 11, marginBottom: 10,  letterSpacing: '0.04em', fontWeight: 600 }}>
                     LIVE QUERY PREVIEW
                   </div>
-                  <div
-                    className="rounded-[10px] px-3 py-2 mb-3"
-                    style={{
-                      background: 'rgba(99,102,241,0.07)',
-                      border: '1px solid rgba(99,102,241,0.15)',
-                    }}
-                  >
-                    <div className="text-[#6366f1] text-[12px] font-mono leading-[1.5]">
+                  <div style={{
+                    background: 'rgba(99,102,241,0.07)', border: '1px solid rgba(99,102,241,0.15)',
+                    borderRadius: 10, padding: '8px 12px', marginBottom: 12,
+                  }}>
+                    <div style={{ color: '#6366f1', fontSize: 12, fontFamily: 'monospace', lineHeight: 1.5 }}>
                       {current.queries[0].replace(/"/g, '')}
                     </div>
                   </div>
-                  <div className="flex items-center gap-1.5 mb-2.5">
-                    <span
-                      className="w-[7px] h-[7px] rounded-full bg-green-400 inline-block"
-                      style={{
-                        animation: 'uc-dot 1.4s ease-in-out infinite',
-                        boxShadow: '0 0 5px rgba(74,222,128,0.5)',
-                      }}
-                    />
-                    <span className="text-gray-400 text-[12px]">Generating insight...</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
+                    <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#4ade80', display: 'inline-block', animation: 'uc-dot 1.4s ease-in-out infinite', boxShadow: '0 0 5px rgba(74,222,128,0.5)' }} />
+                    <span style={{ color: '#9ca3af', fontSize: 12 }}>Generating insight...</span>
                   </div>
-                  <div className="flex items-end gap-[3px] h-10">
+                  <div style={{ display: 'flex', alignItems: 'flex-end', gap: 3, height: 40 }}>
                     {[55, 80, 40, 70, 90, 55, 75, 60, 85].map((h, i) => (
-                      <div
-                        key={i}
-                        className="flex-1 bg-[#6366f1] rounded-[3px]"
-                        style={{
-                          height: `${h}%`,
-                          opacity: 0.5 + h / 200,
-                          animation: `uc-bar 0.5s ease ${i * 0.05}s both`,
-                        }}
-                      />
+                      <div key={i} style={{
+                        flex: 1, background: '#6366f1', borderRadius: 3,
+                        height: `${h}%`, opacity: 0.5 + h / 200,
+                        animation: `uc-bar 0.5s ease ${i * 0.05}s both`,
+                      }} />
                     ))}
                   </div>
                 </div>

@@ -1,188 +1,190 @@
-import { useState } from "react";
-import { useInView } from "./useInView";
-import { Play } from "lucide-react";
+import { useState } from 'react';
+import { useInView } from './useInView';
+import { integrations } from '../data';
 
-export function Demo() {
+function useCounter(target: number, duration = 1600, active = false) {
+  const [count, setCount] = useState(0);
+  const [started, setStarted] = useState(false);
+  if (active && !started) {
+    setStarted(true);
+    let start: number | null = null;
+    const step = (ts: number) => {
+      if (!start) start = ts;
+      const p = Math.min((ts - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      setCount(Math.floor(eased * target));
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+  return count;
+}
+
+export default function Integrations() {
   const [sectionRef, inView] = useInView(0.1);
-  const [playing, setPlaying] = useState(false);
+  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+  const count10x = useCounter(10, 1400, inView);
 
   return (
     <>
       <style>{`
-        @keyframes demo-pulse {
-          0%, 100% { opacity: 1; transform: scale(1); }
-          50% { opacity: 0.5; transform: scale(0.8); }
-        }
-        @keyframes demo-ring {
-          0% { transform: scale(1); opacity: 0.6; }
-          100% { transform: scale(2.2); opacity: 0; }
-        }
-        .demo-section::before {
-          content: '';
-          position: absolute;
-          top: -200px;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 900px;
-          height: 600px;
-          background: radial-gradient(ellipse, rgba(99,102,241,0.12) 0%, transparent 70%);
-          pointer-events: none;
-        }
-        .demo-grid-lines {
-          position: absolute;
-          inset: 0;
-          background-image:
-            linear-gradient(rgba(99,102,241,0.04) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(99,102,241,0.04) 1px, transparent 1px);
-          background-size: 60px 60px;
-          pointer-events: none;
-        }
+        @keyframes int-ping { 0%{transform:scale(1);opacity:0.6} 100%{transform:scale(2.4);opacity:0} }
+        @keyframes int-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+        @keyframes int-rotate { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+        .int-ping { animation: int-ping 1s ease-out infinite; }
+        .int-float { animation: int-float 2s ease-in-out infinite; }
+        .int-rotate { animation: int-rotate 12s linear infinite; }
       `}</style>
 
-      <section className="demo-section bg-[#05060f] py-[140px] relative overflow-hidden">
-        <div className="demo-grid-lines" />
+      <section className="bg-gray-50 py-28">
+        <div
+          ref={sectionRef}
+          className="max-w-6xl mx-auto px-6"
+        >
 
-        <div ref={sectionRef} className="max-w-[1100px] mx-auto px-6">
-
-          {/* Header */}
+          {/* Heading */}
           <div
-            className="text-center mb-16"
-            style={{
-              opacity: inView ? 1 : 0,
-              transform: inView ? "translateY(0)" : "translateY(24px)",
-              transition: "opacity 0.7s ease, transform 0.7s ease",
-            }}
+            className={`text-center mb-16 transition-all duration-700 ease-out ${
+              inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'
+            }`}
           >
-            <div className="inline-flex items-center gap-2 bg-[rgba(99,102,241,0.1)] border border-[rgba(99,102,241,0.25)] text-[#818cf8] text-[11px] font-medium tracking-[0.15em] uppercase px-4 py-1.5 rounded-full mb-6">
-              <span
-                className="w-1.5 h-1.5 bg-[#6366f1] rounded-full shrink-0"
-                style={{
-                  boxShadow: "0 0 8px #6366f1",
-                  animation: "demo-pulse 2s ease-in-out infinite",
-                }}
-              />
-              Live Demo
-            </div>
-
-            <h2 className="text-[clamp(2.4rem,5vw,3.8rem)] font-extrabold text-white leading-[1.05] tracking-[-0.03em] mb-4">
-              See SirDash{" "}
-              <span className="bg-gradient-to-br from-[#818cf8] to-[#c4b5fd] bg-clip-text text-transparent">
-                in Action
-              </span>
+            <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-3 tracking-tight">
+              Connect instantly with all your data sources
             </h2>
-
-            <p className="text-white/40 text-base font-light max-w-[440px] mx-auto leading-[1.7]">
-              Watch how natural language transforms into powerful data insights—in seconds, not hours.
-            </p>
+            <p className="text-gray-500 text-[17px]">No more bottlenecks. Start analyzing right away.</p>
           </div>
 
-          {/* Video */}
-          <div
-            style={{
-              opacity: inView ? 1 : 0,
-              transform: inView ? "translateY(0) scale(1)" : "translateY(32px) scale(0.97)",
-              transition: "opacity 0.8s ease 0.15s, transform 0.8s cubic-bezier(0.34,1.2,0.64,1) 0.15s",
-            }}
-          >
-            <div
-              className="relative rounded-[24px] overflow-hidden aspect-video max-w-[900px] mx-auto cursor-pointer"
-              style={{
-                boxShadow:
-                  "0 0 0 1px rgba(99,102,241,0.2), 0 40px 100px rgba(0,0,0,0.6), 0 0 80px rgba(99,102,241,0.08)",
-              }}
-              onClick={() => setPlaying(true)}
-            >
-              {/* Thumbnail bg */}
-              <div className="absolute inset-0 bg-[#0a0b1e] flex items-center justify-center">
-                <div className="w-[85%] h-[75%] bg-white/[0.03] border border-white/[0.06] rounded-2xl overflow-hidden flex flex-col">
-                  <div className="h-9 bg-white/[0.04] border-b border-white/[0.05] flex items-center px-4 gap-2">
-                    {(["#ef4444", "#f59e0b", "#22c55e"] as const).map((color, i) => (
-                      <div key={i} className="w-2 h-2 rounded-full" style={{ background: color }} />
-                    ))}
-                  </div>
-                  <div className="flex-1 p-5 grid grid-cols-2 gap-3">
-                    {[...Array(4)].map((_, i) => (
-                      <div
-                        key={i}
-                        className="bg-[rgba(99,102,241,0.06)] border border-[rgba(99,102,241,0.12)] rounded-[10px] p-3.5 flex flex-col gap-2"
-                      >
-                        <div className="h-1.5 rounded-[3px] bg-[rgba(99,102,241,0.3)] w-[60%]" />
-                        <div className="h-1.5 rounded-[3px] bg-white/[0.08]" />
-                        <div className="h-1.5 rounded-[3px] bg-white/[0.08] w-[60%]" />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Play overlay */}
-              <div
-                className={`absolute inset-0 flex flex-col items-center justify-center gap-5 backdrop-blur-[4px] transition-opacity duration-[400ms] ${
-                  playing ? "opacity-0 pointer-events-none" : "opacity-100"
-                }`}
-                style={{
-                  background: "linear-gradient(135deg, rgba(6,7,26,0.85) 0%, rgba(6,7,26,0.6) 100%)",
-                }}
-              >
-                <div className="relative flex items-center justify-center">
+          {/* Integration cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-4">
+            {integrations.map((db, i) => {
+              const isHov = hoveredCard === db.name;
+              return (
+                <div
+                  key={db.name}
+                  onMouseEnter={() => setHoveredCard(db.name)}
+                  onMouseLeave={() => setHoveredCard(null)}
+                  className="bg-white rounded-2xl p-8 text-center relative overflow-hidden cursor-pointer"
+                  style={{
+                    border: `1px solid ${isHov ? 'rgba(99,102,241,0.3)' : '#f3f4f6'}`,
+                    boxShadow: isHov
+                      ? '0 16px 48px rgba(99,102,241,0.12)'
+                      : '0 2px 8px rgba(0,0,0,0.04)',
+                    opacity: inView ? 1 : 0,
+                    transform: inView
+                      ? isHov ? 'translateY(-6px)' : 'translateY(0)'
+                      : 'translateY(28px)',
+                    transition: `opacity 0.6s ease ${i * 0.12}s, transform 0.5s cubic-bezier(0.34,1.4,0.64,1) ${i * 0.12}s, box-shadow 0.3s, border-color 0.3s`,
+                  }}
+                >
+                  {/* Glow */}
                   <div
-                    className="absolute w-20 h-20 rounded-full border-2 border-white/30"
-                    style={{ animation: "demo-ring 2s ease-in-out infinite" }}
-                  />
-                  <div
-                    className="absolute w-20 h-20 rounded-full border-2 border-white/30"
-                    style={{ animation: "demo-ring 2s ease-in-out infinite", animationDelay: "0.7s" }}
-                  />
-                  <button
-                    className="w-20 h-20 rounded-full bg-white flex items-center justify-center cursor-pointer border-none transition-all duration-300 hover:scale-110"
+                    className="absolute top-0 left-0 right-0 h-24 pointer-events-none transition-opacity duration-500"
                     style={{
-                      boxShadow: "0 8px 40px rgba(99,102,241,0.4)",
+                      background: 'radial-gradient(ellipse at 50% 0%,rgba(99,102,241,0.1),transparent 70%)',
+                      opacity: isHov ? 1 : 0,
+                    }}
+                  />
+
+                  {/* Icon */}
+                  <div
+                    className={`w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5 text-3xl ${
+                      isHov ? `${isHov && 'int-float'}` : ''
+                    }`}
+                    style={{
+                      background: isHov ? 'rgba(99,102,241,0.07)' : '#f9fafb',
+                      border: `1px solid ${isHov ? 'rgba(99,102,241,0.2)' : '#f3f4f6'}`,
+                      transform: isHov ? 'scale(1.12) rotate(-5deg)' : 'scale(1)',
+                      boxShadow: isHov ? '0 6px 20px rgba(99,102,241,0.2)' : 'none',
+                      transition: 'all 0.35s cubic-bezier(0.34,1.56,0.64,1)',
+                      animation: isHov ? 'int-float 2s ease-in-out infinite' : 'none',
                     }}
                   >
-                    <Play size={28} color="#6366f1" style={{ marginLeft: 3 }} />
-                  </button>
+                    {db.emoji}
+                  </div>
+
+                  <h3 className="text-gray-900 font-bold text-[17px] mb-1.5">{db.name}</h3>
+                  <p className="text-gray-400 text-[13px] mb-4">{db.description}</p>
+
+                  {/* Status indicator */}
+                  <div className="inline-flex items-center gap-1.5 relative">
+                    <span className="relative inline-flex">
+                      <span className="w-2 h-2 rounded-full bg-green-400 inline-block shadow-[0_0_6px_rgba(74,222,128,0.5)]" />
+                      {isHov && (
+                        <span className="absolute inset-0 rounded-full bg-green-400 int-ping" />
+                      )}
+                    </span>
+                    <span className="text-green-600 text-[12px] font-bold">Ready to connect</span>
+                  </div>
                 </div>
-                <span className="text-white/70 text-[13px] font-light tracking-[0.05em]">
-                  Watch 2-min demo
+              );
+            })}
+          </div>
+
+          <p
+            className={`text-center text-gray-400 text-[13px] mb-16 transition-opacity duration-700 delay-400 ${
+              inView ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            More integrations coming soon. Connect your existing infrastructure seamlessly.
+          </p>
+
+          {/* 10x trust block */}
+          <div
+            className={`relative overflow-hidden rounded-2xl px-12 py-10 flex items-center gap-10 flex-wrap transition-all duration-700 delay-300 ${
+              inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'
+            }`}
+            style={{
+              background: 'rgba(99,102,241,0.04)',
+              border: '1px solid rgba(99,102,241,0.15)',
+            }}
+          >
+            {/* Background glow */}
+            <div
+              className="absolute -left-10 -top-10 w-48 h-48 rounded-full pointer-events-none"
+              style={{ background: 'radial-gradient(circle,rgba(99,102,241,0.12),transparent 70%)' }}
+            />
+
+            {/* Animated 10x circle */}
+            <div className="flex-shrink-0 relative">
+              {/* Rotating ring */}
+              <div
+                className="absolute -inset-2 rounded-full int-rotate"
+                style={{ border: '2px dashed rgba(99,102,241,0.2)' }}
+              />
+              <div
+                className="w-24 h-24 rounded-full flex items-center justify-center"
+                style={{
+                  background: 'rgba(99,102,241,0.08)',
+                  border: '2px solid rgba(99,102,241,0.2)',
+                }}
+              >
+                <span
+                  className="font-extrabold text-4xl"
+                  style={{
+                    background: 'linear-gradient(135deg,#6366f1,#8b5cf6)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                  }}
+                >
+                  {count10x}x
                 </span>
               </div>
+            </div>
 
-              {playing && (
-                <iframe
-                  src="https://www.youtube.com/embed/MLAG4v7Aa7g?si=5W5b8pB_uBJIOB_i&autoplay=1"
-                  title="SirDash Demo"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="absolute inset-0 w-full h-full border-none"
-                />
-              )}
+            <div className="flex-1 min-w-[260px]">
+              <h3 className="text-gray-900 font-extrabold text-[22px] mb-2.5">
+                Trusted by data-intensive industries
+              </h3>
+              <p className="text-gray-500 leading-relaxed text-[15px]">
+                From telecom giants managing customer data to financial institutions analyzing market trends,
+                SirDash.ai empowers teams to make data-driven decisions without the traditional bottlenecks.
+              </p>
             </div>
           </div>
 
-          {/* Bottom stats */}
-          <div
-            className="flex items-center justify-center gap-10 mt-10 flex-wrap"
-            style={{
-              opacity: inView ? 1 : 0,
-              transition: "opacity 0.7s ease 0.5s",
-            }}
-          >
-            {[
-              "No SQL knowledge needed",
-              "Works with any database",
-              "Results in under 2 seconds",
-              "Enterprise-grade security",
-            ].map((s) => (
-              <div key={s} className="flex items-center gap-2.5 text-white/35 text-[13px] font-light">
-                <div className="w-1 h-1 rounded-full bg-[#6366f1]" />
-                {s}
-              </div>
-            ))}
-          </div>
         </div>
       </section>
     </>
   );
 }
-
-export default Demo;

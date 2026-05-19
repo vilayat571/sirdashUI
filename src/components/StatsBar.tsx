@@ -1,181 +1,304 @@
-import { useState } from "react";
-import { useInView } from "./useInView";
-import { Play } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
-export function Demo() {
-  const [sectionRef, inView] = useInView(0.1);
-  const [playing, setPlaying] = useState(false);
+// ── Hooks ──────────────────────────────────────────────────────────────────
+
+function useInView(threshold = 0.2) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) setVisible(true); },
+      { threshold }
+    );
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  return [ref, visible] as const;
+}
+
+// Animates a numeric value from 0 → target over `duration` ms
+function useCounter(target: number, duration = 1800, active = false) {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    if (!active) return;
+    let start: number | null = null;
+    const step = (ts: number) => {
+      if (!start) start = ts;
+      const progress = Math.min((ts - start) / duration, 1);
+      // ease-out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.floor(eased * target));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [active, target, duration]);
+  return count;
+}
+
+// ── Stat Card ─────────────────────────────────────────────────────────────
+
+interface StatConfig {
+  prefix?: string;
+  numericValue?: number;   // if set → count-up animation
+  displayValue: string;    // fallback / suffix-only strings like "0 SQL"
+  suffix?: string;
+  label: string;
+  sub: string;
+  icon: string;
+}
+
+function StatCard({ stat, active }: { stat: StatConfig; active: boolean }) {
+  const count = useCounter(stat.numericValue ?? 0, 1800, active && !!stat.numericValue);
+  const [hovered, setHovered] = useState(false);
+
+  const displayed = stat.numericValue
+    ? `${stat.prefix ?? ""}${count}${stat.suffix ?? ""}`
+    : stat.displayValue;
+
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        position: "relative",
+        textAlign: "center",
+        padding: "28px 20px",
+        borderRadius: 20,
+        background: hovered
+          ? "linear-gradient(135deg,rgba(99,102,241,0.08),rgba(139,92,246,0.06))"
+          : "linear-gradient(135deg,#fafafa,#f5f5fa)",
+        border: `1px solid ${hovered ? "rgba(99,102,241,0.3)" : "#ebebf5"}`,
+        boxShadow: hovered
+          ? "0 8px 32px rgba(99,102,241,0.15), 0 2px 8px rgba(0,0,0,0.04)"
+          : "0 2px 8px rgba(0,0,0,0.04)",
+        transform: hovered ? "translateY(-4px)" : "translateY(0)",
+        transition: "all 0.35s cubic-bezier(0.34,1.56,0.64,1)",
+        cursor: "default",
+        overflow: "hidden",
+      }}
+    >
+      {/* Glow blob on hover */}
+      <div style={{
+        position: "absolute", inset: 0, borderRadius: 20, pointerEvents: "none",
+        background: "radial-gradient(ellipse at 50% 0%,rgba(99,102,241,0.12),transparent 70%)",
+        opacity: hovered ? 1 : 0,
+        transition: "opacity 0.35s",
+      }} />
+
+      {/* Icon */}
+      <div style={{
+        fontSize: 22,
+        marginBottom: 10,
+        transform: hovered ? "scale(1.18) rotate(-5deg)" : "scale(1) rotate(0deg)",
+        transition: "transform 0.35s cubic-bezier(0.34,1.56,0.64,1)",
+        display: "inline-block",
+      }}>
+        {stat.icon}
+      </div>
+
+      {/* Value */}
+      <div style={{
+        fontSize: 32,
+        fontWeight: 800,
+       
+        background: "linear-gradient(135deg,#6366f1,#8b5cf6)",
+        WebkitBackgroundClip: "text",
+        WebkitTextFillColor: "transparent",
+        backgroundClip: "text",
+        lineHeight: 1,
+        marginBottom: 6,
+        letterSpacing: "-0.02em",
+        transition: "transform 0.2s",
+      }}>
+        {displayed}
+      </div>
+
+      <div style={{ color: "#374151", fontWeight: 600, fontSize: 14, marginBottom: 3 }}>
+        {stat.label}
+      </div>
+      <div style={{ color: "#9ca3af", fontSize: 12 }}>{stat.sub}</div>
+
+      {/* Bottom shimmer bar */}
+      <div style={{
+        position: "absolute", bottom: 0, left: "20%", right: "20%", height: 2,
+        borderRadius: 2,
+        background: "linear-gradient(90deg,transparent,rgba(99,102,241,0.5),transparent)",
+        opacity: hovered ? 1 : 0,
+        transition: "opacity 0.35s",
+      }} />
+    </div>
+  );
+}
+
+// ── Marquee logos ──────────────────────────────────────────────────────────
+
+const LOGOS = [
+  "Telecom Corp", "FinanceHub", "DataStream",
+  "NovaSoft", "CloudBase", "MetaAnalytics",
+  // duplicate for seamless loop
+  "Telecom Corp", "FinanceHub", "DataStream",
+  "NovaSoft", "CloudBase", "MetaAnalytics",
+];
+
+function LogoMarquee() {
+  return (
+    <div style={{ position: "relative", overflow: "hidden", width: "100%", marginBottom: 48 }}>
+      {/* Fade masks */}
+      <div style={{
+        position: "absolute", left: 0, top: 0, bottom: 0, width: 80, zIndex: 2,
+        background: "linear-gradient(to right,white,transparent)",
+        pointerEvents: "none",
+      }} />
+      <div style={{
+        position: "absolute", right: 0, top: 0, bottom: 0, width: 80, zIndex: 2,
+        background: "linear-gradient(to left,white,transparent)",
+        pointerEvents: "none",
+      }} />
+
+      <div style={{
+        display: "flex",
+        gap: 48,
+        animation: "marquee 22s linear infinite",
+        width: "max-content",
+      }}>
+        {LOGOS.map((name, i) => (
+          <div
+            key={i}
+            style={{
+              color: "#d1d5db",
+              fontWeight: 700,
+              fontSize: 17,
+              letterSpacing: "-0.01em",
+              whiteSpace: "nowrap",
+              userSelect: "none",
+              transition: "color 0.2s",
+              cursor: "default",
+             
+            }}
+            onMouseEnter={(e) => ((e.currentTarget as HTMLDivElement).style.color = "#6366f1")}
+            onMouseLeave={(e) => ((e.currentTarget as HTMLDivElement).style.color = "#d1d5db")}
+          >
+            {name}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── Main component ─────────────────────────────────────────────────────────
+
+const STATS: StatConfig[] = [
+  { icon: "⚡", numericValue: 10, suffix: "x", displayValue: "10x", label: "Faster insights", sub: "than traditional BI" },
+  { icon: "💬", displayValue: "0 SQL", label: "Required", sub: "just natural language" },
+  { icon: "🛡️", numericValue: 99, prefix: "", suffix: ".9%", displayValue: "99.9%", label: "Uptime SLA", sub: "enterprise-grade" },
+  { icon: "🗄️", numericValue: 3, suffix: "+ DBs", displayValue: "3+ DBs", label: "Supported", sub: "more coming soon" },
+];
+
+export default function StatsBar() {
+  const [sectionRef, inView] = useInView(0.15);
 
   return (
     <>
       <style>{`
-        @keyframes demo-pulse {
-          0%, 100% { opacity: 1; transform: scale(1); }
-          50% { opacity: 0.5; transform: scale(0.8); }
+
+        @keyframes marquee {
+          0%   { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
         }
-        @keyframes demo-ring {
-          0% { transform: scale(1); opacity: 0.6; }
-          100% { transform: scale(2.2); opacity: 0; }
+
+        @keyframes fadeSlideUp {
+          from { opacity: 0; transform: translateY(24px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
-        .demo-section::before {
-          content: '';
-          position: absolute;
-          top: -200px;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 900px;
-          height: 600px;
-          background: radial-gradient(ellipse, rgba(99,102,241,0.12) 0%, transparent 70%);
-          pointer-events: none;
-        }
-        .demo-grid-lines {
-          position: absolute;
-          inset: 0;
-          background-image:
-            linear-gradient(rgba(99,102,241,0.04) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(99,102,241,0.04) 1px, transparent 1px);
-          background-size: 60px 60px;
-          pointer-events: none;
+
+        @keyframes badgePulse {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(99,102,241,0.35); }
+          50%       { box-shadow: 0 0 0 8px rgba(99,102,241,0); }
         }
       `}</style>
 
-      <section className="demo-section bg-[#05060f] py-[140px] relative overflow-hidden">
-        <div className="demo-grid-lines" />
-
-        <div ref={sectionRef} className="max-w-[1100px] mx-auto px-6">
-
-          {/* Header */}
-          <div
-            className="text-center mb-16"
-            style={{
-              opacity: inView ? 1 : 0,
-              transform: inView ? "translateY(0)" : "translateY(24px)",
-              transition: "opacity 0.7s ease, transform 0.7s ease",
-            }}
-          >
-            <div className="inline-flex items-center gap-2 bg-[rgba(99,102,241,0.1)] border border-[rgba(99,102,241,0.25)] text-[#818cf8] text-[11px] font-medium tracking-[0.15em] uppercase px-4 py-1.5 rounded-full mb-6">
-              <span
-                className="w-1.5 h-1.5 bg-[#6366f1] rounded-full shrink-0"
-                style={{
-                  boxShadow: "0 0 8px #6366f1",
-                  animation: "demo-pulse 2s ease-in-out infinite",
-                }}
-              />
-              Live Demo
+      <section style={{ background: "white", borderBottom: "1px solid #f3f4f6" }}>
+        <div
+          ref={sectionRef}
+          style={{ maxWidth: 1152, margin: "0 auto", padding: "56px 24px" }}
+        >
+          {/* ── Headline ── */}
+          <div style={{
+            textAlign: "center",
+            marginBottom: 40,
+            opacity: inView ? 1 : 0,
+            transform: inView ? "translateY(0)" : "translateY(16px)",
+            transition: "opacity 0.6s ease, transform 0.6s ease",
+          }}>
+            {/* Badge */}
+            <div style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              background: "rgba(99,102,241,0.07)",
+              border: "1px solid rgba(99,102,241,0.2)",
+              borderRadius: 999,
+              padding: "6px 16px",
+              marginBottom: 16,
+              animation: inView ? "badgePulse 2.5s ease-in-out infinite" : "none",
+            }}>
+              <span style={{
+                width: 7, height: 7, borderRadius: "50%",
+                background: "#6366f1",
+                display: "inline-block",
+                boxShadow: "0 0 6px rgba(99,102,241,0.6)",
+              }} />
+              <span style={{
+                color: "#6366f1",
+                fontSize: 11,
+                fontWeight: 700,
+                letterSpacing: "0.1em",
+               
+              }}>
+                TRUSTED BY INDUSTRY LEADERS
+              </span>
             </div>
 
-            <h2 className="text-[clamp(2.4rem,5vw,3.8rem)] font-extrabold text-white leading-[1.05] tracking-[-0.03em] mb-4">
-              See SirDash{" "}
-              <span className="bg-gradient-to-br from-[#818cf8] to-[#c4b5fd] bg-clip-text text-transparent">
-                in Action
-              </span>
-            </h2>
-
-            <p className="text-white/40 text-base font-light max-w-[440px] mx-auto leading-[1.7]">
-              Watch how natural language transforms into powerful data insights—in seconds, not hours.
+            <p style={{ color: "#9ca3af", fontSize: 14, fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase" }}>
+              Helping to grow the next generation of{" "}
+              <strong style={{
+               
+                background: "linear-gradient(135deg,#6366f1,#8b5cf6)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}>
+                500+
+              </strong>{" "}
+              companies
             </p>
           </div>
 
-          {/* Video */}
-          <div
-            style={{
-              opacity: inView ? 1 : 0,
-              transform: inView ? "translateY(0) scale(1)" : "translateY(32px) scale(0.97)",
-              transition: "opacity 0.8s ease 0.15s, transform 0.8s cubic-bezier(0.34,1.2,0.64,1) 0.15s",
-            }}
-          >
-            <div
-              className="relative rounded-[24px] overflow-hidden aspect-video max-w-[900px] mx-auto cursor-pointer"
-              style={{
-                boxShadow:
-                  "0 0 0 1px rgba(99,102,241,0.2), 0 40px 100px rgba(0,0,0,0.6), 0 0 80px rgba(99,102,241,0.08)",
-              }}
-              onClick={() => setPlaying(true)}
-            >
-              {/* Thumbnail bg */}
-              <div className="absolute inset-0 bg-[#0a0b1e] flex items-center justify-center">
-                <div className="w-[85%] h-[75%] bg-white/[0.03] border border-white/[0.06] rounded-2xl overflow-hidden flex flex-col">
-                  <div className="h-9 bg-white/[0.04] border-b border-white/[0.05] flex items-center px-4 gap-2">
-                    {(["#ef4444", "#f59e0b", "#22c55e"] as const).map((color, i) => (
-                      <div key={i} className="w-2 h-2 rounded-full" style={{ background: color }} />
-                    ))}
-                  </div>
-                  <div className="flex-1 p-5 grid grid-cols-2 gap-3">
-                    {[...Array(4)].map((_, i) => (
-                      <div
-                        key={i}
-                        className="bg-[rgba(99,102,241,0.06)] border border-[rgba(99,102,241,0.12)] rounded-[10px] p-3.5 flex flex-col gap-2"
-                      >
-                        <div className="h-1.5 rounded-[3px] bg-[rgba(99,102,241,0.3)] w-[60%]" />
-                        <div className="h-1.5 rounded-[3px] bg-white/[0.08]" />
-                        <div className="h-1.5 rounded-[3px] bg-white/[0.08] w-[60%]" />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Play overlay */}
-              <div
-                className={`absolute inset-0 flex flex-col items-center justify-center gap-5 backdrop-blur-[4px] transition-opacity duration-[400ms] ${
-                  playing ? "opacity-0 pointer-events-none" : "opacity-100"
-                }`}
-                style={{
-                  background: "linear-gradient(135deg, rgba(6,7,26,0.85) 0%, rgba(6,7,26,0.6) 100%)",
-                }}
-              >
-                <div className="relative flex items-center justify-center">
-                  <div
-                    className="absolute w-20 h-20 rounded-full border-2 border-white/30"
-                    style={{ animation: "demo-ring 2s ease-in-out infinite" }}
-                  />
-                  <div
-                    className="absolute w-20 h-20 rounded-full border-2 border-white/30"
-                    style={{ animation: "demo-ring 2s ease-in-out infinite", animationDelay: "0.7s" }}
-                  />
-                  <button
-                    className="w-20 h-20 rounded-full bg-white flex items-center justify-center cursor-pointer border-none transition-all duration-300 hover:scale-110"
-                    style={{
-                      boxShadow: "0 8px 40px rgba(99,102,241,0.4)",
-                    }}
-                  >
-                    <Play size={28} color="#6366f1" style={{ marginLeft: 3 }} />
-                  </button>
-                </div>
-                <span className="text-white/70 text-[13px] font-light tracking-[0.05em]">
-                  Watch 2-min demo
-                </span>
-              </div>
-
-              {playing && (
-                <iframe
-                  src="https://www.youtube.com/embed/MLAG4v7Aa7g?si=5W5b8pB_uBJIOB_i&autoplay=1"
-                  title="SirDash Demo"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="absolute inset-0 w-full h-full border-none"
-                />
-              )}
-            </div>
+          {/* ── Marquee ── */}
+          <div style={{
+            opacity: inView ? 1 : 0,
+            transition: "opacity 0.7s ease 0.15s",
+          }}>
+            <LogoMarquee />
           </div>
 
-          {/* Bottom stats */}
-          <div
-            className="flex items-center justify-center gap-10 mt-10 flex-wrap"
-            style={{
-              opacity: inView ? 1 : 0,
-              transition: "opacity 0.7s ease 0.5s",
-            }}
-          >
-            {[
-              "No SQL knowledge needed",
-              "Works with any database",
-              "Results in under 2 seconds",
-              "Enterprise-grade security",
-            ].map((s) => (
-              <div key={s} className="flex items-center gap-2.5 text-white/35 text-[13px] font-light">
-                <div className="w-1 h-1 rounded-full bg-[#6366f1]" />
-                {s}
+          {/* ── Stat cards ── */}
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(4, 1fr)",
+            gap: 20,
+          }}>
+            {STATS.map((stat, i) => (
+              <div
+                key={stat.label}
+                style={{
+                  opacity: inView ? 1 : 0,
+                  transform: inView ? "translateY(0)" : "translateY(28px)",
+                  transition: `opacity 0.6s ease ${0.1 + i * 0.1}s, transform 0.6s ease ${0.1 + i * 0.1}s`,
+                }}
+              >
+                <StatCard stat={stat} active={inView} />
               </div>
             ))}
           </div>
@@ -184,5 +307,3 @@ export function Demo() {
     </>
   );
 }
-
-export default Demo;
