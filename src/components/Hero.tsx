@@ -90,7 +90,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative overflow-hidden bg-[#212121] pt-28 pb-0">
+    <section className="relative overflow-hidden bg-[#faf9fb] pt-28 pb-0">
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute left-1/2 top-0 -translate-x-1/2 w-[900px] h-[500px] bg-[radial-gradient(ellipse_at_top,rgba(99,102,241,0.28)_0%,transparent_70%)]" />
         <div className="absolute inset-0 grid-bg opacity-30" />
@@ -105,47 +105,40 @@ export default function Hero() {
                 <div key={i} className="w-8 h-8 rounded-full border-2 border-[#06071a]" style={{ background: bg }} />
               ))}
             </div>
-            <span className="text-white/55 text-sm">
-              <strong className="text-white font-semibold">500+</strong> enterprises trust SirDash
+            <span className="text-black/55 text-sm">
+              <strong className="text-black font-semibold">500+</strong> enterprises trust SirDash
             </span>
           </div>
 
           <h1 className="text-6xl md:text-7xl font-bold leading-[1.05] tracking-tight max-w-4xl">
-            <span className="text-white">Your Data,</span>{" "}
-            <span className="gradient-text">Intelligent</span>
+            <span className="text-black">Your Data,</span>{" "}
+            <span className="text-black">Intelligent</span>
             <br />
-            <span className="text-white">Conversations</span>
+            <span className="text-black">Conversations</span>
           </h1>
 
-          <p className="text-white/50 text-xl max-w-xl leading-relaxed">
+          <p className="text-black/50 text-xl max-w-xl leading-relaxed">
             Enterprise-grade AI that turns natural language into database insights—no SQL required.
           </p>
 
-          <a
-            href="#demo"
-            className="bg-brand hover:bg-brand-dark text-white font-semibold px-10 py-4 rounded-xl text-lg transition-all duration-200 flex items-center gap-2 shadow-xl shadow-brand/20"
-          >
-            Book a Demo
-            <span className="text-xl leading-none rotate-45">↗</span>
-          </a>
-
           <div className="relative w-full flex flex-col items-center mt-4 gap-4">
 
-            <div className="flex bg-white rounded-2xl p-1.5 gap-1 shadow-sm w-full max-w-lg">
+            <div className="flex bg-[#faf9fb] rounded-2xl p-1.5 gap-1  w-full max-w-lg">
               {TABS.map((tab, i) => (
                 <button
                   key={tab}
                   onClick={() => goToTab(i)}
-                  className="relative flex-1 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 overflow-hidden"
+                  className={` ${activeTab === i && ' shadow-2xl'} relative flex-1 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 overflow-hidden`}
                   style={{
-                    background: activeTab === i ? "#06071a" : "transparent",
-                    color: activeTab === i ? "#ffffff" : "#6b7280",
+                    background: activeTab === i ? "#faf9fb" : "#faf9fb",
+                    color: activeTab === i ? "black" : "#6b7280",
+
                   }}
                 >
                   {tab}
                   {activeTab === i && (
                     <span
-                      className="absolute bottom-0 left-0 h-[2px] bg-brand rounded-full transition-none"
+                      className="absolute bottom-0 left-0 h-[2px]  rounded-full transition-none"
                       style={{ width: `${progress}%` }}
                     />
                   )}
@@ -153,15 +146,12 @@ export default function Hero() {
               ))}
             </div>
 
-            <div className="w-full mx-auto rounded-t-2xl overflow-hidden shadow-2xl shadow-brand/10 relative">
-              <div className="absolute top-3 left-3 z-10 bg-brand text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">
-                {TABS[activeTab]}
-              </div>
+            <div className="w-full mx-auto rounded-t-2xl relative">
 
               {VIDEO_SOURCES.map((src, i) => (
                 <div
                   key={i}
-                  className={`transition-opacity duration-500 ${activeTab === i ? "block opacity-100" : "hidden opacity-0"}`}
+                  className={`transition-opacity  duration-500 ${activeTab === i ? "block opacity-100" : "hidden opacity-0"}`}
                 >
                   <video
                     // ✅ el is HTMLVideoElement | null, array type matches

@@ -9,6 +9,7 @@ import Demo from '../components/Demos/Demo';
 import Pricing from '../components/Pricing';
 import BookDemo from '../components/Demos/BookDemo';
 import SubscribePopup from '../components/SubscribePopup';
+import ImagesDesc from '../components/ImagesDesc';
 
 export default function HomePage() {
   return (
@@ -23,6 +24,7 @@ export default function HomePage() {
       <Security />
       <UseCases />
       <Demo />
+      <ImagesDesc />
       <Pricing />
       <BookDemo />
     </>

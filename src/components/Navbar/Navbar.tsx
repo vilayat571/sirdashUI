@@ -60,7 +60,7 @@ export default function Navbar() {
             <img src={logo} alt="" />
           </div>
           <span
-            className={`font-bold text-lg tracking-tight transition-colors ${scrolled ? "text-gray-900" : "text-white"}`}
+            className={`font-bold text-lg tracking-tight transition-colors ${scrolled ? "text-gray-900" : "text-black"}`}
           >
             sirdash.ai
           </span>
@@ -71,7 +71,7 @@ export default function Navbar() {
             <a
               key={item.label}
               href={item.href}
-              className={`text-sm font-medium transition-colors duration-200 ${scrolled ? "text-gray-600 hover:text-gray-900" : "text-white/70 hover:text-white"}`}
+              className={`text-sm font-medium transition-colors duration-200 ${scrolled ? "text-gray-600 hover:text-gray-900" : "text-black/70 hover:text-black"}`}
             >
               {item.label}
             </a>
@@ -87,7 +87,7 @@ export default function Navbar() {
               className={`text-sm font-medium transition-all px-4 py-2 rounded-lg border ${
                 scrolled
                   ? "text-gray-600 border-gray-200 hover:border-gray-300"
-                  : "text-white/70 border-white/15 hover:border-white/30"
+                  : "text-black/70 border-white/15 hover:border-white/30"
               }`}
             >
               Sign in
@@ -103,7 +103,7 @@ export default function Navbar() {
         </div>
 
         <button
-          className={`md:hidden p-2 ${scrolled ? "text-gray-700" : "text-white"}`}
+          className={`md:hidden p-2 ${scrolled ? "text-gray-700" : "text-black"}`}
           onClick={() => setIsOpen(!isOpen)}
         >
           {isOpen ? <X size={22} /> : <Menu size={22} />}
@@ -136,7 +136,7 @@ export default function Navbar() {
             )}
             <a
               href={ctaGoesToDashboard ? "/dashboard" : "#sandbox"}
-              className="block text-center bg-brand text-white text-sm font-semibold rounded-xl py-2.5 hover:bg-brand-dark transition-colors"
+              className="block text-center bg-brand text-black text-sm font-semibold rounded-xl py-2.5 hover:bg-brand-dark transition-colors"
             >
               {ctaGoesToDashboard ? "Go to dashboard ↗" : "Try our sandbox ↗"}
             </a>
