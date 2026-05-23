@@ -4,19 +4,18 @@ import { useCases } from '../data';
 
 export default function UseCases() {
   const [active, setActive] = useState(0);
-  const [prev, setPrev] = useState(0);
+  // ✅ Removed: const [prev, setPrev] = useState(0) — prev was never read
   const [animating, setAnimating] = useState(false);
   const [sectionRef, inView] = useInView(0.1);
   const current = useCases[active];
 
   const switchTab = (i: number) => {
     if (i === active || animating) return;
-    setPrev(active);
+    // ✅ Removed setPrev(active) — no longer needed
     setAnimating(true);
     setTimeout(() => { setActive(i); setAnimating(false); }, 220);
   };
 
-  // Auto-rotate tabs
   useEffect(() => {
     if (!inView) return;
     const id = setInterval(() => {
@@ -36,13 +35,12 @@ export default function UseCases() {
       <section id="use-cases" style={{ background: '#f9fafb', padding: '112px 0' }}>
         <div ref={sectionRef} style={{ maxWidth: 1152, margin: '0 auto', padding: '0 24px' }}>
 
-          {/* Heading */}
           <div style={{
             textAlign: 'center', marginBottom: 64,
             opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(20px)',
             transition: 'opacity 0.6s ease, transform 0.6s ease',
           }}>
-            <h2 style={{ fontSize: 'clamp(2.2rem,5vw,3.2rem)', fontWeight: 800, color: '#111827', marginBottom: 12,  letterSpacing: '-0.025em' }}>
+            <h2 style={{ fontSize: 'clamp(2.2rem,5vw,3.2rem)', fontWeight: 800, color: '#111827', marginBottom: 12, letterSpacing: '-0.025em' }}>
               Use Cases
             </h2>
             <p style={{ color: '#6b7280', fontSize: 17, maxWidth: 480, margin: '0 auto' }}>
@@ -50,7 +48,6 @@ export default function UseCases() {
             </p>
           </div>
 
-          {/* Tab switcher with progress bars */}
           <div style={{
             display: 'flex', gap: 8, background: 'white', border: '1px solid #e5e7eb',
             padding: 6, borderRadius: 18, width: 'fit-content', margin: '0 auto 32px',
@@ -68,12 +65,10 @@ export default function UseCases() {
                   fontWeight: 700, fontSize: 13,
                   border: 'none', cursor: 'pointer',
                   transition: 'all 0.3s',
-                  
                   boxShadow: active === i ? '0 4px 16px rgba(99,102,241,0.3)' : 'none',
                   position: 'relative', overflow: 'hidden',
                 }}
               >
-                {/* Auto-progress bar */}
                 {active === i && inView && (
                   <div style={{
                     position: 'absolute', bottom: 0, left: 0, height: 2,
@@ -87,7 +82,6 @@ export default function UseCases() {
             ))}
           </div>
 
-          {/* Content panel */}
           <div style={{
             background: 'white', borderRadius: 22, border: '1px solid #f3f4f6',
             boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
@@ -102,10 +96,9 @@ export default function UseCases() {
                 transition: 'opacity 0.22s ease',
               }}
             >
-              {/* Left */}
               <div>
                 <div style={{ fontSize: 44, marginBottom: 12 }}>{current.icon}</div>
-                <h3 style={{ color: '#111827', fontWeight: 800, fontSize: 26, marginBottom: 12,  }}>
+                <h3 style={{ color: '#111827', fontWeight: 800, fontSize: 26, marginBottom: 12 }}>
                   {current.role}
                 </h3>
                 <p style={{ color: '#6b7280', lineHeight: 1.8, marginBottom: 24, fontSize: 15 }}>{current.description}</p>
@@ -130,9 +123,8 @@ export default function UseCases() {
                 </div>
               </div>
 
-              {/* Right */}
               <div>
-                <h4 style={{ color: '#9ca3af', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16,  }}>
+                <h4 style={{ color: '#9ca3af', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>
                   Key Benefits
                 </h4>
 
@@ -151,9 +143,8 @@ export default function UseCases() {
                   ))}
                 </div>
 
-                {/* Live preview */}
                 <div style={{ background: '#f9fafb', border: '1px solid #f3f4f6', borderRadius: 18, padding: 16 }}>
-                  <div style={{ color: '#9ca3af', fontSize: 11, marginBottom: 10,  letterSpacing: '0.04em', fontWeight: 600 }}>
+                  <div style={{ color: '#9ca3af', fontSize: 11, marginBottom: 10, letterSpacing: '0.04em', fontWeight: 600 }}>
                     LIVE QUERY PREVIEW
                   </div>
                   <div style={{

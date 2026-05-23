@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { LoaderCircle } from "lucide-react";
-import AdminUpdateImageUpload from "../components/AdminUpdateImageUpload";
+import AdminUpdateImageUpload from "../components/Admin/AdminUpdateImageUpload";
 import { ICON_OPTIONS } from "../lib/adminIcons";
 import { supabase } from "../lib/supabase";
 import type { UpdateForm } from "../types";
