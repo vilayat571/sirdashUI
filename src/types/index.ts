@@ -34,3 +34,10 @@ export interface Integration {
   description: string;
   logo: string;
 }
+
+export interface UpdateForm {
+  title: string;
+  description: string;
+  date: string;
+  icon: string;
+}

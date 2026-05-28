@@ -5,14 +5,8 @@ import { LoaderCircle } from "lucide-react";
 import AdminUpdateImageUpload from "../components/Admin/AdminUpdateImageUpload";
 import { ICON_OPTIONS } from "../lib/adminIcons";
 import { supabase } from "../lib/supabase";
+import type { UpdateForm } from "../types";
 import { useCreateAdminUpdate } from "../hooks/useAdminUpdates";
-
-type UpdateForm = {
-  title: string;
-  description: string;
-  date: string;
-  icon: string;
-};
 
 const EMPTY_FORM: UpdateForm = {
   title: "",

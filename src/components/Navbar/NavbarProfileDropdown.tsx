@@ -49,33 +49,31 @@ export default function NavbarProfileDropdown({
         aria-haspopup="menu"
         onClick={() => setOpen((o) => !o)}
         className={`flex items-center gap-2.5 rounded-xl py-1.5 pl-1.5 pr-2 transition-colors ${
-          scrolled ? "hover:bg-gray-100/90" : "hover:bg-white/10"
+          scrolled ? "hover:bg-gray-100/90" : "hover:bg-black/5"
         }`}
       >
         {avatarUrl ? (
           <img
             src={avatarUrl}
             alt=""
-            className="h-9 w-9 rounded-lg object-cover ring-2 ring-white/20"
+            className="h-9 w-9 rounded-lg object-cover ring-2 ring-gray-200"
             referrerPolicy="no-referrer"
           />
         ) : (
           <span
-            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-xs font-bold ${
-              scrolled ? "bg-brand/15 text-brand" : "bg-white/20 text-white"
-            }`}
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand/15 text-xs font-bold text-brand"
           >
             {initials}
           </span>
         )}
         <span
-          className={`max-w-[140px] truncate text-left text-sm font-semibold ${scrolled ? "text-gray-900" : "text-white"}`}
+          className={`max-w-[140px] truncate text-left text-sm font-semibold ${scrolled ? "text-gray-900" : "text-black"}`}
         >
           {displayName}
         </span>
         <ChevronDown
           size={16}
-          className={`shrink-0 opacity-70 ${scrolled ? "text-gray-600" : "text-white/80"}`}
+          className={`shrink-0 opacity-70 ${scrolled ? "text-gray-600" : "text-black/60"}`}
         />
       </button>
       {open && (

@@ -1,8 +1,9 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { LayoutDashboard, List, LogOut, PlusCircle, Zap } from "lucide-react";
+import { LayoutDashboard, List, LogOut, PlusCircle } from "lucide-react";
 import toast from "react-hot-toast";
 import { signOutSupabase } from "../../lib/authUtils";
 import AdminSidebarUserFooter from "./AdminSidebarUserFooter";
+import BrandLogoLink from "../BrandLogoLink";
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>
   `flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
@@ -28,17 +29,13 @@ export default function AdminSidebar() {
   return (
     <aside className="fixed inset-y-0 left-0 z-20 hidden w-64 flex-col overflow-hidden border-r border-gray-200 bg-white md:flex">
       <div className="border-b border-gray-100 p-5">
-        <NavLink to="/" className="flex items-center gap-2.5">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand shadow-sm shadow-brand/20">
-            <Zap className="h-5 w-5 text-white" fill="white" aria-hidden />
-          </span>
-          <span className="text-base font-bold tracking-tight text-gray-900">
-            sirdash.ai
-          </span>
-        </NavLink>
+        <BrandLogoLink />
       </div>
 
-      <nav className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto p-3" aria-label="Admin">
+      <nav
+        className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto p-3"
+        aria-label="Admin"
+      >
         <NavLink to="/admin/dashboard" end className={navLinkClass}>
           <LayoutDashboard className="h-4 w-4" aria-hidden />
           Dashboard

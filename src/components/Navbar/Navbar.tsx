@@ -6,13 +6,13 @@ import toast from "react-hot-toast";
 import { navItems } from "../../data";
 import NavbarMobileUserCard from "../Navbar/NavbarMobileUserCard";
 import NavbarProfileDropdown from "../Navbar/NavbarProfileDropdown";
+import logo from "../../assets/sirdash-logo.png";
 import {
   getSupabaseSessionUser,
   isAdmin,
   signOutSupabase,
   subscribeSupabaseAuth,
 } from "../../lib/authUtils";
-import logo from '../../assets/sirdash-logo.png';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -80,7 +80,11 @@ export default function Navbar() {
 
         <div className="hidden md:flex items-center gap-3">
           {user ? (
-            <NavbarProfileDropdown user={user} scrolled={scrolled} onLogout={handleLogout} />
+            <NavbarProfileDropdown
+              user={user}
+              scrolled={scrolled}
+              onLogout={handleLogout}
+            />
           ) : (
             <Link
               to="/login"
@@ -95,7 +99,7 @@ export default function Navbar() {
           )}
           {/* ✅ CTA button using ctaGoesToDashboard inline */}
           <a
-            href={ctaGoesToDashboard ? "/dashboard" : "#sandbox"}
+            href={ctaGoesToDashboard ? "admin/dashboard" : "#sandbox"}
             className="bg-brand hover:bg-brand-dark text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-all shadow-md shadow-brand/20 flex items-center gap-1.5"
           >
             {ctaGoesToDashboard ? "Go to dashboard" : "Try our sandbox"}
@@ -135,8 +139,8 @@ export default function Navbar() {
               </Link>
             )}
             <a
-              href={ctaGoesToDashboard ? "/dashboard" : "#sandbox"}
-              className="block text-center bg-brand text-black text-sm font-semibold rounded-xl py-2.5 hover:bg-brand-dark transition-colors"
+              href={ctaGoesToDashboard ? "admin/dashboard" : "#sandbox"}
+              className="block text-center bg-brand text-white text-sm font-semibold rounded-xl py-2.5 hover:bg-brand-dark transition-colors"
             >
               {ctaGoesToDashboard ? "Go to dashboard ↗" : "Try our sandbox ↗"}
             </a>

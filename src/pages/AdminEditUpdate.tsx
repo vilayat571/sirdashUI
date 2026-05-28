@@ -9,13 +9,7 @@ import {
   useAdminUpdate,
   useUpdateAdminUpdate,
 } from "../hooks/useAdminUpdates";
-
-type UpdateForm = {
-  title: string;
-  description: string;
-  date: string;
-  icon: string;
-};
+import type { UpdateForm } from "../types";
 
 export default function AdminEditUpdate() {
   const { id } = useParams<{ id: string }>();

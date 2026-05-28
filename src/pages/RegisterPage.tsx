@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import {
   ArrowLeft,
   Eye,
@@ -10,35 +9,15 @@ import {
   Mail,
   UserPlus,
   User,
-  Zap,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
+import BrandLogoLink from "../components/BrandLogoLink";
 import RegisterVerificationSent from "../components/RegisterVerificationSent";
+import type { RegisterFormValues } from "../lib/authSchemas";
+import { registerSchema } from "../lib/authSchemas";
 import { supabase } from "../lib/supabase";
 import { signInWithGoogle } from "../lib/authUtils";
-
-const registerSchema = z
-  .object({
-    fullName: z
-      .string()
-      .min(2, { message: "Please enter your name (at least 2 characters)" })
-      .max(100, { message: "Name is too long" }),
-    email: z.string().email({ message: "Please enter a valid email address" }),
-    password: z
-      .string()
-      .min(8, { message: "Password must be at least 8 characters" }),
-    confirmPassword: z.string(),
-    acceptTerms: z.coerce.boolean().refine((v) => v, {
-      message: "You must accept the Terms and Privacy Policy",
-    }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
-
-type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
@@ -128,17 +107,7 @@ export default function RegisterPage() {
       <div className="relative z-10 mx-auto flex min-h-screen max-w-lg flex-col justify-center px-5 py-14 sm:px-6">
         <div className="rounded-2xl border border-gray-200/80 bg-white p-8 shadow-[0_4px_24px_rgba(0,0,0,0.04),0_1px_2px_rgba(0,0,0,0.04)] sm:p-10">
           <div className="text-center">
-            <Link
-              to="/"
-              className="inline-flex items-center justify-center gap-2.5 transition-opacity hover:opacity-80"
-            >
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand shadow-sm shadow-brand/20">
-                <Zap className="h-5 w-5 text-white" fill="white" aria-hidden />
-              </span>
-              <span className="text-lg font-bold tracking-tight text-gray-900">
-                sirdash.ai
-              </span>
-            </Link>
+            <BrandLogoLink className="inline-flex items-center justify-center gap-2.5 transition-opacity hover:opacity-80 group" />
             <h1 className="mt-4 text-2xl font-bold tracking-tight text-gray-900 sm:text-[1.75rem]">
               Create an account
             </h1>

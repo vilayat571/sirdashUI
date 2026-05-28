@@ -7,11 +7,11 @@ import {
   Menu,
   PlusCircle,
   X,
-  Zap,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { signOutSupabase } from "../../lib/authUtils";
 import AdminSidebarUserFooter from "./AdminSidebarUserFooter";
+import BrandLogoLink from "../BrandLogoLink";
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>
   `flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
@@ -43,14 +43,7 @@ export default function AdminSidebarMobile() {
   return (
     <div className="md:hidden">
       <header className="sticky top-0 z-40 flex items-center justify-between border-b border-gray-200 bg-white px-4 py-3">
-        <NavLink to="/" className="flex items-center gap-2.5">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand shadow-sm shadow-brand/20">
-            <Zap className="h-5 w-5 text-white" fill="white" aria-hidden />
-          </span>
-          <span className="text-base font-bold tracking-tight text-gray-900">
-            sirdash.ai
-          </span>
-        </NavLink>
+        <BrandLogoLink />
         <button
           type="button"
           className="rounded-lg p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900"
