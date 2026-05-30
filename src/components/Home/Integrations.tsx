@@ -2,28 +2,10 @@ import { useState } from 'react';
 import { useInView } from '../useInView';
 import { integrations } from '../../data';
 
-function useCounter(target: number, duration = 1600, active = false) {
-  const [count, setCount] = useState(0);
-  const [started, setStarted] = useState(false);
-  if (active && !started) {
-    setStarted(true);
-    let start: number | null = null;
-    const step = (ts: number) => {
-      if (!start) start = ts;
-      const p = Math.min((ts - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      setCount(Math.floor(eased * target));
-      if (p < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }
-  return count;
-}
 
 export default function Integrations() {
   const [sectionRef, inView] = useInView(0.1);
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
-  const count10x = useCounter(10, 1400, inView);
 
   return (
     <>
