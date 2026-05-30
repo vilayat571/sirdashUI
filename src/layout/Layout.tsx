@@ -8,7 +8,7 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <div className="min-h-screen bg-navy-950 text-white overflow-x-hidden">
+    <div className="min-h-screen  text-white overflow-x-hidden">
       <Navbar />
       <main>{children}</main>
       <Footer />

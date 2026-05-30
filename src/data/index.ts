@@ -139,7 +139,7 @@ export const securityFeatures: SecurityFeature[] = [
     items: [
       'Immutable audit logs for all system activities',
       'SIEM integration for centralized monitoring',
-      'SOC 2 Type II and ISO 27001 compliance roadmap',
+      'In progress',
     ],
   },
   {

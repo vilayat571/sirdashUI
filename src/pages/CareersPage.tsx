@@ -44,7 +44,7 @@ const FadeIn = ({
 const stats = [
   { num: "10%",    label: "Founding Equity" },
   { num: "€1B+",  label: "Market Opportunity" },
-  { num: "500+",  label: "Enterprise Clients" },
+  { num: "500+",  label: "Potential Clients" },
   { num: "Berlin",label: "Headquarters" },
 ];
 
@@ -303,7 +303,6 @@ export default function CareersPage() {
   return (
     <>
       <style>{`
-        .car-dm   { font-family: 'DM Sans', sans-serif; }
 
         @keyframes car-shimmer {
           0%   { background-position: -200% 0; }

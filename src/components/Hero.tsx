@@ -111,15 +111,15 @@ export default function Hero() {
           </div>
 
           <h1 className="text-6xl md:text-7xl font-bold leading-[1.05] tracking-tight max-w-4xl">
-            <span className="text-black">Your Data,</span>{" "}
-            <span className="text-black">Intelligent</span>
-            <br />
-            <span className="text-black">Conversations</span>
+            <span className="text-black">The semantic AI layer </span>{" "}
+            <span className="text-black">between business users and enterprise databases</span>
           </h1>
 
-          <p className="text-black/50 text-xl max-w-xl leading-relaxed">
-            Enterprise-grade AI that turns natural language into database insights—no SQL required.
-          </p>
+          <p className="text-black/50 max-w-xl leading-relaxed">
+          <span className=" font-bold">Your data answers you. Instantly. Securely. In plain English.
+</span>
+<br />
+SirDash connects to your enterprise databases and turns business questions into trusted answers — without involving your data team for every request.          </p>
 
           <div className="relative w-full flex flex-col items-center mt-4 gap-4">
 

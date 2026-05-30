@@ -1,9 +1,8 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 
- import booth1 from '../assets/image.jpeg';
+import booth1 from '../assets/image.jpeg';
 import booth2 from '../assets/image1.jpeg';
-
 
 const STATS = [
   { value: "500+", label: "Enterprises Trust SirDash" },
@@ -13,10 +12,10 @@ const STATS = [
 ];
 
 const MILESTONES = [
-  { year: "2022", title: "Founded in Berlin", desc: "Born out of frustration with traditional BI tools — we set out to make data accessible to everyone, not just engineers." },
-  { year: "2023", title: "First Enterprise Clients", desc: "Onboarded our first wave of enterprise customers in telecom and finance, validating the product-market fit." },
-  { year: "2024", title: "Agentic RAG v2", desc: "Shipped our proprietary Agentic RAG engine — domain-aware, schema-aware, and conversationally refineable." },
-  { year: "2025", title: "Global Stage", desc: "Presented at leading tech conferences worldwide, recognized in the AI & Machine Learning category." },
+  { year: "2022", title: "Founded in Berlin", desc: "Born out of frustration with traditional BI tools — we set out to make data accessible to everyone, not just engineers.", label: "Founder 2025", labelColor: "#818cf8" },
+  { year: "2023", title: "First Enterprise Clients", desc: "Onboarded our first wave of enterprise customers in telecom and finance, validating the product-market fit.", label: "October 2025", labelColor: "#f472b6" },
+  { year: "2024", title: "Agentic RAG v2", desc: "Shipped our proprietary Agentic RAG engine — domain-aware, schema-aware, and conversationally refineable.", label: "Semantic Miner release 2026 February", labelColor: "#60a5fa" },
+  { year: "2025", title: "Global Stage", desc: "Presented at leading tech conferences worldwide, recognized in the AI & Machine Learning category.", label: "Version 1.0.0 May", labelColor: "#34d399" },
 ];
 
 function useInViewOnce(threshold = 0.15) {
@@ -34,11 +33,67 @@ function useInViewOnce(threshold = 0.15) {
   return [ref, visible] as const;
 }
 
+/* Parallax hook — tracks scroll offset relative to element center */
+function useParallax(speed = 0.12) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [offset, setOffset] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!ref.current) return;
+      const rect = ref.current.getBoundingClientRect();
+      const centerY = rect.top + rect.height / 2 - window.innerHeight / 2;
+      setOffset(centerY * speed);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [speed]);
+
+  return [ref, offset] as const;
+}
+
+/* Mouse-tilt hook for 3-D card effect */
+function useTilt() {
+  const ref = useRef<HTMLDivElement>(null);
+  const handleMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const el = ref.current;
+    if (!el) return;
+    const { left, top, width, height } = el.getBoundingClientRect();
+    const x = ((e.clientX - left) / width - 0.5) * 14;
+    const y = ((e.clientY - top) / height - 0.5) * -14;
+    el.style.transform = `perspective(900px) rotateY(${x}deg) rotateX(${y}deg) scale(1.02)`;
+  }, []);
+  const handleLeave = useCallback(() => {
+    if (ref.current) ref.current.style.transform = "";
+  }, []);
+  return { ref, handleMove, handleLeave };
+}
+
 export default function ImagesDesc() {
   const [heroRef, heroVisible] = useInViewOnce();
   const [statsRef, statsVisible] = useInViewOnce();
   const [timelineRef, timelineVisible] = useInViewOnce();
   const [photosRef, photosVisible] = useInViewOnce();
+
+  const [parallax1Ref, parallax1Offset] = useParallax(0.10);
+  const [parallax2Ref, parallax2Offset] = useParallax(0.18);
+
+  const tilt1 = useTilt();
+  const tilt2 = useTilt();
+
+  /* Floating orb mouse parallax for hero */
+  const heroBgRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const handleMouse = (e: MouseEvent) => {
+      if (!heroBgRef.current) return;
+      const x = (e.clientX / window.innerWidth - 0.5) * 40;
+      const y = (e.clientY / window.innerHeight - 0.5) * 20;
+      heroBgRef.current.style.transform = `translate(${x}px, ${y}px)`;
+    };
+    window.addEventListener("mousemove", handleMouse, { passive: true });
+    return () => window.removeEventListener("mousemove", handleMouse);
+  }, []);
 
   return (
     <section id="about" style={{ background: "#fff", overflow: "hidden" }}>
@@ -51,16 +106,33 @@ export default function ImagesDesc() {
         position: "relative",
         overflow: "hidden",
       }}>
-        {/* Background glow */}
-        <div style={{
-          position: "absolute", inset: 0, pointerEvents: "none",
-          background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(99,102,241,0.22) 0%, transparent 70%)",
-        }} />
+        {/* Mouse-reactive glow orb */}
+        <div ref={heroBgRef} style={{
+          position: "absolute", inset: "-20%", pointerEvents: "none",
+          transition: "transform 0.1s linear",
+        }}>
+          <div style={{
+            position: "absolute", top: "-10%", left: "20%", right: "20%", bottom: "30%",
+            background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(99,102,241,0.28) 0%, transparent 70%)",
+          }} />
+          <div style={{
+            position: "absolute", top: "20%", left: "60%", width: 300, height: 300,
+            background: "radial-gradient(circle, rgba(167,139,250,0.12) 0%, transparent 70%)",
+            borderRadius: "50%",
+          }} />
+        </div>
         {/* Dot grid */}
         <div style={{
-          position: "absolute", inset: 0, pointerEvents: "none", opacity: 0.15,
+          position: "absolute", inset: 0, pointerEvents: "none", opacity: 0.12,
           backgroundImage: "radial-gradient(circle, rgba(99,102,241,0.6) 1px, transparent 1px)",
           backgroundSize: "32px 32px",
+        }} />
+        {/* Diagonal accent line */}
+        <div style={{
+          position: "absolute", top: 0, right: "15%", width: 1, height: "100%",
+          background: "linear-gradient(to bottom, transparent, rgba(99,102,241,0.2), transparent)",
+          transform: "skewX(-20deg)",
+          pointerEvents: "none",
         }} />
 
         <div ref={heroRef} style={{ position: "relative", maxWidth: 760, margin: "0 auto" }}>
@@ -71,7 +143,10 @@ export default function ImagesDesc() {
             opacity: heroVisible ? 1 : 0, transform: heroVisible ? "translateY(0)" : "translateY(16px)",
             transition: "opacity 0.6s ease, transform 0.6s ease",
           }}>
-            <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#6366f1", display: "block" }} />
+            <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#6366f1", display: "block",
+              boxShadow: "0 0 8px rgba(99,102,241,0.8)",
+              animation: "pulse 2s ease-in-out infinite",
+            }} />
             <span style={{ color: "rgba(99,102,241,0.9)", fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" }}>
               Our Story
             </span>
@@ -136,72 +211,173 @@ export default function ImagesDesc() {
         </div>
       </div>
 
-      {/* ── Conference photos ─────────────────────────────────────────────────── */}
-      <div ref={photosRef} style={{ padding: "100px 24px", maxWidth: 1152, margin: "0 auto" }}>
+      {/* ── Conference photos — PARALLAX SECTION ──────────────────────────────── */}
+      <div ref={photosRef} style={{
+        padding: "120px 24px",
+        maxWidth: 1152, margin: "0 auto",
+        position: "relative",
+      }}>
+        {/* Decorative background blob */}
+        <div style={{
+          position: "absolute", top: "10%", right: "-5%",
+          width: 500, height: 500, borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(99,102,241,0.05) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }} />
+
         <div style={{
           display: "grid", gridTemplateColumns: "1fr 1fr", gap: 28,
           alignItems: "center",
         }}>
-          {/* Left: photos */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-            {/* Big photo */}
-            <div style={{
-              borderRadius: 20, overflow: "hidden",
-              boxShadow: "0 24px 60px rgba(99,102,241,0.14)",
-              transform: photosVisible ? "translateX(0) rotate(-1deg)" : "translateX(-40px) rotate(-1deg)",
-              opacity: photosVisible ? 1 : 0,
-              transition: "opacity 0.7s ease, transform 0.7s ease",
-              position: "relative",
-            }}>
-              <img
-                src={booth1}
-                alt="SirDash AI at a tech conference"
-                style={{ width: "100%", height: 340, objectFit: "cover", display: "block" }}
-              />
-              {/* Badge */}
-              <div style={{
-                position: "absolute", bottom: 16, left: 16,
-                background: "rgba(6,7,26,0.85)", backdropFilter: "blur(8px)",
-                border: "1px solid rgba(255,255,255,0.1)",
-                borderRadius: 12, padding: "8px 14px",
-                display: "flex", alignItems: "center", gap: 8,
-              }}>
-                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#4ade80", flexShrink: 0, boxShadow: "0 0 6px rgba(74,222,128,0.5)" }} />
-                <span style={{ color: "#fff", fontSize: 12, fontWeight: 600 }}>AI & Machine Learning · Berlin</span>
+          {/* Left: photos with parallax */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 20, position: "relative" }}>
+
+            {/* Big photo — parallax + tilt */}
+            <div
+              ref={parallax1Ref as React.RefObject<HTMLDivElement>}
+              style={{ position: "relative" }}
+            >
+              <div
+                ref={tilt1.ref}
+                onMouseMove={tilt1.handleMove}
+                onMouseLeave={tilt1.handleLeave}
+                style={{
+                  borderRadius: 20, overflow: "hidden",
+                  boxShadow: "0 32px 80px rgba(99,102,241,0.18), 0 8px 24px rgba(0,0,0,0.12)",
+                  transform: photosVisible
+                    ? `translateX(0) rotate(-1.5deg) translateY(${parallax1Offset}px)`
+                    : "translateX(-60px) rotate(-1.5deg)",
+                  opacity: photosVisible ? 1 : 0,
+                  transition: photosVisible
+                    ? "opacity 0.8s ease, box-shadow 0.3s ease"
+                    : "opacity 0.8s ease, transform 0.8s ease",
+                  position: "relative",
+                  cursor: "default",
+                  willChange: "transform",
+                }}>
+                {/* Inner image also moves at different parallax speed for depth */}
+                <div style={{
+                  overflow: "hidden",
+                  borderRadius: 20,
+                  height: 360,
+                }}>
+                  <img
+                    src={booth1}
+                    alt="SirDash AI at a tech conference"
+                    style={{
+                      width: "100%",
+                      height: "calc(100% + 60px)",
+                      marginTop: -30,
+                      objectFit: "cover",
+                      display: "block",
+                      transform: `translateY(${parallax1Offset * -0.5}px)`,
+                      willChange: "transform",
+                    }}
+                  />
+                </div>
+
+                {/* Glint overlay on hover */}
+                <div style={{
+                  position: "absolute", inset: 0, borderRadius: 20,
+                  background: "linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 60%)",
+                  pointerEvents: "none",
+                }} />
+
+                {/* Badge */}
+                <div style={{
+                  position: "absolute", bottom: 16, left: 16,
+                  background: "rgba(6,7,26,0.85)", backdropFilter: "blur(12px)",
+                  border: "1px solid rgba(255,255,255,0.12)",
+                  borderRadius: 12, padding: "8px 14px",
+                  display: "flex", alignItems: "center", gap: 8,
+                }}>
+                  <span style={{
+                    width: 8, height: 8, borderRadius: "50%", background: "#4ade80",
+                    flexShrink: 0, boxShadow: "0 0 8px rgba(74,222,128,0.7)",
+                    animation: "pulse 2s ease-in-out infinite",
+                  }} />
+                  <span style={{ color: "#fff", fontSize: 12, fontWeight: 600 }}>AI & Machine Learning · Berlin</span>
+                </div>
               </div>
             </div>
 
-            {/* Small photo */}
-            <div style={{
-              borderRadius: 20, overflow: "hidden",
-              boxShadow: "0 16px 40px rgba(99,102,241,0.10)",
-              transform: photosVisible ? "translateX(0) rotate(0.5deg)" : "translateX(-40px) rotate(0.5deg)",
-              opacity: photosVisible ? 1 : 0,
-              transition: "opacity 0.7s ease 0.15s, transform 0.7s ease 0.15s",
-              position: "relative",
-              marginLeft: 40,
-            }}>
-              <img
-                src={booth2}
-                alt="SirDash AI at Data & Analytics conference"
-                style={{ width: "100%", height: 260, objectFit: "cover", display: "block" }}
-              />
+            {/* Small photo — parallax + tilt, faster speed */}
+            <div
+              ref={parallax2Ref as React.RefObject<HTMLDivElement>}
+              style={{ marginLeft: 48, position: "relative" }}
+            >
+              <div
+                ref={tilt2.ref}
+                onMouseMove={tilt2.handleMove}
+                onMouseLeave={tilt2.handleLeave}
+                style={{
+                  borderRadius: 20, overflow: "hidden",
+                  boxShadow: "0 20px 50px rgba(99,102,241,0.14), 0 6px 16px rgba(0,0,0,0.10)",
+                  transform: photosVisible
+                    ? `translateX(0) rotate(1deg) translateY(${parallax2Offset}px)`
+                    : "translateX(-60px) rotate(1deg)",
+                  opacity: photosVisible ? 1 : 0,
+                  transition: photosVisible
+                    ? "opacity 0.9s ease 0.15s, box-shadow 0.3s ease"
+                    : "opacity 0.9s ease 0.15s, transform 0.9s ease 0.15s",
+                  position: "relative",
+                  cursor: "default",
+                  willChange: "transform",
+                }}>
+                <div style={{ overflow: "hidden", borderRadius: 20, height: 280 }}>
+                  <img
+                    src={booth2}
+                    alt="SirDash AI at Data & Analytics conference"
+                    style={{
+                      width: "100%",
+                      height: "calc(100% + 60px)",
+                      marginTop: -30,
+                      objectFit: "cover",
+                      display: "block",
+                      transform: `translateY(${parallax2Offset * -0.5}px)`,
+                      willChange: "transform",
+                    }}
+                  />
+                </div>
+
+                <div style={{
+                  position: "absolute", inset: 0, borderRadius: 20,
+                  background: "linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 60%)",
+                  pointerEvents: "none",
+                }} />
+
+                <div style={{
+                  position: "absolute", bottom: 16, left: 16,
+                  background: "rgba(6,7,26,0.85)", backdropFilter: "blur(12px)",
+                  border: "1px solid rgba(255,255,255,0.12)",
+                  borderRadius: 12, padding: "8px 14px",
+                  display: "flex", alignItems: "center", gap: 8,
+                }}>
+                  <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#f472b6", flexShrink: 0,
+                    boxShadow: "0 0 8px rgba(244,114,182,0.6)" }} />
+                  <span style={{ color: "#fff", fontSize: 12, fontWeight: 600 }}>Data & Analytics · Global Stage</span>
+                </div>
+              </div>
+
+              {/* Floating stat chip */}
               <div style={{
-                position: "absolute", bottom: 16, left: 16,
-                background: "rgba(6,7,26,0.85)", backdropFilter: "blur(8px)",
-                border: "1px solid rgba(255,255,255,0.1)",
-                borderRadius: 12, padding: "8px 14px",
-                display: "flex", alignItems: "center", gap: 8,
+                position: "absolute", top: -18, right: -24,
+                background: "linear-gradient(135deg, #6366f1, #a78bfa)",
+                borderRadius: 14, padding: "10px 16px",
+                boxShadow: "0 8px 24px rgba(99,102,241,0.4)",
+                opacity: photosVisible ? 1 : 0,
+                transform: photosVisible ? "translateY(0) scale(1)" : "translateY(10px) scale(0.9)",
+                transition: "opacity 0.7s ease 0.4s, transform 0.7s ease 0.4s",
               }}>
-                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#f472b6", flexShrink: 0 }} />
-                <span style={{ color: "#fff", fontSize: 12, fontWeight: 600 }}>Data & Analytics · Global Stage</span>
+                <div style={{ color: "#fff", fontSize: 18, fontWeight: 900, lineHeight: 1 }}>500+</div>
+                <div style={{ color: "rgba(255,255,255,0.75)", fontSize: 10, fontWeight: 600, marginTop: 2 }}>ENTERPRISES</div>
               </div>
             </div>
           </div>
 
           {/* Right: text */}
           <div style={{
-            paddingLeft: 32,
+            paddingLeft: 40,
             opacity: photosVisible ? 1 : 0,
             transform: photosVisible ? "translateX(0)" : "translateX(40px)",
             transition: "opacity 0.7s ease 0.1s, transform 0.7s ease 0.1s",
@@ -242,16 +418,22 @@ export default function ImagesDesc() {
                 "Enterprise-grade AI with GDPR-compliant infrastructure",
                 "On-prem, private VPC, or air-gapped deployment",
                 "PostgreSQL, MSSQL, Oracle — more databases coming",
-              ].map((point) => (
-                <div key={point} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
+              ].map((point, idx) => (
+                <div key={point} style={{
+                  display: "flex", gap: 12, alignItems: "flex-start",
+                  opacity: photosVisible ? 1 : 0,
+                  transform: photosVisible ? "translateX(0)" : "translateX(16px)",
+                  transition: `opacity 0.5s ease ${0.3 + idx * 0.1}s, transform 0.5s ease ${0.3 + idx * 0.1}s`,
+                }}>
                   <div style={{
-                    width: 20, height: 20, borderRadius: "50%", flexShrink: 0, marginTop: 1,
-                    background: "rgba(99,102,241,0.1)", border: "1px solid rgba(99,102,241,0.2)",
+                    width: 22, height: 22, borderRadius: "50%", flexShrink: 0, marginTop: 1,
+                    background: "linear-gradient(135deg, rgba(99,102,241,0.15), rgba(167,139,250,0.15))",
+                    border: "1px solid rgba(99,102,241,0.25)",
                     display: "flex", alignItems: "center", justifyContent: "center",
                   }}>
-                    <span style={{ color: "#6366f1", fontSize: 10 }}>✓</span>
+                    <span style={{ color: "#6366f1", fontSize: 11, fontWeight: 700 }}>✓</span>
                   </div>
-                  <span style={{ color: "#374151", fontSize: 14, lineHeight: 1.6 }}>{point}</span>
+                  <span style={{ color: "#374151", fontSize: 14, lineHeight: 1.7 }}>{point}</span>
                 </div>
               ))}
             </div>
@@ -260,8 +442,17 @@ export default function ImagesDesc() {
       </div>
 
       {/* ── Timeline ──────────────────────────────────────────────────────────── */}
-      <div style={{ background: "#f9fafb", padding: "100px 24px" }}>
-        <div ref={timelineRef} style={{ maxWidth: 860, margin: "0 auto" }}>
+      <div style={{ background: "#f9fafb", padding: "100px 24px", position: "relative", overflow: "hidden" }}>
+        {/* Background decoration */}
+        <div style={{
+          position: "absolute", top: "50%", left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: 600, height: 600, borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(99,102,241,0.04) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }} />
+
+        <div ref={timelineRef} style={{ maxWidth: 860, margin: "0 auto", position: "relative" }}>
           <div style={{ textAlign: "center", marginBottom: 64 }}>
             <h3 style={{
               fontSize: "clamp(1.8rem, 4vw, 2.8rem)", fontWeight: 900,
@@ -277,7 +468,7 @@ export default function ImagesDesc() {
             {/* Centre line */}
             <div style={{
               position: "absolute", left: "50%", top: 0, bottom: 0,
-              width: 2, background: "linear-gradient(to bottom, #6366f1, rgba(99,102,241,0.1))",
+              width: 2, background: "linear-gradient(to bottom, #6366f1, rgba(99,102,241,0.08))",
               transform: "translateX(-50%)",
             }} />
 
@@ -287,7 +478,7 @@ export default function ImagesDesc() {
                 <div key={m.year} style={{
                   display: "flex",
                   justifyContent: isLeft ? "flex-start" : "flex-end",
-                  paddingBottom: 48,
+                  paddingBottom: 52,
                   position: "relative",
                   opacity: timelineVisible ? 1 : 0,
                   transform: timelineVisible ? "translateY(0)" : "translateY(20px)",
@@ -297,28 +488,60 @@ export default function ImagesDesc() {
                   <div style={{
                     position: "absolute", left: "50%", top: 24, transform: "translate(-50%, -50%)",
                     width: 14, height: 14, borderRadius: "50%",
-                    background: "#6366f1", border: "3px solid #fff",
-                    boxShadow: "0 0 0 3px rgba(99,102,241,0.3)",
+                    background: "#6366f1", border: "3px solid #f9fafb",
+                    boxShadow: "0 0 0 4px rgba(99,102,241,0.2)",
                     zIndex: 1,
                   }} />
 
+                  {/* Floating label on the opposite side of the card */}
+                  <div style={{
+                    position: "absolute",
+                    top: 12,
+                    ...(isLeft
+                      ? { right: "calc(57% - 24px)", textAlign: "right" as const }
+                      : { left: "calc(57% - 24px)", textAlign: "left" as const }),
+                    fontSize: 12,
+                    fontWeight: 600,
+                    color: m.labelColor,
+                    whiteSpace: "nowrap",
+                    letterSpacing: "0.01em",
+                    opacity: 0.9,
+                  }}>
+                    {m.label}
+                  </div>
+
                   {/* Card */}
                   <div style={{
-                    width: "44%",
-                    background: "#fff", borderRadius: 16,
+                    width: "43%",
+                    background: "#fff", borderRadius: 18,
                     border: "1px solid #e5e7eb",
                     padding: "20px 24px",
-                    boxShadow: "0 4px 16px rgba(0,0,0,0.04)",
+                    boxShadow: "0 4px 20px rgba(0,0,0,0.05)",
                     marginLeft: isLeft ? 0 : "auto",
                     marginRight: isLeft ? "auto" : 0,
+                    position: "relative",
+                    transition: "box-shadow 0.3s ease, transform 0.3s ease",
+                  }}
+                  onMouseEnter={e => {
+                    (e.currentTarget as HTMLDivElement).style.boxShadow = "0 12px 40px rgba(99,102,241,0.15)";
+                    (e.currentTarget as HTMLDivElement).style.transform = "translateY(-2px)";
+                  }}
+                  onMouseLeave={e => {
+                    (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 20px rgba(0,0,0,0.05)";
+                    (e.currentTarget as HTMLDivElement).style.transform = "";
                   }}>
+                    {/* Year tag */}
                     <div style={{
-                      fontSize: 12, fontWeight: 800, color: "#6366f1",
-                      letterSpacing: "0.08em", marginBottom: 6,
+                      display: "inline-block",
+                      fontSize: 11, fontWeight: 800, color: "#6366f1",
+                      letterSpacing: "0.1em", marginBottom: 8,
+                      background: "rgba(99,102,241,0.08)",
+                      border: "1px solid rgba(99,102,241,0.15)",
+                      borderRadius: 6, padding: "2px 8px",
                     }}>
                       {m.year}
                     </div>
-                    <div style={{ fontWeight: 700, color: "#111827", fontSize: 16, marginBottom: 6 }}>{m.title}</div>
+                    <div style={{ fontWeight: 700, color: "#111827", fontSize: 15, marginBottom: 6 }}>{m.title}</div>
                     <div style={{ color: "#6b7280", fontSize: 13, lineHeight: 1.7 }}>{m.desc}</div>
                   </div>
                 </div>
@@ -339,12 +562,7 @@ export default function ImagesDesc() {
           background: "radial-gradient(ellipse 60% 80% at 50% 50%, rgba(99,102,241,0.18) 0%, transparent 70%)",
         }} />
         <div style={{ position: "relative" }}>
-          <h3 style={{
-            fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", fontWeight: 900,
-            color: "#fff", letterSpacing: "-0.025em", marginBottom: 16,
-          }}>
-            Ready to join 500+ enterprises?
-          </h3>
+
           <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 16, marginBottom: 36 }}>
             See SirDash in action with a personalized demo for your team.
           </p>
@@ -359,14 +577,28 @@ export default function ImagesDesc() {
               boxShadow: "0 8px 32px rgba(99,102,241,0.35)",
               transition: "transform 0.2s, box-shadow 0.2s",
             }}
-            onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 12px 40px rgba(99,102,241,0.45)"; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.transform = ""; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 8px 32px rgba(99,102,241,0.35)"; }}
+            onMouseEnter={e => {
+              (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)";
+              (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 12px 40px rgba(99,102,241,0.5)";
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLAnchorElement).style.transform = "";
+              (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 8px 32px rgba(99,102,241,0.35)";
+            }}
           >
             Book a Demo
             <span style={{ fontSize: 18 }}>↗</span>
           </a>
         </div>
       </div>
+
+      {/* Global keyframes */}
+      <style>{`
+        @keyframes pulse {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.6; transform: scale(0.85); }
+        }
+      `}</style>
     </section>
   );
 }

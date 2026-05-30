@@ -269,9 +269,8 @@ export default function StatsBar() {
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
               }}>
-                500+
-              </strong>{" "}
-              companies
+                data intensive teams
+              </strong>
             </p>
           </div>
 
