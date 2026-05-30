@@ -17,14 +17,14 @@ const Companies = () => {
 
         <p style={{
           textAlign: 'center',
-          fontSize: 12,
+          fontSize: 25,
           fontWeight: 700,
-          letterSpacing: '0.12em',
+          letterSpacing: '0.09em',
           textTransform: 'uppercase',
-          color: '#9ca3af',
+          color: '#000000',
           marginBottom: 48,
         }}>
-          Trusted by teams at leading companies
+          Trusted by Teams
         </p>
 
         <div style={{

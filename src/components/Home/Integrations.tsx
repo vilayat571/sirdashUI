@@ -138,49 +138,8 @@ export default function Integrations() {
               border: '1px solid rgba(99,102,241,0.15)',
             }}
           >
-            {/* Background glow */}
-            <div
-              className="absolute -left-10 -top-10 w-48 h-48 rounded-full pointer-events-none"
-              style={{ background: 'radial-gradient(circle,rgba(99,102,241,0.12),transparent 70%)' }}
-            />
+    
 
-            {/* Animated 10x circle */}
-            <div className="flex-shrink-0 relative">
-              {/* Rotating ring */}
-              <div
-                className="absolute -inset-2 rounded-full int-rotate"
-                style={{ border: '2px dashed rgba(99,102,241,0.2)' }}
-              />
-              <div
-                className="w-24 h-24 rounded-full flex items-center justify-center"
-                style={{
-                  background: 'rgba(99,102,241,0.08)',
-                  border: '2px solid rgba(99,102,241,0.2)',
-                }}
-              >
-                <span
-                  className="font-extrabold text-4xl"
-                  style={{
-                    background: 'linear-gradient(135deg,#6366f1,#8b5cf6)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
-                  }}
-                >
-                  {count10x}x
-                </span>
-              </div>
-            </div>
-
-            <div className="flex-1 min-w-[260px]">
-              <h3 className="text-gray-900 font-extrabold text-[22px] mb-2.5">
-                Trusted by data-intensive industries
-              </h3>
-              <p className="text-gray-500 leading-relaxed text-[15px]">
-                From telecom giants managing customer data to financial institutions analyzing market trends,
-                SirDash.ai empowers teams to make data-driven decisions without the traditional bottlenecks.
-              </p>
-            </div>
           </div>
 
         </div>

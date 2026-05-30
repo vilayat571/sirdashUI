@@ -43,8 +43,8 @@ const FadeIn = ({
 
 const stats = [
   { num: "10%",    label: "Founding Equity" },
-  { num: "€1B+",  label: "Market Opportunity" },
-  { num: "500+",  label: "Potential Clients" },
+  { num: "Big",  label: "Market Opportunity" },
+  { num: "Massive",  label: "Potential Clients" },
   { num: "Berlin",label: "Headquarters" },
 ];
 

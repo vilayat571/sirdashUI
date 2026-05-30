@@ -11,10 +11,10 @@ export const navItems: NavItem[] = [
 ];
 
 export const statsData = [
-  { value: '10x', label: 'Faster insights' },
-  { value: '0', label: 'SQL required' },
-  { value: '3', label: 'DB integrations' },
-  { value: '99.9%', label: 'Uptime SLA' },
+  { value: '70%', label: 'Less reporting time' },
+  { value: '<30sec', label: 'For first insight' },
+  { value: '3x', label: 'Analyst productivity' },
+  { value: '3k+', label: 'Simulatnously databases' },
 ];
 
 export const pricingPlans: PricingPlan[] = [

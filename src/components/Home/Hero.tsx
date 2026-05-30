@@ -1,8 +1,8 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import video from '../../assets/videos/video.mov';
-import video2 from '../../assets/videos/video.mov';
-import video3 from '../../assets/videos/video.mov';
+import video from "../../assets/videos/video.mov";
+import video2 from "../../assets/videos/video.mov";
+import video3 from "../../assets/videos/video.mov";
 
 const TABS = ["Sales", "Controlling", "Production"];
 const VIDEO_SOURCES = [video, video2, video3];
@@ -51,9 +51,10 @@ export default function Hero() {
       vid.play().catch(() => {});
 
       const getDuration = () => {
-        const d = vid.duration && isFinite(vid.duration)
-          ? vid.duration * 1000
-          : TAB_DURATION;
+        const d =
+          vid.duration && isFinite(vid.duration)
+            ? vid.duration * 1000
+            : TAB_DURATION;
         startProgress(d);
         timerRef.current = setTimeout(() => {
           goToTab((idx + 1) % TABS.length);
@@ -63,7 +64,7 @@ export default function Hero() {
       if (vid.readyState >= 1 && isFinite(vid.duration)) {
         getDuration();
       } else {
-        vid.addEventListener('loadedmetadata', getDuration, { once: true });
+        vid.addEventListener("loadedmetadata", getDuration, { once: true });
         timerRef.current = setTimeout(() => {
           goToTab((idx + 1) % TABS.length);
         }, TAB_DURATION);
@@ -98,41 +99,43 @@ export default function Hero() {
 
       <div className="relative max-w-6xl mx-auto px-6">
         <div className="flex flex-col items-center text-center gap-6">
-
           <div className="flex items-center gap-3">
             <div className="flex -space-x-2.5">
-              {["#818cf8", "#a78bfa", "#60a5fa", "#34d399", "#f472b6"].map((bg, i) => (
-                <div key={i} className="w-8 h-8 rounded-full border-2 border-[#06071a]" style={{ background: bg }} />
-              ))}
+              {["#818cf8", "#a78bfa", "#60a5fa", "#34d399", "#f472b6"].map(
+                (bg, i) => (
+                  <div
+                    key={i}
+                    className="w-8 h-8 rounded-full border-2 border-[#06071a]"
+                    style={{ background: bg }}
+                  />
+                ),
+              )}
             </div>
-            <span className="text-black/55 text-sm">
-              <strong className="text-black font-semibold">500+</strong> enterprises trust SirDash
-            </span>
           </div>
 
           <h1 className="text-6xl md:text-7xl font-bold leading-[1.05] tracking-tight max-w-4xl">
-            <span className="text-black">The semantic AI layer </span>{" "}
-            <span className="text-black">between business users and enterprise databases</span>
+            <span className="text-black">Your data answers you: </span>{" "}
+            <span className="text-black">
+              Instantly - Securely - In English.
+            </span>
           </h1>
 
           <p className="text-black/50 max-w-xl leading-relaxed">
-          <span className=" font-bold">Your data answers you. Instantly. Securely. In plain English.
-</span>
-<br />
-SirDash connects to your enterprise databases and turns business questions into trusted answers — without involving your data team for every request.          </p>
+            SirDash connects to your enterprise databases and turns business
+            questions into trusted answers — without involving your data team
+            for every request.{" "}
+          </p>
 
           <div className="relative w-full flex flex-col items-center mt-4 gap-4">
-
             <div className="flex bg-[#faf9fb] rounded-2xl p-1.5 gap-1  w-full max-w-lg">
               {TABS.map((tab, i) => (
                 <button
                   key={tab}
                   onClick={() => goToTab(i)}
-                  className={` ${activeTab === i && ' shadow-2xl'} relative flex-1 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 overflow-hidden`}
+                  className={` ${activeTab === i && " shadow-2xl"} relative flex-1 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 overflow-hidden`}
                   style={{
                     background: activeTab === i ? "#faf9fb" : "#faf9fb",
                     color: activeTab === i ? "black" : "#6b7280",
-
                   }}
                 >
                   {tab}
@@ -147,7 +150,6 @@ SirDash connects to your enterprise databases and turns business questions into 
             </div>
 
             <div className="w-full mx-auto rounded-t-2xl relative">
-
               {VIDEO_SOURCES.map((src, i) => (
                 <div
                   key={i}
@@ -155,7 +157,9 @@ SirDash connects to your enterprise databases and turns business questions into 
                 >
                   <video
                     // ✅ el is HTMLVideoElement | null, array type matches
-                    ref={(el) => { videoRefs.current[i] = el; }}
+                    ref={(el) => {
+                      videoRefs.current[i] = el;
+                    }}
                     src={src}
                     muted
                     playsInline
@@ -164,7 +168,6 @@ SirDash connects to your enterprise databases and turns business questions into 
                 </div>
               ))}
             </div>
-
           </div>
         </div>
       </div>

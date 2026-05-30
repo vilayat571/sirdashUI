@@ -133,11 +133,11 @@ function StatCard({ stat, active }: { stat: StatConfig; active: boolean }) {
 // ── Marquee logos ──────────────────────────────────────────────────────────
 
 const LOGOS = [
-  "Telecom Corp", "FinanceHub", "DataStream",
-  "NovaSoft", "CloudBase", "MetaAnalytics",
+  "Push 30", "Bozbect", "Yazaki",
+  "Arter", 
   // duplicate for seamless loop
-  "Telecom Corp", "FinanceHub", "DataStream",
-  "NovaSoft", "CloudBase", "MetaAnalytics",
+  "Push 30", "Bozbect", "Yazaki",
+  "Arter",
 ];
 
 function LogoMarquee() {
@@ -189,11 +189,13 @@ function LogoMarquee() {
 // ── Main component ─────────────────────────────────────────────────────────
 
 const STATS: StatConfig[] = [
-  { icon: "⚡", numericValue: 10, suffix: "x", displayValue: "10x", label: "Faster insights", sub: "than traditional BI" },
-  { icon: "💬", displayValue: "0 SQL", label: "Required", sub: "just natural language" },
-  { icon: "🛡️", numericValue: 99, prefix: "", suffix: ".9%", displayValue: "99.9%", label: "Uptime SLA", sub: "enterprise-grade" },
-  { icon: "🗄️", numericValue: 3, suffix: "+ DBs", displayValue: "3+ DBs", label: "Supported", sub: "more coming soon" },
+  { icon: "⚡", numericValue: 70, suffix: "%", displayValue: "70%", label: "Less reporting time", sub: "vs traditional BI" },
+  { icon: "⏱️", displayValue: "<30sec", label: "Time to first insight", sub: "instant answers" },
+  { icon: "📈", numericValue: 3, suffix: "x", displayValue: "3x", label: "Analyst productivity", sub: "more output, less effort" },
+  { icon: "🗄️", numericValue: 3, suffix: "k+", displayValue: "3k+", label: "Databases supported", sub: "simultaneously" },
 ];
+
+
 
 export default function StatsBar() {
   const [sectionRef, inView] = useInView(0.15);
