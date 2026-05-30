@@ -46,12 +46,11 @@ export default function Navbar() {
   // ✅ Removed: ctaLabel, ctaIcon, desktopCtaClass, mobileCtaClass (declared but never used)
   const ctaGoesToDashboard = Boolean(user && isAdmin(user));
 
-      const location = useLocation();
-  
-    
+  const location = useLocation();
+
   return (
     <nav
-      className={`fixed ${location.pathname=='/impressum' || location.pathname=='/career' ? 'bg-white' : ''} top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed ${location.pathname == "/impressum" || location.pathname == "/career" ? "bg-white" : ""} top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
           ? "bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-sm py-3"
           : "py-5"
@@ -91,22 +90,19 @@ export default function Navbar() {
           ) : (
             <Link
               to="/login"
-              className={`text-sm font-medium transition-all px-4 py-2 rounded-lg border ${
-                scrolled
-                  ? "text-gray-600 border-gray-200 hover:border-gray-300"
-                  : "text-black/70 border-white/15 hover:border-white/30"
-              }`}
+              className={`text-sm font-medium transition-all px-4 py-2 rounded-lg border text-black`}
             >
               Sign in
             </Link>
           )}
-          {/* ✅ CTA button using ctaGoesToDashboard inline */}
-          <a
-            href={ctaGoesToDashboard ? "admin/dashboard" : "#sandbox"}
-            className="bg-brand hover:bg-brand-dark text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-all shadow-md shadow-brand/20 flex items-center gap-1.5"
-          >
-            {ctaGoesToDashboard ? "Go to dashboard" : "Try our sandbox"}
-          </a>
+          {ctaGoesToDashboard && (
+            <a
+              href={ctaGoesToDashboard ? "admin/dashboard" : "#sandbox"}
+              className="bg-brand hover:bg-brand-dark text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-all shadow-md shadow-brand/20 flex items-center gap-1.5"
+            >
+              "Go to dashboard"
+            </a>
+          )}
         </div>
 
         <button
@@ -141,12 +137,14 @@ export default function Navbar() {
                 Sign in
               </Link>
             )}
-            <a
-              href={ctaGoesToDashboard ? "admin/dashboard" : "#sandbox"}
-              className="block text-center bg-brand text-white text-sm font-semibold rounded-xl py-2.5 hover:bg-brand-dark transition-colors"
-            >
-              {ctaGoesToDashboard ? "Go to dashboard ↗" : "Try our sandbox ↗"}
-            </a>
+            {ctaGoesToDashboard && (
+              <a
+                href={ctaGoesToDashboard ? "admin/dashboard" : "#sandbox"}
+                className="bg-brand hover:bg-brand-dark text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-all shadow-md shadow-brand/20 flex items-center gap-1.5"
+              >
+                "Go to dashboard"
+              </a>
+            )}
           </div>
         </div>
       )}
