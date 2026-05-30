@@ -603,7 +603,7 @@ export default function ImagesDesc() {
                     lineHeight: 1,
                   }}
                 >
-                  500+
+                  Data Intensive
                 </div>
                 <div
                   style={{
@@ -613,7 +613,7 @@ export default function ImagesDesc() {
                     marginTop: 2,
                   }}
                 >
-                  ENTERPRISES
+                  ENTERPRISES & Teams
                 </div>
               </div>
             </div>
