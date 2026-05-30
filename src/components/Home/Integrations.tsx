@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useInView } from './useInView';
-import { integrations } from '../data';
+import { useInView } from '../useInView';
+import { integrations } from '../../data';
 
 function useCounter(target: number, duration = 1600, active = false) {
   const [count, setCount] = useState(0);

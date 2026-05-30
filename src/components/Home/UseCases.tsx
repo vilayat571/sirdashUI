@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useInView } from './useInView';
-import { useCases } from '../data';
+import { useInView } from '../useInView';
+import { useCases } from '../../data';
 
 export default function UseCases() {
   const [active, setActive] = useState(0);

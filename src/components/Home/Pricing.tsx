@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Check, X, Zap, Star, Building2 } from "lucide-react";
-import { useInView } from "./useInView";
-import { pricingPlans } from "../data";
+import { useInView } from "../useInView";
+import { pricingPlans } from "../../data";
 
 const planIcons = [Zap, Star, Building2];
 

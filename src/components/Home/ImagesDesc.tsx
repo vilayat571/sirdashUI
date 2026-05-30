@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useRef, useState, useCallback } from "react";
 
-import booth1 from '../assets/image.jpeg';
-import booth2 from '../assets/image1.jpeg';
+import booth1 from '../../assets/image.jpeg';
+import booth2 from '../../assets/image1.jpeg';
 
 const STATS = [
   { value: "500+", label: "Enterprises Trust SirDash" },

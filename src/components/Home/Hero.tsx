@@ -1,8 +1,8 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import video from '../assets/videos/video.mov';
-import video2 from '../assets/videos/video.mov';
-import video3 from '../assets/videos/video.mov';
+import video from '../../assets/videos/video.mov';
+import video2 from '../../assets/videos/video.mov';
+import video3 from '../../assets/videos/video.mov';
 
 const TABS = ["Sales", "Controlling", "Production"];
 const VIDEO_SOURCES = [video, video2, video3];

@@ -1,15 +1,16 @@
-import Hero from '../components/Hero';
-import StatsBar from '../components/StatsBar';
-import About from '../components/About';
-import Technology from '../components/Technology';
-import Integrations from '../components/Integrations';
-import Security from '../components/Security';
-import UseCases from '../components/UseCases';
+import Hero from '../components/Home/Hero';
+import StatsBar from '../components/Home/StatsBar';
+import About from '../components/Home/About';
+import Technology from '../components/Home/Technology';
+import Integrations from '../components/Home/Integrations';
+import Security from '../components/Home/Security';
+import UseCases from '../components/Home/UseCases';
 import Demo from '../components/Demos/Demo';
-import Pricing from '../components/Pricing';
+import Pricing from '../components/Home/Pricing';
 import BookDemo from '../components/Demos/BookDemo';
-import SubscribePopup from '../components/SubscribePopup';
-import ImagesDesc from '../components/ImagesDesc';
+import SubscribePopup from '../components/Home/SubscribePopup';
+import ImagesDesc from '../components/Home/ImagesDesc';
+import Companies from '../components/Home/Companies';
 
 export default function HomePage() {
   return (
@@ -20,6 +21,7 @@ export default function HomePage() {
       <StatsBar />
       <About />
       <Technology />
+      <Companies />
       <Integrations />
       <Security />
       <UseCases />

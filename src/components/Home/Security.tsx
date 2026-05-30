@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useInView } from './useInView';
-import { securityFeatures } from '../data';
+import { useInView } from '../useInView';
+import { securityFeatures } from '../../data';
 
 const colorMap: Record<string, { bg: string; border: string; text: string; glow: string }> = {
   blue:   { bg: '#eff6ff', border: '#bfdbfe', text: '#2563eb', glow: '#3b82f6' },

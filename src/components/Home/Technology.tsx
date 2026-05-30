@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useInView } from './useInView';
+import { useInView } from '../useInView';
 
 const technologyFeatures = [
   {
