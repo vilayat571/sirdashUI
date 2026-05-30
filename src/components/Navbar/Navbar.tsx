@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import type { User } from "@supabase/supabase-js";
 import { Menu, X } from "lucide-react";
 import toast from "react-hot-toast";
@@ -46,9 +46,12 @@ export default function Navbar() {
   // ✅ Removed: ctaLabel, ctaIcon, desktopCtaClass, mobileCtaClass (declared but never used)
   const ctaGoesToDashboard = Boolean(user && isAdmin(user));
 
+      const location = useLocation();
+  
+    
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed ${location.pathname=='/impressum' || location.pathname=='/career' ? 'bg-white' : ''} top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
           ? "bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-sm py-3"
           : "py-5"

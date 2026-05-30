@@ -1,5 +1,6 @@
-import { Zap, Mail, Twitter, Linkedin } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Mail, Twitter, Linkedin } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import logo from '../../src/assets/sirdash-logo.png'
 
 const footerLinks = {
   PRODUCT: [
@@ -15,33 +16,39 @@ const footerLinks = {
   ],
 };
 
+
+
 export default function Footer() {
+
+    const location = useLocation();
+
+
+
   return (
     <footer className="bg-[#06071a] border-t border-white/5">
       <div className="max-w-6xl mx-auto px-6 py-16">
         <div className="grid md:grid-cols-4 gap-12">
           <div className="md:col-span-2 space-y-5">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-brand flex items-center justify-center">
-                <Zap size={16} className="text-white" fill="white" />
+              <div className="w-8 h-8 rounded-lg  flex items-center justify-center">
+<img src={logo} alt="sirdash logo" />
               </div>
-              <span className="text-white font-bold text-lg">SirDash</span>
-              <span className="text-brand-light font-light text-lg">.ai</span>
+              <span className="text-white font-bold text-lg">sirdash.ai</span>
             </div>
-            <p className="text-white/40 text-sm leading-relaxed max-w-xs">
+            <p className="text-white text-sm leading-relaxed max-w-xs">
               Transforming how enterprises access and analyze data through
               AI-powered natural language interfaces.
             </p>
             <div className="flex gap-3">
               <a
                 href="#"
-                className="w-9 h-9 rounded-lg bg-white/5 border border-white/8 hover:border-white/20 flex items-center justify-center text-white/50 hover:text-white transition-all"
+                className="w-9 h-9 rounded-lg bg-white/5 border border-white/8 hover:border-white/20 flex items-center justify-center hover:text-white transition-all"
               >
                 <Twitter size={15} />
               </a>
               <a
                 href="#"
-                className="w-9 h-9 rounded-lg bg-white/5 border border-white/8 hover:border-white/20 flex items-center justify-center text-white/50 hover:text-white transition-all"
+                className="w-9 h-9 rounded-lg bg-white/5 border border-white/8 hover:border-white/20 flex items-center justify-center hover:text-white transition-all"
               >
                 <Linkedin size={15} />
               </a>
@@ -51,10 +58,10 @@ export default function Footer() {
                 <Mail size={14} className="text-brand-light" />
               </div>
               <div>
-                <div className="text-white/70 text-sm font-medium mb-0.5">
+                <div className="text-white text-sm font-medium mb-0.5">
                   Email Us
                 </div>
-                <div className="text-white/35 text-xs mb-1">
+                <div className="text-white text-xs mb-1">
                   For support & general inquiries:
                 </div>
                 <a
@@ -69,51 +76,62 @@ export default function Footer() {
 
           {Object.entries(footerLinks).map(([category, links]) => (
             <div key={category}>
-              <h4 className="text-white/60 text-xs font-semibold uppercase tracking-widest mb-5">
+              <h4 className="text-white font-bold text-xs uppercase tracking-widest mb-5">
                 {category}
               </h4>
               <ul className="space-y-3">
-                {links.map((link) => (
+
+{
+
+  location.pathname=='/impressum' || location.pathname=='/career' ? links.map((link) => (
                   <li key={link.label}>
                     {link.href.startsWith("/") ? (
                       <Link
                         to={link.href}
-                        className="text-white/35 hover:text-white text-sm transition-colors"
+                        className="text-white hover:text-white text-sm transition-colors"
                       >
                         {link.label}
                       </Link>
                     ) : (
                       <a
                         href={link.href}
-                        className="text-white/35 hover:text-white text-sm transition-colors"
+                        className="text-white hover:text-white text-sm transition-colors"
+                      >
+                        {link.label}
+                      </a>
+                    )}
+                  </li>
+                )) :  links.map((link) => (
+                  <li key={link.label}>
+                    {link.href.startsWith("/") ? (
+                      <Link
+                        to={link.href}
+                        className="text-white hover:text-white text-sm transition-colors"
+                      >
+                        {link.label}
+                      </Link>
+                    ) : (
+                      <a
+                        href={link.href}
+                        className="text-white hover:text-white text-sm transition-colors"
                       >
                         {link.label}
                       </a>
                     )}
                   </li>
                 ))}
+
+
+               
               </ul>
             </div>
           ))}
         </div>
 
         <div className="border-t border-white/5 mt-14 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-white/20 text-sm">
+          <p className="text-white text-sm">
             © {new Date().getFullYear()} SirDash.ai — All rights reserved.
           </p>
-          <div className="flex gap-6">
-            {["Privacy Policy", "Terms of Service", "Cookie Policy"].map(
-              (item) => (
-                <a
-                  key={item}
-                  href="#"
-                  className="text-white/20 hover:text-white/45 text-sm transition-colors"
-                >
-                  {item}
-                </a>
-              ),
-            )}
-          </div>
         </div>
       </div>
     </footer>
