@@ -1,7 +1,7 @@
-import logoPush from '../../assets/push30.webp'
-import logoYazaki from '../../assets/yazaki_logo.jpeg'
-import logoBozbec from '../../assets/bozbecLogo.webp'
-import logoArter from '../../assets/arter-logo.webp'
+import logoPush from '../../assets/logos/push30.webp'
+import logoYazaki from '../../assets/logos/yazaki_logo.jpeg'
+import logoBozbec from '../../assets/logos/bozbecLogo.webp'
+import logoArter from '../../assets/logos/arter-logo.webp'
 
 const PARTNERS = [
   { name: "Push 30",       src: logoPush },

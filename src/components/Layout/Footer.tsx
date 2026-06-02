@@ -1,6 +1,6 @@
 import { Mail, Twitter, Linkedin } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import logo from '../../src/assets/sirdash-logo.png'
+import logo from '../../assets/logos/sirdash-logo.png'
 
 const footerLinks = {
   PRODUCT: [

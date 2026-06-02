@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import type { User } from "@supabase/supabase-js";
-import { subscribeSupabaseAuth } from "../lib/authUtils";
+import { subscribeSupabaseAuth } from "../../lib/authUtils";
 
 type GuestOnlyRouteProps = Readonly<{
   children: React.ReactNode;

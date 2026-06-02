@@ -11,7 +11,7 @@ import {
 import toast from "react-hot-toast";
 import { signOutSupabase } from "../../lib/authUtils";
 import AdminSidebarUserFooter from "./AdminSidebarUserFooter";
-import BrandLogoLink from "../BrandLogoLink";
+import BrandLogoLink from "../Others/BrandLogoLink";
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>
   `flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${

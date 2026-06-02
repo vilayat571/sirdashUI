@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { LoaderCircle } from "lucide-react";
-import BrandLogoLink from "../components/BrandLogoLink";
+import BrandLogoLink from "../components/Others/BrandLogoLink";
 import { supabase } from "../lib/supabase";
 import { isAdmin } from "../lib/authUtils";
 

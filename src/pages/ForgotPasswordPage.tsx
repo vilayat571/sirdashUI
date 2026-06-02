@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, LoaderCircle, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
-import BrandLogoLink from "../components/BrandLogoLink";
+import BrandLogoLink from "../components/Others/BrandLogoLink";
 import type { ForgotFormValues } from "../lib/authSchemas";
 import { forgotPasswordSchema } from "../lib/authSchemas";
 

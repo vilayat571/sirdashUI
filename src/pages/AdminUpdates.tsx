@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { LoaderCircle, Pencil, PlusCircle, Trash2 } from "lucide-react";
 import DeleteUpdateDialog, {
   type DeleteUpdateTarget,
-} from "../components/DeleteUpdateDialog";
+} from "../components/Others/DeleteUpdateDialog";
 import { ICON_MAP } from "../lib/adminIcons";
 import {
   useAdminUpdates,

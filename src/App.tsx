@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import AdminLayout from "./layout/AdminLayout";
 import AdminRoute from "./components/Admin/AdminRoute";
-import GuestOnlyRoute from "./components/GuestOnlyRoute";
+import GuestOnlyRoute from "./components/Others/GuestOnlyRoute";
 import Layout from "./layout/Layout";
 import AdminCreateUpdate from "./pages/AdminCreateUpdate";
 import AdminDashboard from "./pages/AdminDashboard";

@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import BrandLogoLink from "../components/BrandLogoLink";
+import BrandLogoLink from "../components/Others/BrandLogoLink";
 import type { LoginFormValues } from "../lib/authSchemas";
 import { loginSchema } from "../lib/authSchemas";
 import { supabase } from "../lib/supabase";

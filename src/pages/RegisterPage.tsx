@@ -12,8 +12,8 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
-import BrandLogoLink from "../components/BrandLogoLink";
-import RegisterVerificationSent from "../components/RegisterVerificationSent";
+import BrandLogoLink from "../components/Others/BrandLogoLink";
+import RegisterVerificationSent from "../components/Others/RegisterVerificationSent";
 import type { RegisterFormValues } from "../lib/authSchemas";
 import { registerSchema } from "../lib/authSchemas";
 import { supabase } from "../lib/supabase";

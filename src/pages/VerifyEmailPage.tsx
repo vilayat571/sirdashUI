@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import type { EmailOtpType } from "@supabase/supabase-js";
 import { CheckCircle, LoaderCircle, XCircle } from "lucide-react";
-import BrandLogoLink from "../components/BrandLogoLink";
+import BrandLogoLink from "../components/Others/BrandLogoLink";
 import { handleEmailVerification } from "../lib/authUtils";
 
 type VerificationStatus = "loading" | "success" | "error";

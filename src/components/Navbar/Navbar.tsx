@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import { navItems } from "../../data";
 import NavbarMobileUserCard from "../Navbar/NavbarMobileUserCard";
 import NavbarProfileDropdown from "../Navbar/NavbarProfileDropdown";
-import logo from "../../assets/sirdash-logo.png";
+import logo from "../../assets/logos/sirdash-logo.png";
 import {
   getSupabaseSessionUser,
   isAdmin,
