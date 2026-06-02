@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# Auth pages
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /verify-email
+Disallow: /auth
+
+# Admin pages
+Disallow: /admin
+
+Sitemap: https://sirdash.ai/sitemap.xml
