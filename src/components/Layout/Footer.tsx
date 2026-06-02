@@ -41,13 +41,13 @@ export default function Footer() {
             </p>
             <div className="flex gap-3">
               <a
-                href="#"
+                href="https://x.com/SirDash_AI"
                 className="w-9 h-9 rounded-lg bg-white/5 border border-white/8 hover:border-white/20 flex items-center justify-center hover:text-white transition-all"
               >
                 <Twitter size={15} />
               </a>
               <a
-                href="#"
+                href="https://www.linkedin.com/company/sirdash"
                 className="w-9 h-9 rounded-lg bg-white/5 border border-white/8 hover:border-white/20 flex items-center justify-center hover:text-white transition-all"
               >
                 <Linkedin size={15} />
