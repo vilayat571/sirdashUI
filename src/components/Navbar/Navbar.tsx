@@ -106,6 +106,7 @@ export default function Navbar() {
         </div>
 
         <button
+          aria-label="Open layer"
           className={`md:hidden p-2 ${scrolled ? "text-gray-700" : "text-black"}`}
           onClick={() => setIsOpen(!isOpen)}
         >

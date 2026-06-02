@@ -326,7 +326,9 @@ export function Demo() {
                 <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <div className="demo-play-ring" />
                   <div className="demo-play-ring" style={{ animationDelay: "0.7s" }} />
-                  <button className="demo-play-btn">
+                  <button 
+                    aria-label="Play demo video"
+                  className="demo-play-btn">
                     <Play size={28} color="#6366f1" style={{ marginLeft: 3 }} />
                   </button>
                 </div>

@@ -1,24 +1,30 @@
-import { useState } from 'react';
-import { Users, Calendar, MessageSquare, Send } from 'lucide-react';
-import { useInView } from '../useInView';
+import { useState } from "react";
+import { Users, Calendar, MessageSquare, Send } from "lucide-react";
+import { useInView } from "../useInView";
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 const demoFeatures = [
   {
-    icon: <Users size={18} />, color: '#6366f1',
-    title: 'Tailored to Your Team',
-    description: "We'll customize the demo for your specific role and use cases, whether you're a product manager, data analyst, or data scientist.",
+    icon: <Users size={18} />,
+    color: "#6366f1",
+    title: "Tailored to Your Team",
+    description:
+      "We'll customize the demo for your specific role and use cases, whether you're a product manager, data analyst, or data scientist.",
   },
   {
-    icon: <Calendar size={18} />, color: '#8b5cf6',
-    title: 'Flexible Scheduling',
-    description: 'Pick a time that works for your team. We offer demos across global time zones to accommodate your schedule.',
+    icon: <Calendar size={18} />,
+    color: "#8b5cf6",
+    title: "Flexible Scheduling",
+    description:
+      "Pick a time that works for your team. We offer demos across global time zones to accommodate your schedule.",
   },
   {
-    icon: <MessageSquare size={18} />, color: '#6366f1',
-    title: 'Q&A Session',
-    description: 'Every demo includes time for in-depth questions with our product specialists to address your specific requirements.',
+    icon: <MessageSquare size={18} />,
+    color: "#6366f1",
+    title: "Q&A Session",
+    description:
+      "Every demo includes time for in-depth questions with our product specialists to address your specific requirements.",
   },
 ];
 
@@ -30,34 +36,37 @@ type FormState = {
   message: string;
 };
 
-type SubmitStatus = 'idle' | 'submitting' | 'success' | 'error' | 'duplicate';
+type SubmitStatus = "idle" | "submitting" | "success" | "error" | "duplicate";
 
 export default function BookDemo() {
   const [sectionRef, inView] = useInView(0.08);
   const [form, setForm] = useState<FormState>({
-    fullName: '',
-    businessEmail: '',
-    company: '',
-    role: '',
-    message: '',
+    fullName: "",
+    businessEmail: "",
+    company: "",
+    role: "",
+    message: "",
   });
   const [focusedField, setFocusedField] = useState<string | null>(null);
-  const [status, setStatus] = useState<SubmitStatus>('idle');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [status, setStatus] = useState<SubmitStatus>("idle");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
   ) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const validate = (): string | null => {
     if (!form.fullName.trim() || form.fullName.trim().length < 2)
-      return 'Full name must be at least 2 characters.';
-    if (!form.businessEmail.trim() || !/^\S+@\S+\.\S+$/.test(form.businessEmail))
-      return 'Please enter a valid business email.';
-    if (!form.company.trim())
-      return 'Company name is required.';
-    if (!form.role)
-      return 'Please select your role.';
+      return "Full name must be at least 2 characters.";
+    if (
+      !form.businessEmail.trim() ||
+      !/^\S+@\S+\.\S+$/.test(form.businessEmail)
+    )
+      return "Please enter a valid business email.";
+    if (!form.company.trim()) return "Company name is required.";
+    if (!form.role) return "Please select your role.";
     return null;
   };
 
@@ -67,17 +76,17 @@ export default function BookDemo() {
     const validationError = validate();
     if (validationError) {
       setErrorMessage(validationError);
-      setStatus('error');
+      setStatus("error");
       return;
     }
 
-    setStatus('submitting');
-    setErrorMessage('');
+    setStatus("submitting");
+    setErrorMessage("");
 
     try {
       const res = await fetch(`${API_BASE}/demos`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           fullName: form.fullName.trim(),
           businessEmail: form.businessEmail.trim().toLowerCase(),
@@ -90,42 +99,49 @@ export default function BookDemo() {
       const data = await res.json();
 
       if (res.status === 409) {
-        setStatus('duplicate');
-        setErrorMessage(data.message || 'A demo request with this email is already pending.');
+        setStatus("duplicate");
+        setErrorMessage(
+          data.message || "A demo request with this email is already pending.",
+        );
         return;
       }
 
       if (!res.ok) {
-        throw new Error(data.message || 'Something went wrong.');
+        throw new Error(data.message || "Something went wrong.");
       }
 
-      setStatus('success');
+      setStatus("success");
     } catch (err: any) {
-      setStatus('error');
-      setErrorMessage(err.message || 'Unable to submit. Please try again.');
+      setStatus("error");
+      setErrorMessage(err.message || "Unable to submit. Please try again.");
     }
   };
 
   const inputStyle = (name: string): React.CSSProperties => ({
-    width: '100%',
-    background: 'white',
-    border: `1px solid ${focusedField === name ? 'rgba(99,102,241,0.5)' : '#e5e7eb'}`,
+    width: "100%",
+    background: "white",
+    border: `1px solid ${focusedField === name ? "rgba(99,102,241,0.5)" : "#e5e7eb"}`,
     borderRadius: 12,
-    padding: '12px 16px',
+    padding: "12px 16px",
     fontSize: 14,
-    color: '#111827',
-    outline: 'none',
-    transition: 'border-color 0.2s, box-shadow 0.2s',
-    boxSizing: 'border-box',
-    boxShadow: focusedField === name ? '0 0 0 3px rgba(99,102,241,0.1)' : 'none',
+    color: "#111827",
+    outline: "none",
+    transition: "border-color 0.2s, box-shadow 0.2s",
+    boxSizing: "border-box",
+    boxShadow:
+      focusedField === name ? "0 0 0 3px rgba(99,102,241,0.1)" : "none",
   });
 
   const labelStyle: React.CSSProperties = {
-    display: 'block', color: '#374151', fontSize: 13, marginBottom: 6, fontWeight: 600,
+    display: "block",
+    color: "#374151",
+    fontSize: 13,
+    marginBottom: 6,
+    fontWeight: 600,
   };
 
-  const isSubmitting = status === 'submitting';
-  const isSuccess = status === 'success';
+  const isSubmitting = status === "submitting";
+  const isSuccess = status === "success";
 
   return (
     <>
@@ -136,152 +152,323 @@ export default function BookDemo() {
         ::placeholder { color: #d1d5db !important; }
       `}</style>
 
-      <section id="demo" style={{ background: 'white', padding: '112px 0' }}>
-        <div ref={sectionRef} style={{ maxWidth: 1152, margin: '0 auto', padding: '0 24px' }}>
-
+      <section id="demo" style={{ background: "white", padding: "112px 0" }}>
+        <div
+          ref={sectionRef}
+          style={{ maxWidth: 1152, margin: "0 auto", padding: "0 24px" }}
+        >
           {/* Heading */}
-          <div style={{
-            textAlign: 'center', marginBottom: 64,
-            opacity: inView ? 1 : 0, transform: inView ? 'translateY(0)' : 'translateY(20px)',
-            transition: 'opacity 0.6s ease, transform 0.6s ease',
-          }}>
-            <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: 8,
-              background: 'rgba(99,102,241,0.08)', border: '1px solid rgba(99,102,241,0.2)',
-              borderRadius: 999, padding: '6px 16px', marginBottom: 16,
-              fontSize: 12, fontWeight: 700, color: '#6366f1', letterSpacing: '0.08em',
-            }}>
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#6366f1', display: 'inline-block', boxShadow: '0 0 6px rgba(99,102,241,0.5)' }} />
+          <div
+            style={{
+              textAlign: "center",
+              marginBottom: 64,
+              opacity: inView ? 1 : 0,
+              transform: inView ? "translateY(0)" : "translateY(20px)",
+              transition: "opacity 0.6s ease, transform 0.6s ease",
+            }}
+          >
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                background: "rgba(99,102,241,0.08)",
+                border: "1px solid rgba(99,102,241,0.2)",
+                borderRadius: 999,
+                padding: "6px 16px",
+                marginBottom: 16,
+                fontSize: 12,
+                fontWeight: 700,
+                color: "#6366f1",
+                letterSpacing: "0.08em",
+              }}
+            >
+              <span
+                style={{
+                  width: 6,
+                  height: 6,
+                  borderRadius: "50%",
+                  background: "#6366f1",
+                  display: "inline-block",
+                  boxShadow: "0 0 6px rgba(99,102,241,0.5)",
+                }}
+              />
               BOOK A DEMO
             </div>
-            <h2 style={{ fontSize: 'clamp(2.2rem,5vw,3.2rem)', fontWeight: 800, color: '#111827', marginBottom: 12, letterSpacing: '-0.025em' }}>
+            <h2
+              style={{
+                fontSize: "clamp(2.2rem,5vw,3.2rem)",
+                fontWeight: 800,
+                color: "#111827",
+                marginBottom: 12,
+                letterSpacing: "-0.025em",
+              }}
+            >
               Book a Demo
             </h2>
-            <p style={{ color: '#6b7280', fontSize: 17, maxWidth: 500, margin: '0 auto' }}>
-              Experience the power of SirDash.ai firsthand with a personalized demonstration tailored to your data needs.
+            <p
+              style={{
+                color: "#6b7280",
+                fontSize: 17,
+                maxWidth: 500,
+                margin: "0 auto",
+              }}
+            >
+              Experience the power of SirDash.ai firsthand with a personalized
+              demonstration tailored to your data needs.
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'start' }}>
-
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: 48,
+              alignItems: "start",
+            }}
+          >
             {/* Feature cards */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               {demoFeatures.map((f, i) => (
                 <div
                   key={f.title}
                   style={{
-                    background: '#f9fafb', borderRadius: 18, border: '1px solid #f3f4f6',
-                    padding: '24px', display: 'flex', gap: 20,
+                    background: "#f9fafb",
+                    borderRadius: 18,
+                    border: "1px solid #f3f4f6",
+                    padding: "24px",
+                    display: "flex",
+                    gap: 20,
                     opacity: inView ? 1 : 0,
-                    transform: inView ? 'translateX(0)' : 'translateX(-20px)',
+                    transform: inView ? "translateX(0)" : "translateX(-20px)",
                     transition: `opacity 0.6s ease ${i * 0.12}s, transform 0.6s ease ${i * 0.12}s, border-color 0.25s, box-shadow 0.25s`,
                   }}
-                  onMouseEnter={e => { const el = e.currentTarget; el.style.borderColor = 'rgba(99,102,241,0.25)'; el.style.boxShadow = '0 6px 24px rgba(99,102,241,0.08)'; }}
-                  onMouseLeave={e => { const el = e.currentTarget; el.style.borderColor = '#f3f4f6'; el.style.boxShadow = 'none'; }}
-                >
-                  <div style={{
-                    width: 44, height: 44, borderRadius: 14,
-                    background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.2)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    flexShrink: 0, color: f.color,
-                    transition: 'transform 0.3s cubic-bezier(0.34,1.56,0.64,1)',
+                  onMouseEnter={(e) => {
+                    const el = e.currentTarget;
+                    el.style.borderColor = "rgba(99,102,241,0.25)";
+                    el.style.boxShadow = "0 6px 24px rgba(99,102,241,0.08)";
                   }}
-                    onMouseEnter={e => ((e.currentTarget as HTMLDivElement).style.transform = 'scale(1.12) rotate(-5deg)')}
-                    onMouseLeave={e => ((e.currentTarget as HTMLDivElement).style.transform = 'scale(1)')}
+                  onMouseLeave={(e) => {
+                    const el = e.currentTarget;
+                    el.style.borderColor = "#f3f4f6";
+                    el.style.boxShadow = "none";
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 44,
+                      height: 44,
+                      borderRadius: 14,
+                      background: "rgba(99,102,241,0.1)",
+                      border: "1px solid rgba(99,102,241,0.2)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                      color: f.color,
+                      transition:
+                        "transform 0.3s cubic-bezier(0.34,1.56,0.64,1)",
+                    }}
+                    onMouseEnter={(e) =>
+                      ((e.currentTarget as HTMLDivElement).style.transform =
+                        "scale(1.12) rotate(-5deg)")
+                    }
+                    onMouseLeave={(e) =>
+                      ((e.currentTarget as HTMLDivElement).style.transform =
+                        "scale(1)")
+                    }
                   >
                     {f.icon}
                   </div>
                   <div>
-                    <h3 style={{ color: '#111827', fontWeight: 700, fontSize: 16, marginBottom: 6 }}>{f.title}</h3>
-                    <p style={{ color: '#6b7280', fontSize: 14, lineHeight: 1.75, margin: 0 }}>{f.description}</p>
+                    <h3
+                      style={{
+                        color: "#111827",
+                        fontWeight: 700,
+                        fontSize: 16,
+                        marginBottom: 6,
+                      }}
+                    >
+                      {f.title}
+                    </h3>
+                    <p
+                      style={{
+                        color: "#6b7280",
+                        fontSize: 14,
+                        lineHeight: 1.75,
+                        margin: 0,
+                      }}
+                    >
+                      {f.description}
+                    </p>
                   </div>
                 </div>
               ))}
             </div>
 
             {/* Form */}
-            <div style={{
-              background: '#f9fafb', borderRadius: 22, border: '1px solid #f3f4f6',
-              padding: '36px',
-              opacity: inView ? 1 : 0,
-              transform: inView ? 'translateY(0)' : 'translateY(24px)',
-              transition: 'opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s',
-              position: 'relative', overflow: 'hidden',
-            }}>
+            <div
+              style={{
+                background: "#f9fafb",
+                borderRadius: 22,
+                border: "1px solid #f3f4f6",
+                padding: "36px",
+                opacity: inView ? 1 : 0,
+                transform: inView ? "translateY(0)" : "translateY(24px)",
+                transition: "opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s",
+                position: "relative",
+                overflow: "hidden",
+              }}
+            >
               {/* Top accent */}
-              <div style={{
-                position: 'absolute', top: 0, left: 0, right: 0, height: 3,
-                background: 'linear-gradient(90deg,#6366f1,#8b5cf6)',
-              }} />
+              <div
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: 3,
+                  background: "linear-gradient(90deg,#6366f1,#8b5cf6)",
+                }}
+              />
 
               {isSuccess ? (
                 /* ── Success state ── */
-                <div style={{ textAlign: 'center', padding: '40px 20px', animation: 'bd-success 0.5s ease' }}>
-                  <div style={{
-                    width: 72, height: 72, borderRadius: '50%',
-                    background: 'rgba(74,222,128,0.1)', border: '2px solid rgba(74,222,128,0.4)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    margin: '0 auto 20px',
-                  }}>
+                <div
+                  style={{
+                    textAlign: "center",
+                    padding: "40px 20px",
+                    animation: "bd-success 0.5s ease",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 72,
+                      height: 72,
+                      borderRadius: "50%",
+                      background: "rgba(74,222,128,0.1)",
+                      border: "2px solid rgba(74,222,128,0.4)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      margin: "0 auto 20px",
+                    }}
+                  >
                     <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
                       <path
                         d="M8 16 L13 21 L24 11"
-                        stroke="#4ade80" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+                        stroke="#4ade80"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                         style={{ strokeDasharray: 50, strokeDashoffset: 0 }}
                       />
                     </svg>
                   </div>
-                  <h3 style={{ color: '#111827', fontWeight: 800, fontSize: 22, marginBottom: 10 }}>
+                  <h3
+                    style={{
+                      color: "#111827",
+                      fontWeight: 800,
+                      fontSize: 22,
+                      marginBottom: 10,
+                    }}
+                  >
                     Demo Request Sent!
                   </h3>
-                  <p style={{ color: '#6b7280', fontSize: 14, lineHeight: 1.75 }}>
-                    Thanks! Our team will reach out within 24 hours to schedule your personalized demo.
+                  <p
+                    style={{ color: "#6b7280", fontSize: 14, lineHeight: 1.75 }}
+                  >
+                    Thanks! Our team will reach out within 24 hours to schedule
+                    your personalized demo.
                   </p>
                 </div>
               ) : (
                 /* ── Form ── */
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+                <div
+                  style={{ display: "flex", flexDirection: "column", gap: 18 }}
+                >
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "1fr 1fr",
+                      gap: 14,
+                    }}
+                  >
                     <div>
-                      <label style={labelStyle}>Full Name <span style={{ color: '#6366f1' }}>*</span></label>
+                      <label style={labelStyle}>
+                        Full Name <span style={{ color: "#6366f1" }}>*</span>
+                      </label>
                       <input
-                        type="text" name="fullName" placeholder="John Doe"
-                        value={form.fullName} onChange={handleChange}
-                        onFocus={() => setFocusedField('fullName')} onBlur={() => setFocusedField(null)}
-                        style={inputStyle('fullName')}
+                        type="text"
+                        name="fullName"
+                        placeholder="John Doe"
+                        value={form.fullName}
+                        onChange={handleChange}
+                        onFocus={() => setFocusedField("fullName")}
+                        onBlur={() => setFocusedField(null)}
+                        style={inputStyle("fullName")}
                         disabled={isSubmitting}
                       />
                     </div>
                     <div>
-                      <label style={labelStyle}>Business Email <span style={{ color: '#6366f1' }}>*</span></label>
+                      <label style={labelStyle}>
+                        Business Email{" "}
+                        <span style={{ color: "#6366f1" }}>*</span>
+                      </label>
                       <input
-                        type="email" name="businessEmail" placeholder="john@company.com"
-                        value={form.businessEmail} onChange={handleChange}
-                        onFocus={() => setFocusedField('businessEmail')} onBlur={() => setFocusedField(null)}
-                        style={inputStyle('businessEmail')}
+                        type="email"
+                        name="businessEmail"
+                        placeholder="john@company.com"
+                        value={form.businessEmail}
+                        onChange={handleChange}
+                        onFocus={() => setFocusedField("businessEmail")}
+                        onBlur={() => setFocusedField(null)}
+                        style={inputStyle("businessEmail")}
                         disabled={isSubmitting}
                       />
                     </div>
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "1fr 1fr",
+                      gap: 14,
+                    }}
+                  >
                     <div>
-                      <label style={labelStyle}>Company <span style={{ color: '#6366f1' }}>*</span></label>
+                      <label style={labelStyle}>
+                        Company <span style={{ color: "#6366f1" }}>*</span>
+                      </label>
                       <input
-                        type="text" name="company" placeholder="Company Inc."
-                        value={form.company} onChange={handleChange}
-                        onFocus={() => setFocusedField('company')} onBlur={() => setFocusedField(null)}
-                        style={inputStyle('company')}
+                        type="text"
+                        name="company"
+                        placeholder="Company Inc."
+                        value={form.company}
+                        onChange={handleChange}
+                        onFocus={() => setFocusedField("company")}
+                        onBlur={() => setFocusedField(null)}
+                        style={inputStyle("company")}
                         disabled={isSubmitting}
                       />
                     </div>
                     <div>
-                      <label style={labelStyle}>Your Role <span style={{ color: '#6366f1' }}>*</span></label>
+                      <label style={labelStyle}>
+                        Your Role <span style={{ color: "#6366f1" }}>*</span>
+                      </label>
                       <select
-                        name="role" value={form.role} onChange={handleChange}
-                        onFocus={() => setFocusedField('role')} onBlur={() => setFocusedField(null)}
-                        style={{ ...inputStyle('role'), appearance: 'none', cursor: 'pointer', color: form.role ? '#111827' : '#9ca3af' }}
+                        name="role"
+                        aria-label="Select your role"
+                        value={form.role}
+                        onChange={handleChange}
+                        onFocus={() => setFocusedField("role")}
+                        onBlur={() => setFocusedField(null)}
+                        style={{
+                          ...inputStyle("role"),
+                          appearance: "none",
+                          cursor: "pointer",
+                          color: form.role ? "#111827" : "#9ca3af",
+                        }}
                         disabled={isSubmitting}
                       >
                         <option value="">Select your role</option>
@@ -295,59 +482,115 @@ export default function BookDemo() {
                   </div>
 
                   <div>
-                    <label style={labelStyle}>What are you hoping to learn from the demo?</label>
+                    <label style={labelStyle}>
+                      What are you hoping to learn from the demo?
+                    </label>
                     <textarea
                       name="message"
                       placeholder="Tell us about your specific data challenges or use cases..."
-                      value={form.message} onChange={handleChange} rows={4}
-                      onFocus={() => setFocusedField('message')} onBlur={() => setFocusedField(null)}
-                      style={{ ...inputStyle('message'), resize: 'none', fontFamily: 'inherit' }}
+                      value={form.message}
+                      onChange={handleChange}
+                      rows={4}
+                      onFocus={() => setFocusedField("message")}
+                      onBlur={() => setFocusedField(null)}
+                      style={{
+                        ...inputStyle("message"),
+                        resize: "none",
+                        fontFamily: "inherit",
+                      }}
                       disabled={isSubmitting}
                     />
                   </div>
 
                   {/* Error / duplicate message */}
-                  {(status === 'error' || status === 'duplicate') && errorMessage && (
-                    <div style={{
-                      background: status === 'duplicate' ? 'rgba(245,158,11,0.08)' : 'rgba(239,68,68,0.08)',
-                      border: `1px solid ${status === 'duplicate' ? 'rgba(245,158,11,0.25)' : 'rgba(239,68,68,0.25)'}`,
-                      borderRadius: 10, padding: '10px 14px',
-                      fontSize: 13, color: status === 'duplicate' ? '#b45309' : '#dc2626',
-                      lineHeight: 1.5,
-                    }}>
-                      {status === 'duplicate'
-                        ? '⚠️ ' + errorMessage
-                        : '✕ ' + errorMessage}
-                    </div>
-                  )}
+                  {(status === "error" || status === "duplicate") &&
+                    errorMessage && (
+                      <div
+                        style={{
+                          background:
+                            status === "duplicate"
+                              ? "rgba(245,158,11,0.08)"
+                              : "rgba(239,68,68,0.08)",
+                          border: `1px solid ${status === "duplicate" ? "rgba(245,158,11,0.25)" : "rgba(239,68,68,0.25)"}`,
+                          borderRadius: 10,
+                          padding: "10px 14px",
+                          fontSize: 13,
+                          color: status === "duplicate" ? "#b45309" : "#dc2626",
+                          lineHeight: 1.5,
+                        }}
+                      >
+                        {status === "duplicate"
+                          ? "⚠️ " + errorMessage
+                          : "✕ " + errorMessage}
+                      </div>
+                    )}
 
                   <button
                     onClick={handleSubmit}
                     disabled={isSubmitting}
                     style={{
-                      width: '100%', padding: '14px',
-                      background: isSubmitting ? 'rgba(99,102,241,0.7)' : 'linear-gradient(135deg,#6366f1,#818cf8)',
-                      color: 'white', fontWeight: 700, fontSize: 15,
-                      border: 'none', borderRadius: 14, cursor: isSubmitting ? 'not-allowed' : 'pointer',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                      boxShadow: '0 6px 24px rgba(99,102,241,0.35)',
-                      transition: 'all 0.25s',
+                      width: "100%",
+                      padding: "14px",
+                      background: isSubmitting
+                        ? "rgba(99,102,241,0.7)"
+                        : "linear-gradient(135deg,#6366f1,#818cf8)",
+                      color: "white",
+                      fontWeight: 700,
+                      fontSize: 15,
+                      border: "none",
+                      borderRadius: 14,
+                      cursor: isSubmitting ? "not-allowed" : "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: 8,
+                      boxShadow: "0 6px 24px rgba(99,102,241,0.35)",
+                      transition: "all 0.25s",
                     }}
-                    onMouseEnter={e => { if (!isSubmitting) { const el = e.currentTarget; el.style.transform = 'translateY(-2px)'; el.style.boxShadow = '0 10px 32px rgba(99,102,241,0.5)'; } }}
-                    onMouseLeave={e => { const el = e.currentTarget; el.style.transform = 'translateY(0)'; el.style.boxShadow = '0 6px 24px rgba(99,102,241,0.35)'; }}
+                    onMouseEnter={(e) => {
+                      if (!isSubmitting) {
+                        const el = e.currentTarget;
+                        el.style.transform = "translateY(-2px)";
+                        el.style.boxShadow = "0 10px 32px rgba(99,102,241,0.5)";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      const el = e.currentTarget;
+                      el.style.transform = "translateY(0)";
+                      el.style.boxShadow = "0 6px 24px rgba(99,102,241,0.35)";
+                    }}
                   >
                     {isSubmitting ? (
                       <>
-                        <div style={{ width: 16, height: 16, border: '2px solid rgba(255,255,255,0.4)', borderTopColor: 'white', borderRadius: '50%', animation: 'bd-spin 0.7s linear infinite' }} />
+                        <div
+                          style={{
+                            width: 16,
+                            height: 16,
+                            border: "2px solid rgba(255,255,255,0.4)",
+                            borderTopColor: "white",
+                            borderRadius: "50%",
+                            animation: "bd-spin 0.7s linear infinite",
+                          }}
+                        />
                         Sending...
                       </>
                     ) : (
-                      <><Send size={15} /> Request a Demo</>
+                      <>
+                        <Send size={15} /> Request a Demo
+                      </>
                     )}
                   </button>
 
-                  <p style={{ color: '#9ca3af', fontSize: 12, textAlign: 'center', margin: 0 }}>
-                    By submitting this form, you agree to our privacy policy and terms of service.
+                  <p
+                    style={{
+                      color: "#9ca3af",
+                      fontSize: 12,
+                      textAlign: "center",
+                      margin: 0,
+                    }}
+                  >
+                    By submitting this form, you agree to our privacy policy and
+                    terms of service.
                   </p>
                 </div>
               )}

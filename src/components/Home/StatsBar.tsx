@@ -138,6 +138,11 @@ const LOGOS = [
   // duplicate for seamless loop
   "Push 30", "Bozbect", "Yazaki",
   "Arter",
+    "Push 30", "Bozbect", "Yazaki",
+  "Arter", 
+  // duplicate for seamless loop
+  "Push 30", "Bozbect", "Yazaki",
+  "Arter",
 ];
 
 function LogoMarquee() {
