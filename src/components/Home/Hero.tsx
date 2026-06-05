@@ -4,7 +4,7 @@ import video from "../../assets/videos/video.mov";
 import video2 from "../../assets/videos/video.mov";
 import video3 from "../../assets/videos/video.mov";
 
-const TABS = ["Sales", "Controlling", "Production"];
+const TABS = ["Logistics","Retail","Sales"];
 const VIDEO_SOURCES = [video, video2, video3];
 
 export default function Hero() {
