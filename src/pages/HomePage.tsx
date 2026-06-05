@@ -11,6 +11,7 @@ import BookDemo from '../components/Demos/BookDemo';
 import SubscribePopup from '../components/Home/SubscribePopup';
 import ImagesDesc from '../components/Home/ImagesDesc';
 import Companies from '../components/Home/Companies';
+import SirDashCards from '../components/Home/SirDashCards';
 
 export default function HomePage() {
   return (
@@ -22,6 +23,7 @@ export default function HomePage() {
       <About />
       <Technology />
       <Companies />
+      <SirDashCards />
       <Integrations />
       <Security />
       <UseCases />
