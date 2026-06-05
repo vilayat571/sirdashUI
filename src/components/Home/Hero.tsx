@@ -6,27 +6,22 @@ import video3 from "../../assets/videos/video.mov";
 
 const TABS = ["Sales", "Controlling", "Production"];
 const VIDEO_SOURCES = [video, video2, video3];
-const TAB_DURATION = 15000;
 
 export default function Hero() {
   const [activeTab, setActiveTab] = useState(0);
   const [progress, setProgress] = useState(0);
 
-  // ✅ Properly typed refs — no more `null` inference issues
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const rafRef = useRef<number | null>(null);
   const startRef = useRef<number | null>(null);
-  const durationRef = useRef<number>(TAB_DURATION);
+  const durationRef = useRef<number>(0);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([null, null, null]);
 
-  // ✅ Typed parameter
   const startProgress = (duration: number) => {
     if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
     setProgress(0);
     startRef.current = performance.now();
     durationRef.current = duration;
 
-    // ✅ Typed parameter + null guard on startRef
     const animate = (now: number) => {
       const elapsed = now - (startRef.current ?? now);
       const pct = Math.min((elapsed / durationRef.current) * 100, 100);
@@ -38,54 +33,48 @@ export default function Hero() {
     rafRef.current = requestAnimationFrame(animate);
   };
 
-  // ✅ Typed parameter
   const goToTab = (idx: number) => {
-    if (timerRef.current !== null) clearTimeout(timerRef.current);
     if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
     setActiveTab(idx);
     setProgress(0);
 
-    const vid = videoRefs.current[idx];
-    if (vid) {
-      vid.currentTime = 0;
-      vid.play().catch(() => {});
-
-      const getDuration = () => {
-        const d =
-          vid.duration && isFinite(vid.duration)
-            ? vid.duration * 1000
-            : TAB_DURATION;
-        startProgress(d);
-        timerRef.current = setTimeout(() => {
-          goToTab((idx + 1) % TABS.length);
-        }, d);
-      };
-
-      if (vid.readyState >= 1 && isFinite(vid.duration)) {
-        getDuration();
-      } else {
-        vid.addEventListener("loadedmetadata", getDuration, { once: true });
-        timerRef.current = setTimeout(() => {
-          goToTab((idx + 1) % TABS.length);
-        }, TAB_DURATION);
-        startProgress(TAB_DURATION);
-      }
-    } else {
-      startProgress(TAB_DURATION);
-      timerRef.current = setTimeout(() => {
-        goToTab((idx + 1) % TABS.length);
-      }, TAB_DURATION);
-    }
-
+    // Pause all other videos
     videoRefs.current.forEach((v, i) => {
-      if (v && i !== idx) v.pause();
+      if (v && i !== idx) {
+        v.pause();
+        v.currentTime = 0;
+      }
     });
+
+    const vid = videoRefs.current[idx];
+    if (!vid) return;
+
+    vid.currentTime = 0;
+
+    const onEnded = () => {
+      goToTab((idx + 1) % TABS.length);
+    };
+
+    // Remove previous listener to avoid duplicates
+    vid.removeEventListener("ended", onEnded);
+    vid.addEventListener("ended", onEnded, { once: true });
+
+    const playWithProgress = () => {
+      const duration = vid.duration * 1000;
+      startProgress(duration);
+      vid.play().catch(() => {});
+    };
+
+    if (vid.readyState >= 1 && isFinite(vid.duration)) {
+      playWithProgress();
+    } else {
+      vid.addEventListener("loadedmetadata", playWithProgress, { once: true });
+    }
   };
 
   useEffect(() => {
     goToTab(0);
     return () => {
-      if (timerRef.current !== null) clearTimeout(timerRef.current);
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
     };
   }, []);
@@ -105,7 +94,7 @@ export default function Hero() {
                 (bg, i) => (
                   <div
                     key={i}
-                    className="w-8 h-8 rounded-full border-2 border-[#06071a]"
+                    className="w-8 h-8 rounded-full"
                     style={{ background: bg }}
                   />
                 ),
@@ -127,21 +116,21 @@ export default function Hero() {
           </p>
 
           <div className="relative w-full flex flex-col items-center mt-4 gap-4">
-            <div className="flex bg-[#faf9fb] rounded-2xl p-1.5 gap-1  w-full max-w-lg">
+            <div className="flex bg-[#faf9fb] rounded-2xl p-1.5 gap-1 w-full max-w-lg">
               {TABS.map((tab, i) => (
                 <button
                   key={tab}
                   onClick={() => goToTab(i)}
-                  className={` ${activeTab === i && " shadow-2xl"} relative flex-1 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 overflow-hidden`}
+                  className={`${activeTab === i && "shadow-2xl"} relative flex-1 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 overflow-hidden`}
                   style={{
-                    background: activeTab === i ? "#faf9fb" : "#faf9fb",
+                    background: "#faf9fb",
                     color: activeTab === i ? "black" : "#6b7280",
                   }}
                 >
                   {tab}
                   {activeTab === i && (
                     <span
-                      className="absolute bottom-0 left-0 h-[2px]  rounded-full transition-none"
+                      className="absolute bottom-0 left-0 h-[2px] rounded-full transition-none"
                       style={{ width: `${progress}%` }}
                     />
                   )}
@@ -153,10 +142,9 @@ export default function Hero() {
               {VIDEO_SOURCES.map((src, i) => (
                 <div
                   key={i}
-                  className={`transition-opacity  duration-500 ${activeTab === i ? "block opacity-100" : "hidden opacity-0"}`}
+                  className={`transition-opacity duration-500 ${activeTab === i ? "block opacity-100" : "hidden opacity-0"}`}
                 >
                   <video
-                    // ✅ el is HTMLVideoElement | null, array type matches
                     ref={(el) => {
                       videoRefs.current[i] = el;
                     }}
