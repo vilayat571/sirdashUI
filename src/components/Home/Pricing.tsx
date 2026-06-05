@@ -308,7 +308,7 @@ export function Pricing() {
           >
             <div className="pricing-label">Pricing</div>
             <h2 className="pricing-title">
-              Simple, <span>Transparent</span> Pricing
+              Simple <span>Transparent</span> Pricing
             </h2>
             <p className="pricing-subtitle">
               No hidden fees. No surprises. Scale when you're ready.
