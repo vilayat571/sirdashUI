@@ -80,7 +80,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative overflow-hidden bg-[#faf9fb] pt-40 pb-0">
+    <section className="relative overflow-hidden bg-[#faf9fb] pt-36 pb-0">
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute left-1/2 top-0 -translate-x-1/2 w-[900px] h-[500px] bg-[radial-gradient(ellipse_at_top,rgba(99,102,241,0.28)_0%,transparent_70%)]" />
         <div className="absolute inset-0 grid-bg opacity-30" />
