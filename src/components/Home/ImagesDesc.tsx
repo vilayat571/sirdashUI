@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 import booth1 from "../../assets/images/image.jpeg";
 import booth2 from "../../assets/images/image1.jpeg";
 
