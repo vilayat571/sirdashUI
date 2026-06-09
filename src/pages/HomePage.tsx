@@ -1,17 +1,17 @@
-import Hero from '../components/Home/Hero';
-import StatsBar from '../components/Home/StatsBar';
-import About from '../components/Home/About';
-import Technology from '../components/Home/Technology';
-import Integrations from '../components/Home/Integrations';
-import Security from '../components/Home/Security';
-import UseCases from '../components/Home/UseCases';
-import Demo from '../components/Demos/Demo';
-import Pricing from '../components/Home/Pricing';
-import BookDemo from '../components/Demos/BookDemo';
-import SubscribePopup from '../components/Home/SubscribePopup';
-import ImagesDesc from '../components/Home/ImagesDesc';
-import Companies from '../components/Home/Companies';
-import SirDashCards from '../components/Home/SirDashCards';
+import Hero from "../components/Home/Hero";
+import StatsBar from "../components/Home/StatsBar";
+import Technology from "../components/Home/Technology";
+import Integrations from "../components/Home/Integrations";
+import Security from "../components/Home/Security";
+import UseCases from "../components/Home/UseCases";
+import Demo from "../components/Demos/Demo";
+import Pricing from "../components/Home/Pricing";
+import BookDemo from "../components/Demos/BookDemo";
+import SubscribePopup from "../components/Home/SubscribePopup";
+import ImagesDesc from "../components/Home/ImagesDesc";
+import Companies from "../components/Home/Companies";
+import SirDashCards from "../components/Home/SirDashCards";
+import Certificates from "../components/Home/Certificates";
 
 export default function HomePage() {
   return (
@@ -20,10 +20,10 @@ export default function HomePage() {
       <SubscribePopup />
       <Hero />
       <StatsBar />
-      <About />
+      <SirDashCards />
+      <Certificates />
       <Technology />
       <Companies />
-      <SirDashCards />
       <Integrations />
       <Security />
       <UseCases />
