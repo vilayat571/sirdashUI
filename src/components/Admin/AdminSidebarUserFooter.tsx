@@ -12,18 +12,25 @@ export default function AdminSidebarUserFooter() {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    void getSupabaseSessionUser().then(setUser);
+    let cancelled = false;
+
+    void getSupabaseSessionUser().then((u) => {
+      if (!cancelled) setUser(u);
+    });
+
     const { unsubscribe } = subscribeSupabaseAuth(setUser);
     return () => {
+      cancelled = true;
       unsubscribe();
     };
   }, []);
 
   if (!user) {
     return (
+      // aria-hidden: the skeleton is decorative; screen readers don't need it
       <div
         className="mb-4 rounded-xl border border-gray-100 bg-gray-50/80 px-3 py-3"
-        aria-hidden
+        aria-hidden="true"
       >
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 shrink-0 animate-pulse rounded-full bg-gray-200" />
@@ -46,23 +53,35 @@ export default function AdminSidebarUserFooter() {
       {avatarUrl ? (
         <img
           src={avatarUrl}
+          // Decorative: the name is already shown as text beside the avatar
           alt=""
-          className="h-10 w-10 shrink-0 rounded-full object-cover ring-2 ring-white"
+          width={40}
+          height={40}
+          // Prevent third-party sites from reading the Referer header
           referrerPolicy="no-referrer"
+          // Lazy-load since this is below the fold on first paint
+          loading="lazy"
+          // Decode off the main thread to avoid layout jank
+          decoding="async"
+          className="h-10 w-10 shrink-0 rounded-full object-cover ring-2 ring-white"
         />
       ) : (
+        // aria-hidden: initials are purely visual; the name label covers the info
         <span
           className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand/15 text-xs font-semibold text-brand"
-          aria-hidden
+          aria-hidden="true"
         >
           {initials}
         </span>
       )}
-      <div className="min-w-0 flex-1">
+
+      {/* Use a <p> with role="group" so both lines read as one logical unit */}
+      <div className="min-w-0 flex-1" role="group" aria-label={`Signed in as ${displayName}`}>
         <p className="truncate text-sm font-semibold text-gray-900">
           {displayName}
         </p>
         {email ? (
+          // title provides the full address on hover/assistive tech when truncated
           <p className="truncate text-xs text-gray-500" title={email}>
             {email}
           </p>

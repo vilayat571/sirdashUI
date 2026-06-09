@@ -16,27 +16,41 @@ export default function AdminRoute({ children }: AdminRouteProps) {
   const [authReady, setAuthReady] = useState(false);
 
   useEffect(() => {
+    let cancelled = false;
+
     async function loadInitialUser() {
       const nextUser = await getSupabaseSessionUser();
-      setUser(nextUser);
-      setAuthReady(true);
+      // Prevent state update if component unmounted before the async call resolved
+      if (!cancelled) {
+        setUser(nextUser);
+        setAuthReady(true);
+      }
     }
 
-    loadInitialUser();
+    void loadInitialUser();
 
     const { unsubscribe } = subscribeSupabaseAuth((nextUser) => {
       setUser(nextUser);
     });
 
     return () => {
+      cancelled = true;
       unsubscribe();
     };
   }, []);
 
   if (!authReady) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#F9FAFB]">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-brand border-t-transparent" />
+      // role="status" announces loading state to screen readers
+      <div
+        className="flex min-h-screen items-center justify-center bg-[#F9FAFB]"
+        role="status"
+        aria-label="Checking authentication…"
+      >
+        <div
+          className="h-8 w-8 animate-spin rounded-full border-2 border-brand border-t-transparent"
+          aria-hidden="true"
+        />
       </div>
     );
   }
